@@ -7,7 +7,9 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 
 
-function Header({ userName, setIsLoggedIn }) {
+function Header({ userName, setIsLoggedIn, handleisLogged }) {
+	console.log('setIsLoggedIn', setIsLoggedIn)
+	console.log('username', userName)
 	const useStyles = makeStyles((theme) => ({
 		margin: {
 			margin: 10,
@@ -19,8 +21,8 @@ function Header({ userName, setIsLoggedIn }) {
 	const history = useHistory();
 
 	function handleLogout() {
-		AuthService.logout();
-		AuthService.isLogged = false;
+		AuthService.removeUserInfo();
+		handleisLogged(false);
 		history.push('/login');
 	};
 

@@ -47,8 +47,8 @@ public class SpringHexagonalApplication {
             if (userService.findByUsername(username) == null) {
                 userService.save(new UserEntity(username, EnvService.getProp("user.pwd"), new HashMap<>()));
             }
-            storageService.deleteAll();
-            storageService.init();
+            // storageService.deleteAll();
+            // storageService.init();
             // generate RSA keys
             JwtUtil.generateRSAKeys();
         };

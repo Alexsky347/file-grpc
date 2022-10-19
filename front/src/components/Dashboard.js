@@ -3,25 +3,23 @@ import SideBar from "./SideBar";
 import Main from "./Main";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
-import { AuthService } from '../service/auth.service.js';
 
 
-const Dashboard = () => {
+export default function Dashboard({ userName, setIsLoggedIn, handleisLogged }) {
   const history = useHistory();
 
   useEffect(() => {
     document.title = "Drive Clone";
   }, [history]);
 
-  const [userName, setUserName] = useState("");
   const [sideBarOption, setSideBarOption] = useState(0);
   const [reRender, setReRender] = useState(0);
 
 
-  if (AuthService.isLogged) {
+  if (setIsLoggedIn) {
     return (
       <div className="dashboard-container">
-        <Header userName={userName} setIsLoggedIn={AuthService.isLogged} />
+        <Header userName={userName} setIsLoggedIn={setIsLoggedIn} handleisLogged={handleisLogged} />
         <div className="main-flex">
           <SideBar
             setSideBarOption={setSideBarOption}
@@ -42,4 +40,3 @@ const Dashboard = () => {
   }
 };
 
-export default Dashboard;

@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public interface IFilesStorageService {
@@ -17,5 +18,5 @@ public interface IFilesStorageService {
 
     public void deleteAll();
 
-    public Stream<Path> loadAll() throws IOException;
+    public Set<String> loadAll(String username) throws IOException;
 }

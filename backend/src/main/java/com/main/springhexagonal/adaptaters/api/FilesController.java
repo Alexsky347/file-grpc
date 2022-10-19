@@ -1,6 +1,5 @@
 package com.main.springhexagonal.adaptaters.api;
 
-import com.main.springhexagonal.domain.model.FileInfo;
 import com.main.springhexagonal.util.fileStorage.service.FilesStorageService;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -22,7 +20,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -57,18 +55,13 @@ public class FilesController extends MainController{
     }
 
 
-    @GetMapping("/files")
-    public ResponseEntity<List<FileInfo>> getListFiles() throws IOException {
-        List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
-            String filename = path.getFileName().toString();
-            String url = MvcUriComponentsBuilder
-                    .fromMethodName(FilesController.class, "getFile", path.getFileName().toString()).build().toString();
-            return new FileInfo(filename, url);
-        }).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
+    @GetMapping(value="/files", produces = MediaType.IMAGE_JPEG_VALUE)
+    public Set<String> getListFiles(HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
+        String username = retrieveUser(httpServletRequest);
+        return storageService.loadAll(username);
     }
 
-    @GetMapping("/file/{filename:.+}")
+    @GetMapping(value="/file/{filename:.+}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<Resource> getFile(@PathVariable String filename, HttpServletRequest httpServletRequest) throws MalformedURLException, ParseException, JOSEException {
         String username = retrieveUser(httpServletRequest);
         Path dir = Paths.get(FilesStorageService.root + "/" + username);

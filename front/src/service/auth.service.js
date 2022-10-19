@@ -2,7 +2,6 @@ import axios from "axios";
 
 export class AuthService {
 
-    static isLogged = false;
     static #BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080/api';
 
     static async postLogin(data) {
@@ -19,7 +18,7 @@ export class AuthService {
         localStorage.setItem("user", JSON.stringify(userInfo));
     }
 
-    static logout() {
+    static removeUserInfo() {
         localStorage.removeItem("user");
     }
 
@@ -27,11 +26,10 @@ export class AuthService {
         this.isLogged = state;
     }
 
-    static setJWTHeader() {
+    static getHeaderJWT() {
         const user = JSON.parse(localStorage.getItem('user'));
-
         if (user && user.accessToken) {
-            return { Authorization: 'Bearer ' + user.accessToken };
+            return { headers: { Authorization: 'Bearer ' + user.accessToken } };
         } else {
             return {};
         }

@@ -2,28 +2,53 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import { ToastContainer } from 'react-toastify';
-
+import { AuthService } from './service/auth.service.js';
 import 'react-toastify/dist/ReactToastify.css';
+import { useState } from 'react';
+
 // minified version is also included
 // import 'react-toastify/dist/ReactToastify.min.css';
 require('dotenv').config();
 
 function App() {
+	const [username, setUsername] = useState('');
+	const [isLogged, setIsLogged] = useState(false);
+
+	/**
+	 * props from child
+	 * @param {*} name 
+	 */
+	const handleUsername = name => {
+		setUsername(current => current = name)
+	}
+
+	const handleisLogged = state => {
+		setIsLogged(current => current = state)
+	}
+
 	return (
 		<div className="App">
 			<Router>
 				<Switch>
-					{/* Login Route */}
 					<Route exact path="/login">
-						<Login />
+						<Login handleUsername={handleUsername} handleisLogged={handleisLogged} />
 					</Route>
-					{/* Dashboard Route */}
 					<Route exact path="/">
-						<Dashboard />
+						<Dashboard userName={username} setIsLoggedIn={isLogged} handleisLogged={handleisLogged} />
 					</Route>
 				</Switch>
 			</Router>
-			<ToastContainer />
+			<ToastContainer
+				position="top-center"
+				autoClose={3000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				theme="light" />
 		</div>
 	);
 }

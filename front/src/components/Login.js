@@ -6,7 +6,7 @@ import { useHistory } from 'react-router';
 import { AuthService } from '../service/auth.service.js';
 import { toast } from 'react-toastify';
 
-function Login() {
+function Login({ handleUsername, handleisLogged }) {
 	const history = useHistory();
 	// state Variables
 	const [name, setName] = useState('');
@@ -32,15 +32,12 @@ function Login() {
 		const response = await AuthService.postLogin(data);
 		if (response.status === 200 && response?.data?.accessToken) {
 			AuthService.setUserInfo(response.data);
-			AuthService.setLoginUser(true);
-			toast.success(`You 're logged`,
-				{ position: toast.POSITION.TOP_CENTER }
-			);
+			handleUsername(data.username);
+			handleisLogged(true);
+			toast.success(`You 're logged`);
 			history.push('/');
 		} else {
-			toast.error(`${response?.code}: ${response?.response?.data?.errorMessage}`,
-				{ position: toast.POSITION.TOP_CENTER }
-			);
+			toast.error(`${response?.response?.data?.errorMessage}`);
 		}
 	}
 

@@ -12,6 +12,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -53,8 +55,15 @@ public class FilesStorageService implements IFilesStorageService {
     }
 
     @Override
-    public Stream<Path> loadAll() throws IOException {
-        return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
+    public Set<String> loadAll(String username) throws IOException {
+        int depth = 1;
+        try (Stream<Path> stream = Files.walk(Paths.get(root + "/" + username), depth)) {
+            return stream
+                    .filter(file -> !Files.isDirectory(file))
+                    .map(Path::getFileName)
+                    .map(Path::toString)
+                    .collect(Collectors.toSet());
+        }
     }
 
 }

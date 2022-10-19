@@ -11,7 +11,6 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
-require('dotenv').config()
 
 const style = {
 	position: 'absolute',
@@ -27,7 +26,7 @@ const style = {
 
 const Main = ({ metaData, reRender, setReRender }) => {
 	const [open, setOpen] = useState(false);
-	const [newFileName, setNewFileName] = useState(metaData.filename);
+	const [newFileName, setNewFileName] = useState(metaData?.filename);
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
@@ -35,7 +34,7 @@ const Main = ({ metaData, reRender, setReRender }) => {
 	// HANDLE DELETE
 	const handleDelete = () => {
 		const data = {
-			filename: metaData.filename,
+			filename: metaData?.filename,
 		};
 
 		fetch(`${process.env.REACT_APP_IP}/deleteBlob`, {
@@ -59,13 +58,13 @@ const Main = ({ metaData, reRender, setReRender }) => {
 	// HANDLE RENAME
 	const handleRename = () => {
 		const data = {
-			filename: metaData.filename,
+			filename: metaData?.filename,
 			metadata: {
 				filename: newFileName,
-				createdate: metaData.createdate,
+				createdate: metaData?.createdate,
 				lastmodified: new Date(Date.now()).toDateString(),
-				filesize: metaData.filesize,
-				type: metaData.type,
+				filesize: metaData?.filesize,
+				type: metaData?.type,
 			},
 		};
 		fetch(`${process.env.REACT_APP_IP}/renameBlob`, {
@@ -90,7 +89,7 @@ const Main = ({ metaData, reRender, setReRender }) => {
 	// HANDLE DOWNLOAD
 	const handleDownload = () => {
 		const data = {
-			filename: metaData.filename,
+			filename: metaData?.filename,
 		};
 
 		fetch(`${process.env.REACT_APP_IP}/getSASUrl`, {
@@ -113,7 +112,7 @@ const Main = ({ metaData, reRender, setReRender }) => {
 					a.href = data.url;
 
 					// Use download attribute to set set desired file name
-					a.setAttribute('download', metaData.filename);
+					a.setAttribute('download', metaData?.filename);
 
 					// Trigger the download by simulating click
 					a.click();
@@ -131,8 +130,8 @@ const Main = ({ metaData, reRender, setReRender }) => {
 		<div className="file">
 			<div className="file-header">
 				<InsertDriveFileIcon />
-				<p className="file-name" title={metaData.filename}>
-					{metaData.filename}
+				<p className="file-name" title={metaData?.filename}>
+					{metaData?.filename}
 				</p>
 
 				<IconButton onClick={handleDownload}>
@@ -140,9 +139,9 @@ const Main = ({ metaData, reRender, setReRender }) => {
 				</IconButton>
 			</div>
 			<div className="file-info">
-				Created: {metaData.createdate} <br />
-				Last Modified: {metaData.lastmodified} <br />
-				File Size: {metaData.filesize} MB
+				Created: {metaData?.createdate} <br />
+				Last Modified: {metaData?.lastmodified} <br />
+				File Size: {metaData?.filesize} MB
 				<br />
 				<br />
 			</div>
@@ -174,7 +173,7 @@ const Main = ({ metaData, reRender, setReRender }) => {
 							InputLabelProps={{
 								shrink: true,
 							}}
-							defaultValue={metaData.filename}
+							defaultValue={metaData?.filename}
 							onChange={(e) => {
 								setNewFileName(e.target.value);
 							}}
