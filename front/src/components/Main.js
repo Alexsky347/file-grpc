@@ -13,40 +13,64 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
 	}, [reRender]);
 
 	// State Variables
-	const [file, setFiles] = useState();
+	const [files, setFiles] = useState();
 
-	// Functions
+	/**
+	 * init
+	 */
 	async function initGetFiles(fileName) {
-		const response = await fileService.getFile(fileName);
+		const response = await fileService.getFiles(fileName);
 		if (response.status === 200) {
 
-			const getHeaderProp = (property) => {
-				if (response && response.headers &&
-					response.headers.get(property)) {
-					return response.headers.get(property)
+			let arrayFiles = await Promise.all(response.data.map(async (fileName) => {
+				let responseFile = await fileService.getFile(fileName);
+				const { headers, data } = responseFile;
+				const fileNickName = getHeaderProp('Content-Disposition', headers);
+
+				return {
+					type: getHeaderProp('Content-Type', headers),
+					url: handleFileUrl(data, fileNickName),
+					filename: fileNickName,
+					createdate: getHeaderProp('Content-Created', headers),
+					lastmodified: getHeaderProp('Content-Modified', headers),
+					filesize: getHeaderProp('Content-Length', headers) / 1000,
 				}
-				return null;
-			}
+			}));
 
-			const filename = (response && response.headers &&
-				response.headers.get('Content-Disposition'))
-				? response.headers
-					.get('Content-Disposition').split('filename=')[1] : null;
-
-			const fileData = {
-				url: URL.createObjectURL(response.data),
-				filename,
-				createdate: getHeaderProp('Content-Created'),
-				lastmodified: getHeaderProp('Content-Modified'),
-				filesize: getHeaderProp('Content-Length'),
-				type: getHeaderProp('Content-Type'),
-			};
-
-			setFiles(fileData)
+			setFiles(arrayFiles)
 		} else {
 			toast.error(`${response?.response?.data?.errorMessage}`);
 		}
 
+	}
+
+	/**
+	 * 
+	 * @param {*} data 
+	 * @param {*} name 
+	 * @returns 
+	 */
+	const handleFileUrl = (data, name) => {
+		if (name.endsWith('pdf')) {
+			return '/static/pdf.png'
+		}
+		return URL.createObjectURL(data);
+	}
+
+	/**
+	 * 
+	 * @param {*} property 
+	 * @param {*} headers 
+	 * @returns 
+	 */
+	const getHeaderProp = (property, headers) => {
+		if (headers && headers.get(property)) {
+			if (property === 'Content-Disposition') {
+				return headers.get('Content-Disposition').split('filename=')[1]
+			}
+			return headers.get(property)
+		}
+		return null;
 	}
 
 
@@ -54,14 +78,15 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
 	if (sideBarOption === 0) {
 		return (
 			<div className="main">
-				{file ? (
-					/* files.map((file, i) => ( */
-					<File
-						metaData={file}
-						reRender={reRender}
-						setReRender={setReRender}
-					/>
-					/* )) */
+				{files ? (
+					files.map((file, i) => (
+						<File
+							metaData={file}
+							reRender={reRender}
+							setReRender={setReRender}
+							key={i}
+						/>
+					))
 				) : (
 					<div>
 						<h1>

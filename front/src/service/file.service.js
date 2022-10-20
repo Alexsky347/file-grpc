@@ -8,8 +8,7 @@ export class FileService {
         headers: {
             "Authorization": AuthService.getBearer(),
             "Content-Type": "multipart/form-data",
-        },
-        responseType: 'blob'
+        }
     }
 
 
@@ -25,6 +24,7 @@ export class FileService {
     };
 
     async getFile(fileName) {
+        this.config.responseType = 'blob';
         return http
             .get(`/file/${fileName}`, this.config);
     };
@@ -51,9 +51,9 @@ export class FileService {
             });
     };
 
-    async renameFile(filename) {
+    async renameFile(oldName, newName) {
         return http
-            .put(`/file/${filename}`, this.config)
+            .patch(`/file/${oldName}/${newName}`, {}, this.config)
             .then(response => {
                 return response;
             })

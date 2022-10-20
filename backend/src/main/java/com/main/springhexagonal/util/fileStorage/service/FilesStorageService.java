@@ -14,6 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,7 +23,12 @@ import java.util.stream.Stream;
 
 @Service
 public class FilesStorageService implements IFilesStorageService {
-    public static final Path root = Paths.get("uploads");
+    public final Path root = Paths.get("uploads");
+
+    @Override
+    public Path getUserDir(String username){
+        return Paths.get(root + "/" + username);
+    }
 
 
     @Override
@@ -32,19 +39,22 @@ public class FilesStorageService implements IFilesStorageService {
     }
 
     @Override
-    public Resource save(MultipartFile file, String username) throws IOException {
-        Path userDir = Paths.get(root + "/" + username);
+    public Map<String, String> save(MultipartFile file, String username) throws IOException {
+        Path userDir = this.getUserDir(username);
         if(!Files.exists(userDir)){
             Files.createDirectory(userDir);
         }
         Path filePath = userDir.resolve(Objects.requireNonNull(file.getOriginalFilename()));
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        return this.load(file.getOriginalFilename(), userDir);
+        Map<String, String> mp = new HashMap<>();
+        mp.put("file uploaded", filePath.getFileName().toString());
+        return mp;
     }
 
     @Override
-    public Resource load(String filename, Path filePath) throws MalformedURLException {
-        Path file = filePath.resolve(filename);
+    public Resource load(String filename, String username) throws MalformedURLException {
+        Path userDir = this.getUserDir(username);
+        Path file = Paths.get(userDir + "/" + filename);
         Resource resource = new UrlResource(file.toUri());
         if (resource.exists() || resource.isReadable()) {
             return resource;
@@ -56,7 +66,7 @@ public class FilesStorageService implements IFilesStorageService {
     @Override
     public Set<String> loadAll(String username) throws IOException {
         int depth = 1;
-        Path userDir = Paths.get(root + "/" + username);
+        Path userDir = this.getUserDir(username);
         try (Stream<Path> stream = Files.walk(userDir, depth)) {
             return stream
                     .filter(file -> !Files.isDirectory(file))
@@ -72,13 +82,26 @@ public class FilesStorageService implements IFilesStorageService {
     }
 
     @Override
-    public boolean deleteOne(String filename, Path filePath) throws IOException {
-        Path file = filePath.resolve(filename);
+    public boolean deleteOne(String filename, String username) throws IOException {
+        Path userDir = this.getUserDir(username);
+        Path file = Paths.get(userDir + "/" + filename);
         Resource resource = new UrlResource(file.toUri());
         if (resource.exists() || resource.isReadable()) {
             return FileSystemUtils.deleteRecursively(file);
         } else {
             throw new Error("Could not delete the file!");
+        }
+    }
+
+    @Override
+    public boolean renameOne(String oldName,String newName, String username) throws IOException {
+        Path userDir = this.getUserDir(username);
+        Path file = Paths.get(userDir + "/" + oldName);
+        Resource resource = new UrlResource(userDir.toUri());
+        if (resource.exists() || resource.isReadable()) {
+            return Files.move(file, file.resolveSibling(newName)).isAbsolute();
+        } else {
+            throw new Error("Could not rename the file!");
         }
     }
 

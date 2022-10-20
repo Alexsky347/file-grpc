@@ -31,26 +31,29 @@ public class FilesController extends MainController{
 
 
 
-    @PostMapping("/files")
+    @PostMapping(value="/files", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
 
-    public String uploadFiles(@RequestParam("files") MultipartFile[] files, HttpServletRequest httpServletRequest) throws ParseException, JOSEException {
+    public Map<String, List<String>> uploadFiles(@RequestParam("file") MultipartFile[] files, HttpServletRequest httpServletRequest) throws ParseException, JOSEException {
         String username = retrieveUser(httpServletRequest);
         List<String> fileNames = new ArrayList<>();
+        Map<String, List<String>> response = new HashMap<>();
         Arrays.asList(files).stream().forEach(file -> {
             try {
                 storageService.save(file, username);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            file.getOriginalFilename();
+
+            fileNames.add(file.getOriginalFilename());
         });
-        return "Uploaded the files successfully: " + fileNames;
+        response.put("Uploaded the files successfully: ", fileNames);
+        return response;
     }
 
-    @PostMapping("/file")
+    @PostMapping(value="/file", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
-    public Resource uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
+    public Map<String, String> uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
         String username = retrieveUser(httpServletRequest);
         return storageService.save(file, username);
     }
@@ -67,8 +70,7 @@ public class FilesController extends MainController{
                                             HttpServletRequest httpServletRequest,
                                             HttpServletResponse httpServletResponse) throws MalformedURLException, ParseException, JOSEException {
         String username = retrieveUser(httpServletRequest);
-        Path dir = Paths.get(FilesStorageService.root + "/" + username);
-        Resource file = storageService.load(filename, dir);
+        Resource file = storageService.load(filename, username);
         httpServletResponse.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilename());
         httpServletResponse.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
         return file;
@@ -77,7 +79,13 @@ public class FilesController extends MainController{
     @DeleteMapping(value="/file/{filename:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean deleteFile(@PathVariable String filename, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
         String username = retrieveUser(httpServletRequest);
-        Path dir = Paths.get(FilesStorageService.root + "/" + username);
-        return storageService.deleteOne(filename, dir);
+        return storageService.deleteOne(filename, username);
+    }
+
+
+    @PatchMapping(value="/file/{oldName:.+}/{newName:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean renameFile(@PathVariable String oldName, @PathVariable String newName, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
+        String username = retrieveUser(httpServletRequest);
+        return storageService.renameOne(oldName, newName, username);
     }
 }

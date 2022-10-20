@@ -1,3 +1,4 @@
+/* eslint-disable react/style-prop-object */
 import { useState } from 'react';
 
 import { TextField } from '@material-ui/core';
@@ -20,6 +21,7 @@ const style = {
 	left: '50%',
 	transform: 'translate(-50%, -50%)',
 	width: 400,
+
 	borderRadius: 5,
 	bgcolor: 'background.paper',
 	boxShadow: 24,
@@ -42,41 +44,29 @@ export default function Main({ metaData, reRender, setReRender }) {
 			if (response.status === 200) {
 				reRender ? setReRender(0) : setReRender(1);
 				toast.success("File removed !");
+			} else {
+				toast.error(`${response?.response?.data?.errorMessage}`);
 			}
 		} else {
-			toast.error("No file name founded !");
+			toast.error("No file founded !");
 		}
 	};
 
 	// Rename
-	const handleRename = () => {
-		const data = {
-			filename: metaData?.filename,
-			metadata: {
-				filename: newFileName,
-				createdate: metaData?.createdate,
-				lastmodified: new Date(Date.now()).toDateString(),
-				filesize: metaData?.filesize,
-				type: metaData?.type,
-			},
-		};
-		fetch(`${process.env.REACT_APP_IP}/renameBlob`, {
-			method: 'PATCH',
-			withCredentials: true,
-			credentials: 'include',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.success) {
-					handleClose();
-					reRender ? setReRender(0) : setReRender(1);
-				}
-			})
-			.catch((err) => console.log(err));
+	const handleRename = async () => {
+		if (metaData?.filename) {
+			const response = await fileService.renameFile(metaData?.filename, newFileName);
+			if (response.status === 200) {
+				handleClose();
+				toast.success("File renamed !");
+				reRender ? setReRender(0) : setReRender(1);
+			} else {
+				toast.error(`${response?.response?.data?.errorMessage}`);
+			}
+		} else {
+			toast.error("No file founded !");
+		}
+
 	};
 
 	return (
@@ -94,7 +84,7 @@ export default function Main({ metaData, reRender, setReRender }) {
 					</IconButton>
 				</a>
 			</div>
-			<img alt="hey" src={metaData?.url} />
+			<img style={{ objectFit: 'scale-down' }} alt={metaData?.filename} src={metaData?.url} />
 			<div className="file-info">
 				Created: {metaData?.createdate} <br />
 				Last Modified: {metaData?.lastmodified} <br />
@@ -137,7 +127,6 @@ export default function Main({ metaData, reRender, setReRender }) {
 						/>
 					</Typography>
 
-					{/* SAVE / EDIT / UPDATE REQUEST */}
 					<Button
 						style={{ margin: 8 }}
 						variant="contained"

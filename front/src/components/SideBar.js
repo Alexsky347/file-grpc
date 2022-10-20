@@ -95,37 +95,18 @@ export default function SideBar({
 	const handleUpload = async (e) => {
 		var data = new FormData();
 		data.append('file', file);
-		console.log(file)
-		// data.append('filename', metaData?.fileName);
-		const response = await fileService.uploadOneFile(data)
-		console.log(response)
+		const response = await fileService.uploadOneFile(data);
 		if (response.status === 200) {
-			console.log('ok')
 			reRender ? setReRender(0) : setReRender(1);
-					setFile();
-					setMetaData({});
-					setIsFileUploaded(false);
+			setFile();
+			setMetaData({});
+			setIsFileUploaded(false);
 		} else {
 			toast.error(`${response?.response?.data?.errorMessage}`);
 		}
 
-
-		/* fetch(`${process.env.REACT_APP_IP}/uploadFile`, {
-			method: 'POST',
-			withCredentials: true,
-			credentials: 'include',
-			body: data,
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.success) {
-					uploadMetaData(metaData);
-				}
-			})
-			.catch((err) => console.log(err));
-
 		e.target.files = {};
-		handleClose(); */
+		handleClose();
 	};
 
 	return (
