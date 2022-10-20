@@ -8,8 +8,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 
 function Header({ userName, setIsLoggedIn, handleisLogged }) {
-	console.log('setIsLoggedIn', setIsLoggedIn)
-	console.log('username', userName)
+
 	const useStyles = makeStyles((theme) => ({
 		margin: {
 			margin: 10,

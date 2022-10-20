@@ -1,13 +1,21 @@
-import axios from "axios";
+import http from "./http-common.js";
 import { AuthService } from "./auth.service";
 
 export class FileService {
 
-    #BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080/api';
+
+    config = {
+        headers: {
+            "Authorization": AuthService.getBearer(),
+            "Content-Type": "multipart/form-data",
+        },
+        responseType: 'blob'
+    }
+
 
     async getFiles() {
-        return axios
-            .get(`${this.#BACKEND_URL}/files`, AuthService.getHeaderJWT())
+        return http
+            .get('/files', this.config)
             .then(response => {
                 return response;
             })
@@ -16,15 +24,36 @@ export class FileService {
             });
     };
 
-    async getOneFile(fileName) {
-        return await fetch(`${this.#BACKEND_URL}/file/${fileName}`, AuthService.getHeaderJWT(), {
-            mode: "no-cors", // 'cors' by default
-        });
+    async getFile(fileName) {
+        return http
+            .get(`/file/${fileName}`, this.config);
     };
 
-    async postOneFile(fileFormData) {
-        return axios
-            .post(`${this.#BACKEND_URL}/file/`, fileFormData)
+    async uploadOneFile(fileFormData) {
+        return http
+            .post(`/file/`, fileFormData, this.config)
+            .then(response => {
+                return response;
+            })
+            .catch((e) => {
+                return e
+            });
+    };
+
+    async deleteFile(filename) {
+        return http
+            .delete(`/file/${filename}`, this.config)
+            .then(response => {
+                return response;
+            })
+            .catch((e) => {
+                return e
+            });
+    };
+
+    async renameFile(filename) {
+        return http
+            .put(`/file/${filename}`, this.config)
             .then(response => {
                 return response;
             })

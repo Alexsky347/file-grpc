@@ -5,8 +5,11 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,7 +26,9 @@ public class FilesStorageService implements IFilesStorageService {
 
     @Override
     public void init() throws IOException {
-        Files.createDirectory(root);
+        if(!Files.exists(root)) {
+            Files.createDirectory(root);
+        }
     }
 
     @Override
@@ -46,7 +51,19 @@ public class FilesStorageService implements IFilesStorageService {
         } else {
             throw new Error("Could not load the file!");
         }
+    }
 
+    @Override
+    public Set<String> loadAll(String username) throws IOException {
+        int depth = 1;
+        Path userDir = Paths.get(root + "/" + username);
+        try (Stream<Path> stream = Files.walk(userDir, depth)) {
+            return stream
+                    .filter(file -> !Files.isDirectory(file))
+                    .map(Path::getFileName)
+                    .map(Path::toString)
+                    .collect(Collectors.toSet());
+        }
     }
 
     @Override
@@ -55,15 +72,15 @@ public class FilesStorageService implements IFilesStorageService {
     }
 
     @Override
-    public Set<String> loadAll(String username) throws IOException {
-        int depth = 1;
-        try (Stream<Path> stream = Files.walk(Paths.get(root + "/" + username), depth)) {
-            return stream
-                    .filter(file -> !Files.isDirectory(file))
-                    .map(Path::getFileName)
-                    .map(Path::toString)
-                    .collect(Collectors.toSet());
+    public boolean deleteOne(String filename, Path filePath) throws IOException {
+        Path file = filePath.resolve(filename);
+        Resource resource = new UrlResource(file.toUri());
+        if (resource.exists() || resource.isReadable()) {
+            return FileSystemUtils.deleteRecursively(file);
+        } else {
+            throw new Error("Could not delete the file!");
         }
     }
+
 
 }

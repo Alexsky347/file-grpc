@@ -1,17 +1,16 @@
-import axios from "axios";
+import http from "./http-common.js";
 
 export class AuthService {
 
-    static #BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080/api';
-
     static async postLogin(data) {
-        return axios
-            .post(`${this.#BACKEND_URL}/login`, data)
+        return http
+            .post('/login', data)
             .then(response => {
                 return response;
             })
-            .catch((e) => { return e; })
-            ;
+            .catch((e) => {
+                return e;
+            });
     };
 
     static setUserInfo(userInfo) {
@@ -26,10 +25,10 @@ export class AuthService {
         this.isLogged = state;
     }
 
-    static getHeaderJWT() {
+    static getBearer() {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user && user.accessToken) {
-            return { headers: { Authorization: 'Bearer ' + user.accessToken } };
+            return 'Bearer ' + user.accessToken;
         } else {
             return {};
         }

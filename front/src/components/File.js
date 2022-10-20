@@ -10,6 +10,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { FileService } from '../service/file.service';
+import { toast } from 'react-toastify';
 
 
 const style = {
@@ -24,38 +26,29 @@ const style = {
 	p: 4,
 };
 
-const Main = ({ metaData, reRender, setReRender }) => {
+export default function Main({ metaData, reRender, setReRender }) {
+
 	const [open, setOpen] = useState(false);
 	const [newFileName, setNewFileName] = useState(metaData?.filename);
+	const fileService = new FileService();
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
-	// HANDLE DELETE
-	const handleDelete = () => {
-		const data = {
-			filename: metaData?.filename,
-		};
-
-		fetch(`${process.env.REACT_APP_IP}/deleteBlob`, {
-			method: 'DELETE',
-			withCredentials: true,
-			credentials: 'include',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.success) {
-					reRender ? setReRender(0) : setReRender(1);
-				}
-			})
-			.catch((err) => console.log(err));
+	// Delete
+	const handleDelete = async () => {
+		if (metaData?.filename) {
+			const response = await fileService.deleteFile(metaData.filename);
+			if (response.status === 200) {
+				reRender ? setReRender(0) : setReRender(1);
+				toast.success("File removed !");
+			}
+		} else {
+			toast.error("No file name founded !");
+		}
 	};
 
-	// HANDLE RENAME
+	// Rename
 	const handleRename = () => {
 		const data = {
 			filename: metaData?.filename,
@@ -86,58 +79,22 @@ const Main = ({ metaData, reRender, setReRender }) => {
 			.catch((err) => console.log(err));
 	};
 
-	// HANDLE DOWNLOAD
-	const handleDownload = () => {
-		const data = {
-			filename: metaData?.filename,
-		};
-
-		fetch(`${process.env.REACT_APP_IP}/getSASUrl`, {
-			method: 'POST',
-			withCredentials: true,
-			credentials: 'include',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.success) {
-					const a = document.createElement('a');
-					a.style.display = 'none';
-					document.body.appendChild(a);
-
-					// a.href = URL.createObjectURL(blobFile);
-					a.href = data.url;
-
-					// Use download attribute to set set desired file name
-					a.setAttribute('download', metaData?.filename);
-
-					// Trigger the download by simulating click
-					a.click();
-
-					// Cleanup
-					window.URL.revokeObjectURL(a.href);
-					document.body.removeChild(a);
-
-					// getFile(data.url);
-				}
-			})
-			.catch((err) => console.log(err));
-	};
 	return (
 		<div className="file">
 			<div className="file-header">
-				<InsertDriveFileIcon />
+				<IconButton>
+					<InsertDriveFileIcon />
+				</IconButton>
 				<p className="file-name" title={metaData?.filename}>
 					{metaData?.filename}
 				</p>
-
-				<IconButton onClick={handleDownload}>
-					<DownloadIcon />
-				</IconButton>
+				<a href={metaData.url} download={metaData.filename}>
+					<IconButton>
+						<DownloadIcon />
+					</IconButton>
+				</a>
 			</div>
+			<img alt="hey" src={metaData?.url} />
 			<div className="file-info">
 				Created: {metaData?.createdate} <br />
 				Last Modified: {metaData?.lastmodified} <br />
@@ -193,4 +150,3 @@ const Main = ({ metaData, reRender, setReRender }) => {
 		</div>
 	);
 };
-export default Main;

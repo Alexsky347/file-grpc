@@ -7,6 +7,8 @@ import AddIcon from '@material-ui/icons/Add';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import { toast } from 'react-toastify';
+import { FileService } from '../service/file.service';
 
 
 const style = {
@@ -21,12 +23,12 @@ const style = {
 	p: 4,
 };
 
-const SideBar = ({
+export default function SideBar({
 	sideBarOption,
 	setSideBarOption,
 	reRender,
 	setReRender,
-}) => {
+}) {
 	// State Variables
 	const [listActive1, setListActive1] = useState('list-item-active');
 	const [listActive2, setListActive2] = useState('');
@@ -34,6 +36,7 @@ const SideBar = ({
 	const [isFileUploaded, setIsFileUploaded] = useState(false);
 	const [metaData, setMetaData] = useState({});
 	const [file, setFile] = useState();
+	const fileService = new FileService();
 
 	// Functions
 	// Button Styles
@@ -89,12 +92,25 @@ const SideBar = ({
 			.catch((err) => console.log(err));
 	};
 
-	const handleUpload = (e) => {
-		var data = new FormData()
-		data.append('file', file)
-		data.append('filename', metaData.fileName)
+	const handleUpload = async (e) => {
+		var data = new FormData();
+		data.append('file', file);
+		console.log(file)
+		// data.append('filename', metaData?.fileName);
+		const response = await fileService.uploadOneFile(data)
+		console.log(response)
+		if (response.status === 200) {
+			console.log('ok')
+			reRender ? setReRender(0) : setReRender(1);
+					setFile();
+					setMetaData({});
+					setIsFileUploaded(false);
+		} else {
+			toast.error(`${response?.response?.data?.errorMessage}`);
+		}
 
-		fetch(`${process.env.REACT_APP_IP}/uploadFile`, {
+
+		/* fetch(`${process.env.REACT_APP_IP}/uploadFile`, {
 			method: 'POST',
 			withCredentials: true,
 			credentials: 'include',
@@ -109,7 +125,7 @@ const SideBar = ({
 			.catch((err) => console.log(err));
 
 		e.target.files = {};
-		handleClose();
+		handleClose(); */
 	};
 
 	return (
@@ -201,4 +217,3 @@ const SideBar = ({
 	);
 };
 
-export default SideBar;

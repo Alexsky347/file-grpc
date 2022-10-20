@@ -3,34 +3,46 @@ import { FileService } from '../service/file.service';
 import { toast } from 'react-toastify';
 import File from './File';
 
-require('dotenv').config();
 
-const Main = ({ sideBarOption, reRender, setReRender }) => {
+export default function Main({ sideBarOption, reRender, setReRender }) {
 
 	const fileService = new FileService();
 	// UseEffect
 	useEffect(() => {
-		getOneFile('drive.png');
+		initGetFiles('drive.png');
 	}, [reRender]);
 
 	// State Variables
 	const [file, setFiles] = useState();
 
 	// Functions
-	async function getOneFile(fileName) {
-		const response = await fileService.getOneFile(fileName);
-		console.log(response)
+	async function initGetFiles(fileName) {
+		const response = await fileService.getFile(fileName);
 		if (response.status === 200) {
-			// https://satyajitpatnaik.medium.com/how-to-download-a-file-from-the-resources-folder-in-a-spring-boot-application-8570b1f16206
+
+			const getHeaderProp = (property) => {
+				if (response && response.headers &&
+					response.headers.get(property)) {
+					return response.headers.get(property)
+				}
+				return null;
+			}
+
 			const filename = (response && response.headers &&
 				response.headers.get('Content-Disposition'))
 				? response.headers
-					.get('Content-Disposition').split('filename=')[1] : '';
-			const blob = await response.blob()
-			const url = await URL.createObjectURL(blob);
-			console.log(response.headers.get('Content-Disposition'))
-			console.log(url)
-			setFiles(url)
+					.get('Content-Disposition').split('filename=')[1] : null;
+
+			const fileData = {
+				url: URL.createObjectURL(response.data),
+				filename,
+				createdate: getHeaderProp('Content-Created'),
+				lastmodified: getHeaderProp('Content-Modified'),
+				filesize: getHeaderProp('Content-Length'),
+				type: getHeaderProp('Content-Type'),
+			};
+
+			setFiles(fileData)
 		} else {
 			toast.error(`${response?.response?.data?.errorMessage}`);
 		}
@@ -45,7 +57,7 @@ const Main = ({ sideBarOption, reRender, setReRender }) => {
 				{file ? (
 					/* files.map((file, i) => ( */
 					<File
-						metaData={file.metadata}
+						metaData={file}
 						reRender={reRender}
 						setReRender={setReRender}
 					/>
@@ -61,4 +73,4 @@ const Main = ({ sideBarOption, reRender, setReRender }) => {
 		);
 	}
 };
-export default Main;
+
