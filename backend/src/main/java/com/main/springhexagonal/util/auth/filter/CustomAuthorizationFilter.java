@@ -1,10 +1,12 @@
 package com.main.springhexagonal.util.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.main.springhexagonal.adaptaters.service.UserService;
 import com.main.springhexagonal.util.auth.util.JwtUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -26,6 +28,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     private static final Logger logger =
             LoggerFactory.getLogger(CustomAuthorizationFilter.class);
+    private final UserService userService;
+
+    public CustomAuthorizationFilter(UserService userService){
+        this.userService = userService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain)
@@ -40,6 +47,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 try {
                     token = authorizationHeader.substring("Bearer ".length());
                     UsernamePasswordAuthenticationToken authenticationToken = JwtUtil.parseToken(token);
+                    //check if user is register
+                    if(this.userService.findByUsername(authenticationToken.getPrincipal().toString()) == null){
+                        throw new Exception("You don't have an account");
+                    }
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {

@@ -34,6 +34,16 @@ export class AuthService {
         }
     }
 
+    /**
+    * check if bearer and redirect in this case
+    */
+    static checkLoginAndRedirect = (handleisLogged, history) => {
+        if (Object.keys(AuthService.getBearer()).length > 0) {
+            handleisLogged(true);
+            history.push('/');
+        }
+    }
+
 
 }
 

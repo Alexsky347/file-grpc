@@ -1,56 +1,82 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/styles';
-import GroupIcon from '@material-ui/icons/Group';
 import ComputerIcon from '@material-ui/icons/Computer';
-import AddIcon from '@material-ui/icons/Add';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { toast } from 'react-toastify';
 import { FileService } from '../service/file.service';
+import * as React from 'react';
+import List from '@mui/joy/List';
+import ListItem from '@mui/joy/ListItem';
+import ListItemDecorator, {
+	listItemDecoratorClasses,
+} from '@mui/joy/ListItemDecorator';
+import ListItemContent from '@mui/joy/ListItemContent';
+import ListItemButton from '@mui/joy/ListItemButton';
+import { height } from '@mui/system';
 
 
-const style = {
-	position: 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: 400,
-	borderRadius: 5,
-	bgcolor: 'background.paper',
-	boxShadow: 24,
-	p: 4,
-};
+
+
+
 
 export default function SideBar({
 	sideBarOption,
 	setSideBarOption,
 	reRender,
 	setReRender,
+	handleSideNav
 }) {
-	// State Variables
+
+
 	const [listActive1, setListActive1] = useState('list-item-active');
 	const [listActive2, setListActive2] = useState('');
-	const [open, setOpen] = useState(false);
 	const [isFileUploaded, setIsFileUploaded] = useState(false);
 	const [metaData, setMetaData] = useState({});
 	const [file, setFile] = useState();
+	const breakpoint = 620;
+	const [open, setOpen] = useState(false);
+	const [widthNav, setWidthNav] = useState(0);
+
+	useEffect(() => {
+		handleSideNav ? setWidthNav(200) : setWidthNav(70);
+	}, [handleSideNav]);
+
 	const fileService = new FileService();
 
-	// Functions
-	// Button Styles
-	const useStyles = makeStyles({
+
+
+	// styles
+	const stylesClasses = {
 		btn: {
 			color: '#5F6368',
+			width: 36,
+			height: 36
 		},
 		uploadbtn: {
 			color: '#2185FC',
 			fontSize: '40px',
 		},
-	});
+		sidenav: {
+			py: 2,
+			pr: 2,
+			width: widthNav,
+			border: '1px solid rgba(0, 0, 0, 0.05)',
+			display: 'block',
+			height: '91vh'
+		},
+		main: {
+			position: 'relative',
+			borderRadius: 5,
+			boxShadow: 24,
+			p: 4,
+		}
+	};
 
-	const classes = useStyles();
+
+
 
 	// Functions
 	const handleOpen = () => setOpen(true);
@@ -59,37 +85,6 @@ export default function SideBar({
 
 	const handleClick = (option) => {
 		setSideBarOption(option);
-	};
-
-	const uploadMetaData = () => {
-		const data = {
-			metadata: {
-				filename: metaData.fileName,
-				createdate: metaData.createDate,
-				lastmodified: metaData.lastModified,
-				filesize: metaData.fileSize.toString(),
-				type: metaData.type,
-			},
-		};
-		fetch(`${process.env.REACT_APP_IP}/setMetaData`, {
-			method: 'POST',
-			withCredentials: true,
-			credentials: 'include',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.success) {
-					reRender ? setReRender(0) : setReRender(1);
-					setFile();
-					setMetaData({});
-					setIsFileUploaded(false);
-				}
-			})
-			.catch((err) => console.log(err));
 	};
 
 	const handleUpload = async (e) => {
@@ -104,27 +99,82 @@ export default function SideBar({
 		} else {
 			toast.error(`${response?.response?.data?.errorMessage}`);
 		}
-
 		e.target.files = {};
 		handleClose();
 	};
 
+
 	return (
-		<div className="sidebar">
-			<div className="upload-btn" onClick={handleOpen}>
-				<img
-					src={process.env.PUBLIC_URL + '/static/add.svg'}
-					alt="Logo"
-				/>
-				New
-			</div>
+		<div>
+			<Box sx={stylesClasses.sidenav}>
+				<List
+					aria-label="Sidebar"
+					sx={{
+						// ...applyRadiusOnEdges({ target: 'deepest' | 'nested' }),
+						'--List-item-paddingLeft': '0px',
+						'--List-decorator-size': '64px',
+						'--List-decorator-color': (theme) => theme.vars.palette.text.secondary,
+						'--List-item-minHeight': '32px',
+						'--List-nestedInsetStart': '13px',
+						[`& .${listItemDecoratorClasses.root}`]: {
+							justifyContent: 'flex-end',
+							pr: '18px',
+						},
+						'& [role="button"]': {
+							borderRadius: '0 20px 20px 0',
+						},
+					}}
+				>
+					<ListItem sx={{
+						'&:hover': {
+							backgroundColor: 'white-smoke',
+							opacity: [0.9, 0.8, 0.7],
+						}
+					}}>
+						<ListItemButton
+							className={`list-item ${listActive1}`}
+							onClick={handleOpen}
+						>
+							<ListItemDecorator>
+								<img
+									className={stylesClasses.btn}
+									src='/static/add.svg'
+									alt="Logo"
+								/>
+							</ListItemDecorator>
+							{handleSideNav ? <ListItemContent>New</ListItemContent> : null}
+						</ListItemButton>
+					</ListItem>
+
+					<ListItem sx={{
+						'&:hover': {
+							backgroundColor: 'white-smoke',
+							opacity: [0.9, 0.8, 0.7],
+						}
+					}}>
+						<ListItemButton
+							className={`list-item ${listActive1}`}
+							onClick={() => {
+								handleClick(0);
+								setListActive1('list-item-active');
+								setListActive2('');
+							}}>
+							<ListItemDecorator>
+								<ComputerIcon className={stylesClasses.btn} fontSize="large" />
+							</ListItemDecorator>
+							{handleSideNav ? <ListItemContent>My Drive</ListItemContent> : null}
+						</ListItemButton>
+					</ListItem>
+
+				</List>
+			</Box>
 			<Modal
 				open={open}
 				onClose={handleClose}
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description"
 			>
-				<Box className="upload-modal" sx={style}>
+				<Box className="upload-modal" sx={stylesClasses.main}>
 					{isFileUploaded ? (
 						<div className="metaData">
 							<p>File name : {metaData.fileName}</p>
@@ -181,19 +231,6 @@ export default function SideBar({
 					)}
 				</Box>
 			</Modal>
-			<ul className="sidebar-list">
-				<li
-					className={`list-item ${listActive1}`}
-					onClick={() => {
-						handleClick(0);
-						setListActive1('list-item-active');
-						setListActive2('');
-					}}
-				>
-					<ComputerIcon className={classes.btn} fontSize="large" />
-					<p className="list-text">My Drive</p>
-				</li>
-			</ul>
 		</div>
 	);
 };

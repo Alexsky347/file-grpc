@@ -30,6 +30,7 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
 				return {
 					type: getHeaderProp('Content-Type', headers),
 					url: handleFileUrl(data, fileNickName),
+					urlForDownload: URL.createObjectURL(data),
 					filename: fileNickName,
 					createdate: getHeaderProp('Content-Created', headers),
 					lastmodified: getHeaderProp('Content-Modified', headers),

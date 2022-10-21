@@ -65,7 +65,7 @@ public class FilesController extends MainController{
         return storageService.loadAll(username);
     }
 
-    @GetMapping(value="/file/{filename:.+}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value="/file/{filename:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public Resource getFile(@PathVariable String filename,
                                             HttpServletRequest httpServletRequest,
                                             HttpServletResponse httpServletResponse) throws MalformedURLException, ParseException, JOSEException {

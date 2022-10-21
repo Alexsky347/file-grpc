@@ -15,6 +15,11 @@ function Login({ handleUsername, handleisLogged }) {
 	const [isValidated, setIsValidated] = useState(false);
 	const [isClicked, setIsclicked] = useState(false);
 
+	// UseEffect
+	useEffect(() => {
+		AuthService.checkLoginAndRedirect(handleisLogged, history);
+	});
+
 	// Functions
 	const useStyles = makeStyles((theme) => ({
 		margin: {
@@ -23,6 +28,8 @@ function Login({ handleUsername, handleisLogged }) {
 	}));
 
 	const classes = useStyles();
+
+
 
 	// useEffect
 	useEffect(() => {
@@ -53,10 +60,6 @@ function Login({ handleUsername, handleisLogged }) {
 
 		// Username regex
 		const nameRegex = /^[a-z ,.'-]+$/i;
-
-		// Password Regex
-		const passwordRegex =
-			/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{2,}$/;
 
 		if (nameRegex.test(name) && password) {
 			setIsValidated(true);

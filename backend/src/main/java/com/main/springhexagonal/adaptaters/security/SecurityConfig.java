@@ -1,7 +1,9 @@
 package com.main.springhexagonal.adaptaters.security;
 
+import com.main.springhexagonal.adaptaters.service.UserService;
 import com.main.springhexagonal.util.auth.filter.CustomAuthenticationFilter;
 import com.main.springhexagonal.util.auth.filter.CustomAuthorizationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,6 +22,9 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
+    @Autowired
+    private UserService userService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
         http
@@ -33,7 +38,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .addFilter(new CustomAuthenticationFilter(authenticationManager))
-                .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new CustomAuthorizationFilter(userService), UsernamePasswordAuthenticationFilter.class)
                 .headers().cacheControl();
 
         return http.build();

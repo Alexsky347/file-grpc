@@ -6,13 +6,19 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import DownloadIcon from '@mui/icons-material/Download';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
-import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { FileService } from '../service/file.service';
 import { toast } from 'react-toastify';
+import * as React from 'react';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 
 
 const style = {
@@ -52,6 +58,18 @@ export default function Main({ metaData, reRender, setReRender }) {
 		}
 	};
 
+	// download
+	const handleDownload = () => {
+		if (metaData?.filename && metaData?.urlForDownload) {
+			let alink = document.createElement('a');
+			alink.href = metaData.urlForDownload;
+			alink.download = metaData.filename;
+			alink.click();
+		} else {
+			toast.error("No file founded !");
+		}
+	}
+
 	// Rename
 	const handleRename = async () => {
 		if (metaData?.filename) {
@@ -70,37 +88,42 @@ export default function Main({ metaData, reRender, setReRender }) {
 	};
 
 	return (
-		<div className="file">
-			<div className="file-header">
-				<IconButton>
-					<InsertDriveFileIcon />
-				</IconButton>
-				<p className="file-name" title={metaData?.filename}>
-					{metaData?.filename}
-				</p>
-				<a href={metaData.url} download={metaData.filename}>
+
+		<div>
+			<Card sx={{ maxWidth: 345, m: 0.5 }}>
+				<CardHeader
+					title={metaData?.filename}
+					subheader=""
+				/>
+				<CardMedia
+					component="img"
+					height="194"
+					image={metaData?.url}
+					alt="Paella dish"
+				/>
+				<CardContent>
+					<Typography variant="body2" color="text.secondary">
+						Size: {metaData?.filesize} MB
+					</Typography>
+					<Typography variant="body2" color="text.secondary">
+						Creation date: {metaData?.createdate}
+					</Typography>
+				</CardContent>
+				<CardActions disableSpacing>
+					<IconButton onClick={handleDelete} aria-label="remove">
+						<DeleteIcon />
+					</IconButton>
+					<IconButton onClick={handleOpen} aria-label="add">
+						<CreateIcon />
+					</IconButton>
 					<IconButton>
+						<InsertDriveFileIcon />
+					</IconButton>
+					<IconButton onClick={handleDownload} aria-label="download">
 						<DownloadIcon />
 					</IconButton>
-				</a>
-			</div>
-			<img style={{ objectFit: 'scale-down' }} alt={metaData?.filename} src={metaData?.url} />
-			<div className="file-info">
-				Created: {metaData?.createdate} <br />
-				Last Modified: {metaData?.lastmodified} <br />
-				File Size: {metaData?.filesize} MB
-				<br />
-				<br />
-			</div>
-
-			<div className="file-footer">
-				<IconButton onClick={handleDelete}>
-					<DeleteIcon />
-				</IconButton>
-				<IconButton onClick={handleOpen}>
-					<CreateIcon />
-				</IconButton>
-			</div>
+				</CardActions>
+			</Card>
 			<Modal
 				open={open}
 				onClose={handleClose}
@@ -120,9 +143,9 @@ export default function Main({ metaData, reRender, setReRender }) {
 							InputLabelProps={{
 								shrink: true,
 							}}
-							defaultValue={metaData?.filename}
+							defaultValue={metaData?.filename.split('.')[0]}
 							onChange={(e) => {
-								setNewFileName(e.target.value);
+								setNewFileName(e.target.value + '.' + metaData?.filename.split('.')[1]);
 							}}
 						/>
 					</Typography>
@@ -137,5 +160,9 @@ export default function Main({ metaData, reRender, setReRender }) {
 				</Box>
 			</Modal>
 		</div>
+
+
 	);
 };
+
+

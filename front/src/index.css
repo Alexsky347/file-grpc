@@ -39,7 +39,7 @@ body {
 }
 .main-flex {
 	display: flex;
-	justify-content: center;
+	justify-content: left;
 }
 
 .sidebar {
