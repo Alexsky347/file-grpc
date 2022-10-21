@@ -3,6 +3,10 @@ import SideBar from "./SideBar";
 import Main from "./Main";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
+import Grid from '@mui/material/Grid';
+import { experimentalStyled as styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 
 
 export default function Dashboard({ userName, setIsLoggedIn, handleisLogged }) {
@@ -36,13 +40,17 @@ export default function Dashboard({ userName, setIsLoggedIn, handleisLogged }) {
             setReRender={setReRender}
             handleSideNav={sideNavOpen}
           />
-          <Main
-            sideBarOption={sideBarOption}
-            reRender={reRender}
-            setReRender={setReRender}
-          />
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 8, md: 4, lg: 4 }}>
+              <Main
+                sideBarOption={sideBarOption}
+                reRender={reRender}
+                setReRender={setReRender}
+              />
+            </Grid>
+          </Box>
         </div>
-      </div>
+      </div >
     );
   } else {
     history.push("/login");

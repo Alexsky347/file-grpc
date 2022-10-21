@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { FileService } from '../service/file.service';
 import { toast } from 'react-toastify';
 import File from './File';
+import Grid from '@mui/material/Grid';
 
 
 export default function Main({ sideBarOption, reRender, setReRender }) {
@@ -74,27 +75,28 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
 		return null;
 	}
 
-
+	// TODO to implement https://mui.com/material-ui/react-grid/
 	// Render main according to side bar option
 	if (sideBarOption === 0) {
 		return (
 			<div className="main">
-				{files ? (
-					files.map((file, i) => (
-						<File
-							metaData={file}
-							reRender={reRender}
-							setReRender={setReRender}
-							key={i}
-						/>
-					))
-				) : (
-					<div>
-						<h1>
-							No files yet.
-						</h1>
-					</div>
-				)}
+				{files ?
+					(files.map((file, i) => (
+						<Grid item xs={1} sm={2} md={4} lg={4} key={i}>
+							<File
+								metaData={file}
+								reRender={reRender}
+								setReRender={setReRender}
+								key={i}
+							/>
+						</Grid>
+					))) : (
+						<div>
+							<h1>
+								No files yet.
+							</h1>
+						</div>
+					)}
 			</div>
 		);
 	}
