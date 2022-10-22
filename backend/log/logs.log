@@ -7117,3 +7117,393 @@ Unconditional classes:
 2022-10-22 16:06:04.452 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
 2022-10-22 16:06:04.452 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
 2022-10-22 16:06:04.538 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:06:57.018 DEBUG 23544 --- [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:06:57.019  INFO 23544 --- [http-nio-8080-exec-4] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:06:57.019 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:06:57.019 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:06:57.020 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/api/files", parameters={}
+2022-10-22 16:06:57.020 DEBUG 23544 --- [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:06:57.021 DEBUG 23544 --- [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:06:57.021 DEBUG 23544 --- [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Writing [[drive.png, a.pdf, zaza.jpg]]
+2022-10-22 16:06:57.021 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:06:57.077 DEBUG 23544 --- [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:06:57.078  INFO 23544 --- [http-nio-8080-exec-10] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:06:57.078 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:06:57.078 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:06:57.080 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/api/file/drive.png", parameters={}
+2022-10-22 16:06:57.080 DEBUG 23544 --- [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:06:57.081 DEBUG 23544 --- [http-nio-8080-exec-10] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:06:57.081 DEBUG 23544 --- [http-nio-8080-exec-10] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/drive.png]]
+2022-10-22 16:06:57.081 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:06:57.082 DEBUG 23544 --- [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:06:57.083  INFO 23544 --- [http-nio-8080-exec-7] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:06:57.083 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:06:57.083 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:06:57.084 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/api/file/a.pdf", parameters={}
+2022-10-22 16:06:57.084 DEBUG 23544 --- [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:06:57.085 DEBUG 23544 --- [http-nio-8080-exec-7] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:06:57.085 DEBUG 23544 --- [http-nio-8080-exec-7] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/a.pdf]]
+2022-10-22 16:06:57.098 DEBUG 23544 --- [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:06:57.099  INFO 23544 --- [http-nio-8080-exec-6] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:06:57.099 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:06:57.099 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:06:57.100 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/file/zaza.jpg", parameters={}
+2022-10-22 16:06:57.100 DEBUG 23544 --- [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:06:57.101 DEBUG 23544 --- [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:06:57.101 DEBUG 23544 --- [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/zaza.jpg]]
+2022-10-22 16:06:57.101 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:06:57.173 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:07:31.226 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2022-10-22 16:07:31.308 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:07:31.308 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:07:31.419 DEBUG 23544 --- [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:07:31.420  INFO 23544 --- [http-nio-8080-exec-9] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:07:31.420 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:07:31.420 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:07:31.421 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/api/files", parameters={}
+2022-10-22 16:07:31.421 DEBUG 23544 --- [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:07:31.422 DEBUG 23544 --- [http-nio-8080-exec-9] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:07:31.422 DEBUG 23544 --- [http-nio-8080-exec-9] m.m.a.RequestResponseBodyMethodProcessor : Writing [[drive.png, a.pdf, zaza.jpg]]
+2022-10-22 16:07:31.423 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:07:31.437 DEBUG 23544 --- [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:07:31.437 DEBUG 23544 --- [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:07:31.438  INFO 23544 --- [http-nio-8080-exec-5] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:07:31.438 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:07:31.438  INFO 23544 --- [http-nio-8080-exec-8] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:07:31.438 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:07:31.438 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:07:31.438 DEBUG 23544 --- [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:07:31.438 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:07:31.439  INFO 23544 --- [http-nio-8080-exec-1] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:07:31.439 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:07:31.439 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:07:31.439 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/api/file/drive.png", parameters={}
+2022-10-22 16:07:31.439 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/api/file/a.pdf", parameters={}
+2022-10-22 16:07:31.440 DEBUG 23544 --- [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:07:31.440 DEBUG 23544 --- [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:07:31.440 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/api/file/zaza.jpg", parameters={}
+2022-10-22 16:07:31.440 DEBUG 23544 --- [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:07:31.440 DEBUG 23544 --- [http-nio-8080-exec-8] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:07:31.440 DEBUG 23544 --- [http-nio-8080-exec-8] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/a.pdf]]
+2022-10-22 16:07:31.440 DEBUG 23544 --- [http-nio-8080-exec-5] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:07:31.440 DEBUG 23544 --- [http-nio-8080-exec-5] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/drive.png]]
+2022-10-22 16:07:31.440 DEBUG 23544 --- [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:07:31.440 DEBUG 23544 --- [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/zaza.jpg]]
+2022-10-22 16:07:31.441 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:07:31.441 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:07:31.527 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:07:34.348 DEBUG 23544 --- [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#deleteFile(String, HttpServletRequest)
+2022-10-22 16:07:34.348  INFO 23544 --- [http-nio-8080-exec-4] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:07:34.348 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:07:34.348 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:07:34.349 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : DELETE "/api/file/a.pdf", parameters={}
+2022-10-22 16:07:34.350 DEBUG 23544 --- [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#deleteFile(String, HttpServletRequest)
+2022-10-22 16:07:34.353 DEBUG 23544 --- [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:07:34.353 DEBUG 23544 --- [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Writing [true]
+2022-10-22 16:07:34.353 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:07:34.384 DEBUG 23544 --- [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:07:34.385  INFO 23544 --- [http-nio-8080-exec-10] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:07:34.385 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:07:34.385 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:07:34.386 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/api/files", parameters={}
+2022-10-22 16:07:34.386 DEBUG 23544 --- [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:07:34.387 DEBUG 23544 --- [http-nio-8080-exec-10] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:07:34.387 DEBUG 23544 --- [http-nio-8080-exec-10] m.m.a.RequestResponseBodyMethodProcessor : Writing [[drive.png, zaza.jpg]]
+2022-10-22 16:07:34.387 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:07:34.390 DEBUG 23544 --- [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:07:34.390  INFO 23544 --- [http-nio-8080-exec-6] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:07:34.390 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:07:34.390 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:07:34.391 DEBUG 23544 --- [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:07:34.391 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/file/drive.png", parameters={}
+2022-10-22 16:07:34.391 DEBUG 23544 --- [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:07:34.391  INFO 23544 --- [http-nio-8080-exec-7] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:07:34.391 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:07:34.391 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:07:34.392 DEBUG 23544 --- [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:07:34.392 DEBUG 23544 --- [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/drive.png]]
+2022-10-22 16:07:34.392 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/api/file/zaza.jpg", parameters={}
+2022-10-22 16:07:34.392 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:07:34.392 DEBUG 23544 --- [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:07:34.393 DEBUG 23544 --- [http-nio-8080-exec-7] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:07:34.393 DEBUG 23544 --- [http-nio-8080-exec-7] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/zaza.jpg]]
+2022-10-22 16:07:34.393 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:08:01.899 DEBUG 23544 --- [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:08:01.900  INFO 23544 --- [http-nio-8080-exec-2] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:08:01.900 DEBUG 23544 --- [http-nio-8080-exec-2] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:08:01.900 DEBUG 23544 --- [http-nio-8080-exec-2] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:08:01.901 DEBUG 23544 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/api/files", parameters={}
+2022-10-22 16:08:01.902 DEBUG 23544 --- [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:08:01.902 DEBUG 23544 --- [http-nio-8080-exec-2] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:08:01.902 DEBUG 23544 --- [http-nio-8080-exec-2] m.m.a.RequestResponseBodyMethodProcessor : Writing [[drive.png, zaza.jpg]]
+2022-10-22 16:08:01.903 DEBUG 23544 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:08:01.949 DEBUG 23544 --- [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:01.950 DEBUG 23544 --- [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:01.950  INFO 23544 --- [http-nio-8080-exec-3] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:08:01.950 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:08:01.950 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:08:01.951  INFO 23544 --- [http-nio-8080-exec-9] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:08:01.951 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:08:01.951 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:08:01.952 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/api/file/drive.png", parameters={}
+2022-10-22 16:08:01.952 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/api/file/zaza.jpg", parameters={}
+2022-10-22 16:08:01.952 DEBUG 23544 --- [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:01.952 DEBUG 23544 --- [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:01.952 DEBUG 23544 --- [http-nio-8080-exec-9] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:08:01.952 DEBUG 23544 --- [http-nio-8080-exec-9] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/zaza.jpg]]
+2022-10-22 16:08:01.953 DEBUG 23544 --- [http-nio-8080-exec-3] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:08:01.953 DEBUG 23544 --- [http-nio-8080-exec-3] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/drive.png]]
+2022-10-22 16:08:01.953 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:08:01.953 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:08:19.370 DEBUG 23544 --- [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:08:19.371  INFO 23544 --- [http-nio-8080-exec-1] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:08:19.371 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:08:19.371 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:08:19.372 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/api/files", parameters={}
+2022-10-22 16:08:19.372 DEBUG 23544 --- [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:08:19.373 DEBUG 23544 --- [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:08:19.373 DEBUG 23544 --- [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Writing [[drive.png, zaza.jpg]]
+2022-10-22 16:08:19.374 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:08:19.391 DEBUG 23544 --- [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:19.391  INFO 23544 --- [http-nio-8080-exec-5] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:08:19.391 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:08:19.391 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:08:19.391 DEBUG 23544 --- [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:19.392  INFO 23544 --- [http-nio-8080-exec-8] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:08:19.392 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:08:19.392 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:08:19.392 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/api/file/drive.png", parameters={}
+2022-10-22 16:08:19.392 DEBUG 23544 --- [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:19.393 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/api/file/zaza.jpg", parameters={}
+2022-10-22 16:08:19.393 DEBUG 23544 --- [http-nio-8080-exec-5] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:08:19.393 DEBUG 23544 --- [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:19.393 DEBUG 23544 --- [http-nio-8080-exec-5] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/drive.png]]
+2022-10-22 16:08:19.394 DEBUG 23544 --- [http-nio-8080-exec-8] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:08:19.394 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:08:19.394 DEBUG 23544 --- [http-nio-8080-exec-8] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/zaza.jpg]]
+2022-10-22 16:08:19.394 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:08:36.042 DEBUG 23544 --- [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#uploadFile(MultipartFile, HttpServletRequest)
+2022-10-22 16:08:36.043  INFO 23544 --- [http-nio-8080-exec-10] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:08:36.043 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:08:36.043 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:08:36.044 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : POST "/api/file/", parameters={multipart}
+2022-10-22 16:08:36.072 DEBUG 23544 --- [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#uploadFile(MultipartFile, HttpServletRequest)
+2022-10-22 16:08:36.079 DEBUG 23544 --- [http-nio-8080-exec-10] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:08:36.081 DEBUG 23544 --- [http-nio-8080-exec-10] m.m.a.RequestResponseBodyMethodProcessor : Writing [{file uploaded=EPSI_BigData_IA_20220411_v0.pdf}]
+2022-10-22 16:08:36.083 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:08:36.117 DEBUG 23544 --- [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:08:36.117  INFO 23544 --- [http-nio-8080-exec-6] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:08:36.117 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:08:36.117 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:08:36.119 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/files", parameters={}
+2022-10-22 16:08:36.119 DEBUG 23544 --- [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:08:36.120 DEBUG 23544 --- [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:08:36.120 DEBUG 23544 --- [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Writing [[drive.png, EPSI_BigData_IA_20220411_v0.pdf, zaza.jpg]]
+2022-10-22 16:08:36.120 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:08:36.147 DEBUG 23544 --- [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:36.148  INFO 23544 --- [http-nio-8080-exec-7] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:08:36.149 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:08:36.149 DEBUG 23544 --- [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:36.149 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:08:36.149  INFO 23544 --- [http-nio-8080-exec-2] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:08:36.149 DEBUG 23544 --- [http-nio-8080-exec-2] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:08:36.149 DEBUG 23544 --- [http-nio-8080-exec-2] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:08:36.149 DEBUG 23544 --- [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:36.150 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/api/file/drive.png", parameters={}
+2022-10-22 16:08:36.150 DEBUG 23544 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/api/file/EPSI_BigData_IA_20220411_v0.pdf", parameters={}
+2022-10-22 16:08:36.150 DEBUG 23544 --- [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:36.150 DEBUG 23544 --- [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:36.150  INFO 23544 --- [http-nio-8080-exec-9] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:08:36.150 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:08:36.150 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:08:36.150 DEBUG 23544 --- [http-nio-8080-exec-2] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:08:36.150 DEBUG 23544 --- [http-nio-8080-exec-7] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:08:36.150 DEBUG 23544 --- [http-nio-8080-exec-2] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/EPSI_BigData_IA_20220411_v0.pdf]]
+2022-10-22 16:08:36.150 DEBUG 23544 --- [http-nio-8080-exec-7] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/drive.png]]
+2022-10-22 16:08:36.151 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/api/file/zaza.jpg", parameters={}
+2022-10-22 16:08:36.151 DEBUG 23544 --- [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:08:36.151 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:08:36.151 DEBUG 23544 --- [http-nio-8080-exec-9] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:08:36.151 DEBUG 23544 --- [http-nio-8080-exec-9] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/zaza.jpg]]
+2022-10-22 16:08:36.152 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:08:36.442 DEBUG 23544 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:09:47.229 DEBUG 23544 --- [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:09:47.229  INFO 23544 --- [http-nio-8080-exec-8] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:09:47.229 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:09:47.230 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:09:47.231 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/api/files", parameters={}
+2022-10-22 16:09:47.231 DEBUG 23544 --- [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:09:47.232 DEBUG 23544 --- [http-nio-8080-exec-8] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:09:47.232 DEBUG 23544 --- [http-nio-8080-exec-8] m.m.a.RequestResponseBodyMethodProcessor : Writing [[drive.png, EPSI_BigData_IA_20220411_v0.pdf, zaza.jpg]]
+2022-10-22 16:09:47.232 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:09:47.249 DEBUG 23544 --- [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:09:47.250  INFO 23544 --- [http-nio-8080-exec-4] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:09:47.250 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:09:47.250 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:09:47.250 DEBUG 23544 --- [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:09:47.250 DEBUG 23544 --- [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:09:47.250  INFO 23544 --- [http-nio-8080-exec-10] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:09:47.250 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:09:47.250 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:09:47.250  INFO 23544 --- [http-nio-8080-exec-6] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:09:47.250 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:09:47.250 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:09:47.251 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/api/file/drive.png", parameters={}
+2022-10-22 16:09:47.251 DEBUG 23544 --- [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:09:47.251 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/file/zaza.jpg", parameters={}
+2022-10-22 16:09:47.251 DEBUG 23544 --- [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:09:47.251 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/api/file/EPSI_BigData_IA_20220411_v0.pdf", parameters={}
+2022-10-22 16:09:47.252 DEBUG 23544 --- [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:09:47.252 DEBUG 23544 --- [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:09:47.252 DEBUG 23544 --- [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:09:47.252 DEBUG 23544 --- [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/drive.png]]
+2022-10-22 16:09:47.252 DEBUG 23544 --- [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/zaza.jpg]]
+2022-10-22 16:09:47.252 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:09:47.252 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:09:47.252 DEBUG 23544 --- [http-nio-8080-exec-10] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:09:47.252 DEBUG 23544 --- [http-nio-8080-exec-10] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/EPSI_BigData_IA_20220411_v0.pdf]]
+2022-10-22 16:09:47.342 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:11:46.012 DEBUG 23544 --- [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:11:46.014  INFO 23544 --- [http-nio-8080-exec-3] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:11:46.014 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:11:46.014 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:11:46.016 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/api/files", parameters={}
+2022-10-22 16:11:46.016 DEBUG 23544 --- [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:11:46.018 DEBUG 23544 --- [http-nio-8080-exec-3] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:11:46.018 DEBUG 23544 --- [http-nio-8080-exec-3] m.m.a.RequestResponseBodyMethodProcessor : Writing [[drive.png, EPSI_BigData_IA_20220411_v0.pdf, zaza.jpg]]
+2022-10-22 16:11:46.019 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:11:46.036 DEBUG 23544 --- [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:11:46.037  INFO 23544 --- [http-nio-8080-exec-1] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:11:46.037 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:11:46.037 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:11:46.038 DEBUG 23544 --- [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:11:46.038 DEBUG 23544 --- [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:11:46.038 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/api/file/drive.png", parameters={}
+2022-10-22 16:11:46.038  INFO 23544 --- [http-nio-8080-exec-8] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:11:46.038  INFO 23544 --- [http-nio-8080-exec-5] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:11:46.038 DEBUG 23544 --- [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:11:46.038 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:11:46.038 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:11:46.039 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:11:46.039 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:11:46.039 DEBUG 23544 --- [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:11:46.039 DEBUG 23544 --- [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/drive.png]]
+2022-10-22 16:11:46.040 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/api/file/zaza.jpg", parameters={}
+2022-10-22 16:11:46.040 DEBUG 23544 --- [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:11:46.040 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/api/file/EPSI_BigData_IA_20220411_v0.pdf", parameters={}
+2022-10-22 16:11:46.040 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:11:46.040 DEBUG 23544 --- [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:11:46.040 DEBUG 23544 --- [http-nio-8080-exec-8] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:11:46.040 DEBUG 23544 --- [http-nio-8080-exec-8] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/zaza.jpg]]
+2022-10-22 16:11:46.040 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:11:46.041 DEBUG 23544 --- [http-nio-8080-exec-5] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:11:46.041 DEBUG 23544 --- [http-nio-8080-exec-5] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/EPSI_BigData_IA_20220411_v0.pdf]]
+2022-10-22 16:11:46.129 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:13:36.595 DEBUG 23544 --- [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:13:36.596  INFO 23544 --- [http-nio-8080-exec-9] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:13:36.596 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:13:36.596 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:13:36.597 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/api/files", parameters={}
+2022-10-22 16:13:36.597 DEBUG 23544 --- [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:13:36.598 DEBUG 23544 --- [http-nio-8080-exec-9] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:13:36.598 DEBUG 23544 --- [http-nio-8080-exec-9] m.m.a.RequestResponseBodyMethodProcessor : Writing [[drive.png, EPSI_BigData_IA_20220411_v0.pdf, zaza.jpg]]
+2022-10-22 16:13:36.598 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:13:36.620 DEBUG 23544 --- [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:13:36.620  INFO 23544 --- [http-nio-8080-exec-7] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:13:36.620 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:13:36.621 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:13:36.621 DEBUG 23544 --- [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:13:36.620 DEBUG 23544 --- [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:13:36.621  INFO 23544 --- [http-nio-8080-exec-2] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:13:36.621  INFO 23544 --- [http-nio-8080-exec-3] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:13:36.621 DEBUG 23544 --- [http-nio-8080-exec-2] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:13:36.621 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:13:36.621 DEBUG 23544 --- [http-nio-8080-exec-2] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:13:36.621 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:13:36.622 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/api/file/drive.png", parameters={}
+2022-10-22 16:13:36.622 DEBUG 23544 --- [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:13:36.622 DEBUG 23544 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/api/file/EPSI_BigData_IA_20220411_v0.pdf", parameters={}
+2022-10-22 16:13:36.622 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/api/file/zaza.jpg", parameters={}
+2022-10-22 16:13:36.622 DEBUG 23544 --- [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:13:36.623 DEBUG 23544 --- [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:13:36.623 DEBUG 23544 --- [http-nio-8080-exec-7] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:13:36.623 DEBUG 23544 --- [http-nio-8080-exec-7] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/drive.png]]
+2022-10-22 16:13:36.623 DEBUG 23544 --- [http-nio-8080-exec-2] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:13:36.623 DEBUG 23544 --- [http-nio-8080-exec-2] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/EPSI_BigData_IA_20220411_v0.pdf]]
+2022-10-22 16:13:36.623 DEBUG 23544 --- [http-nio-8080-exec-3] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:13:36.623 DEBUG 23544 --- [http-nio-8080-exec-3] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/zaza.jpg]]
+2022-10-22 16:13:36.623 DEBUG 23544 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:13:36.624 DEBUG 23544 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:13:36.711 DEBUG 23544 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:15:04.460 DEBUG 23544 --- [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:15:04.460  INFO 23544 --- [http-nio-8080-exec-10] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:15:04.460 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:15:04.460 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:15:04.462 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/api/files", parameters={}
+2022-10-22 16:15:04.462 DEBUG 23544 --- [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:15:04.463 DEBUG 23544 --- [http-nio-8080-exec-10] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:15:04.463 DEBUG 23544 --- [http-nio-8080-exec-10] m.m.a.RequestResponseBodyMethodProcessor : Writing [[drive.png, EPSI_BigData_IA_20220411_v0.pdf, zaza.jpg]]
+2022-10-22 16:15:04.463 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:15:04.511 DEBUG 23544 --- [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:15:04.512  INFO 23544 --- [http-nio-8080-exec-4] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:15:04.512 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:15:04.512 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:15:04.512 DEBUG 23544 --- [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:15:04.512 DEBUG 23544 --- [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:15:04.513  INFO 23544 --- [http-nio-8080-exec-6] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:15:04.513 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:15:04.513 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:15:04.513  INFO 23544 --- [http-nio-8080-exec-9] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:15:04.513 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:15:04.513 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:15:04.513 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/api/file/drive.png", parameters={}
+2022-10-22 16:15:04.513 DEBUG 23544 --- [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:15:04.513 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/file/EPSI_BigData_IA_20220411_v0.pdf", parameters={}
+2022-10-22 16:15:04.513 DEBUG 23544 --- [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:15:04.514 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/api/file/zaza.jpg", parameters={}
+2022-10-22 16:15:04.514 DEBUG 23544 --- [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:15:04.514 DEBUG 23544 --- [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:15:04.514 DEBUG 23544 --- [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/drive.png]]
+2022-10-22 16:15:04.514 DEBUG 23544 --- [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:15:04.514 DEBUG 23544 --- [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/EPSI_BigData_IA_20220411_v0.pdf]]
+2022-10-22 16:15:04.514 DEBUG 23544 --- [http-nio-8080-exec-9] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:15:04.514 DEBUG 23544 --- [http-nio-8080-exec-9] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/zaza.jpg]]
+2022-10-22 16:15:04.514 DEBUG 23544 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:15:04.514 DEBUG 23544 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:15:04.602 DEBUG 23544 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:16:43.512 DEBUG 23544 --- [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:16:43.513  INFO 23544 --- [http-nio-8080-exec-1] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:16:43.513 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:16:43.513 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:16:43.514 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/api/files", parameters={}
+2022-10-22 16:16:43.514 DEBUG 23544 --- [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getListFiles(HttpServletRequest)
+2022-10-22 16:16:43.515 DEBUG 23544 --- [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json]
+2022-10-22 16:16:43.515 DEBUG 23544 --- [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Writing [[drive.png, EPSI_BigData_IA_20220411_v0.pdf, zaza.jpg]]
+2022-10-22 16:16:43.515 DEBUG 23544 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:16:43.532 DEBUG 23544 --- [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:16:43.533  INFO 23544 --- [http-nio-8080-exec-5] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:16:43.533 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:16:43.533 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:16:43.533 DEBUG 23544 --- [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:16:43.534  INFO 23544 --- [http-nio-8080-exec-8] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:16:43.534 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:16:43.534 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:16:43.534 DEBUG 23544 --- [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:16:43.534 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/api/file/drive.png", parameters={}
+2022-10-22 16:16:43.534 DEBUG 23544 --- [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:16:43.535  INFO 23544 --- [http-nio-8080-exec-10] c.m.s.adaptaters.service.UserService     : Retrieving user alex
+2022-10-22 16:16:43.535 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.d.m.r.query.StringBasedMongoQuery    : Created query Document{{username=alex}} for Document{{}} fields.
+2022-10-22 16:16:43.535 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/api/file/EPSI_BigData_IA_20220411_v0.pdf", parameters={}
+2022-10-22 16:16:43.535 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.data.mongodb.core.MongoTemplate      : find using query: { "username" : "alex"} fields: Document{{}} for class: class com.main.springhexagonal.util.auth.model.UserEntity in collection: users
+2022-10-22 16:16:43.535 DEBUG 23544 --- [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:16:43.535 DEBUG 23544 --- [http-nio-8080-exec-5] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:16:43.535 DEBUG 23544 --- [http-nio-8080-exec-5] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/drive.png]]
+2022-10-22 16:16:43.535 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/api/file/zaza.jpg", parameters={}
+2022-10-22 16:16:43.536 DEBUG 23544 --- [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.main.springhexagonal.adaptaters.api.FilesController#getFile(String, HttpServletRequest, HttpServletResponse)
+2022-10-22 16:16:43.536 DEBUG 23544 --- [http-nio-8080-exec-8] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:16:43.536 DEBUG 23544 --- [http-nio-8080-exec-8] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/EPSI_BigData_IA_20220411_v0.pdf]]
+2022-10-22 16:16:43.536 DEBUG 23544 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:16:43.536 DEBUG 23544 --- [http-nio-8080-exec-10] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/octet-stream', given [application/json, text/plain, */*] and supported [application/octet-stream]
+2022-10-22 16:16:43.536 DEBUG 23544 --- [http-nio-8080-exec-10] m.m.a.RequestResponseBodyMethodProcessor : Writing [URL [file:/D:/Dev/drive-clone/backend/uploads/alex/zaza.jpg]]
+2022-10-22 16:16:43.536 DEBUG 23544 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2022-10-22 16:16:43.625 DEBUG 23544 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK

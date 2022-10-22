@@ -90,7 +90,7 @@ export default function Main({ metaData, reRender, setReRender }) {
 	return (
 
 		<div>
-			<Card >
+			<Card>
 				<CardHeader
 					title={metaData?.filename}
 					subheader=""

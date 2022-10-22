@@ -67,9 +67,14 @@ export default function SideBar({
 			display: 'block',
 			height: '91vh'
 		},
-		main: {
-			position: 'relative',
+		modal: {
+			position: 'absolute',
+			top: '50%',
+			left: '50%',
+			transform: 'translate(-50%, -50%)',
+			width: '60%',
 			borderRadius: 5,
+			bgcolor: 'background.paper',
 			boxShadow: 24,
 			p: 4,
 		}
@@ -174,7 +179,7 @@ export default function SideBar({
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description"
 			>
-				<Box className="upload-modal" sx={stylesClasses.main}>
+				<Box className="upload-modal" sx={stylesClasses.modal}>
 					{isFileUploaded ? (
 						<div className="metaData">
 							<p>File name : {metaData.fileName}</p>
