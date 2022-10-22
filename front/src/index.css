@@ -43,7 +43,6 @@ body {
 }
 
 .sidebar {
-	height: 90vh;
 	flex: 0.17;
 	background: #f4f2f2;
 	border-right: 1px solid #c0c0c0;
@@ -93,16 +92,8 @@ body {
 	margin-left: 6px;
 }
 .main {
-	flex: 0.83;
-	display: grid;
 	width: 100%;
-	top: 0;
-	margin: 20px;
-	grid-template-columns: 250px 250px 250px 250px;
-	grid-template-rows: 75px 75px 75px 75px;
-	justify-content: flex-start;
-	align-items: flex-start;
-	flex-wrap: wrap;
+	height: 100vh;
 }
 
 .login-container {

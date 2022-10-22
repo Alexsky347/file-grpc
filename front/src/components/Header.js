@@ -6,9 +6,12 @@ import { AuthService } from '../service/auth.service.js';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useViewport } from '../utils/useViewport';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Sling as Hamburger } from 'hamburger-react'
 
 function Header({ userName, handleisLogged, handleSideNav }) {
+	const { isDesktop, isMobile, isTablet } = useViewport();
+	const [isOpen, setOpen] = useState(false);
 
 	const useStyles = makeStyles((theme) => ({
 		margin: {
@@ -19,9 +22,8 @@ function Header({ userName, handleisLogged, handleSideNav }) {
 		},
 	}));
 
+
 	const history = useHistory();
-	let sideNavOpen = true;
-	const { isDesktop, isMobile, isTablet } = useViewport();
 
 	const handleLogout = () => {
 		AuthService.removeUserInfo();
@@ -29,9 +31,9 @@ function Header({ userName, handleisLogged, handleSideNav }) {
 		history.push('/login');
 	};
 
-	const handleSideNavChildren = () => {
-		const open = !sideNavOpen;
-		handleSideNav(open);
+	const handleSideNavChildren = (state) => {
+		handleSideNav(state);
+		setOpen(state)
 	};
 
 	const classes = useStyles();
@@ -39,7 +41,7 @@ function Header({ userName, handleisLogged, handleSideNav }) {
 	return (
 		<div className="header">
 			<div className="logo">
-				<MenuIcon style={{ cursor: 'pointer' }} onClick={handleSideNavChildren} />
+				<Hamburger toggled={isOpen} toggle={handleSideNavChildren} />
 				<img
 					src='/static/drive.png'
 					alt="Logo"

@@ -3,6 +3,8 @@ import { FileService } from '../service/file.service';
 import { toast } from 'react-toastify';
 import File from './File';
 import Grid from '@mui/material/Grid';
+import { experimentalStyled as styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
 
 
 export default function Main({ sideBarOption, reRender, setReRender }) {
@@ -15,6 +17,7 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
 
 	// State Variables
 	const [files, setFiles] = useState();
+
 
 	/**
 	 * init
@@ -81,16 +84,21 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
 		return (
 			<div className="main">
 				{files ?
-					(files.map((file, i) => (
-						<Grid item xs={1} sm={2} md={4} lg={4} key={i}>
-							<File
-								metaData={file}
-								reRender={reRender}
-								setReRender={setReRender}
-								key={i}
-							/>
-						</Grid>
-					))) : (
+					(<Grid container spacing={{ xs: 2, md: 3 }}
+						columns={{ xs: 1, sm: 8, md: 12 }}
+						justifyContent="space-evenly"
+						alignItems="start">
+						{files.map((file, i) => (
+							<Grid item xs={2} sm={4} md={3} key={i}>
+								<File
+									metaData={file}
+									reRender={reRender}
+									setReRender={setReRender}
+									key={i}
+								/>
+							</Grid>
+						))}
+					</Grid>) : (
 						<div>
 							<h1>
 								No files yet.

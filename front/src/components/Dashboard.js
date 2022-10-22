@@ -40,15 +40,11 @@ export default function Dashboard({ userName, setIsLoggedIn, handleisLogged }) {
             setReRender={setReRender}
             handleSideNav={sideNavOpen}
           />
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 8, md: 4, lg: 4 }}>
-              <Main
-                sideBarOption={sideBarOption}
-                reRender={reRender}
-                setReRender={setReRender}
-              />
-            </Grid>
-          </Box>
+          <Main
+            sideBarOption={sideBarOption}
+            reRender={reRender}
+            setReRender={setReRender}
+          />
         </div>
       </div >
     );

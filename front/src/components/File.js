@@ -90,7 +90,7 @@ export default function Main({ metaData, reRender, setReRender }) {
 	return (
 
 		<div>
-			<Card sx={{ maxWidth: 345, m: 0.5 }}>
+			<Card >
 				<CardHeader
 					title={metaData?.filename}
 					subheader=""
@@ -99,7 +99,7 @@ export default function Main({ metaData, reRender, setReRender }) {
 					component="img"
 					height="194"
 					image={metaData?.url}
-					alt="Paella dish"
+					alt="picture"
 				/>
 				<CardContent>
 					<Typography variant="body2" color="text.secondary">
