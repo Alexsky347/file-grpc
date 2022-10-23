@@ -28,8 +28,10 @@ import java.util.*;
 public class FilesController extends MainController{
     @Autowired
     FilesStorageService storageService;
-
-
+    @GetMapping(value="/filesss", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String test(){
+        return "test";
+    }
 
     @PostMapping(value="/files", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)

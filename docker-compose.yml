@@ -1,0 +1,56 @@
+version: '3.8'
+services:
+  backend:
+    image: 'back:0.0.1'
+    build:
+      context: ./backend
+    container_name: drive-back
+    depends_on:
+      - db
+    networks:
+      - drive-networks
+    environment:
+      - SPRING_DATASOURCE_URL=mongodb://admin:admin@db:27017
+      - SPRING_DATA_MONGODB_DATABASE=drive-clone
+    volumes:
+      - ./backend/uploads
+    ports:
+      - '8080:8080'
+  frontend:
+    image: 'front:0.0.1'
+    build:
+      context: ./frontend
+    container_name: drive-front
+    depends_on:
+      - backend
+    networks:
+      - drive-networks
+    ports:
+      - '80:3300'
+  db:
+    image: mongo:latest
+    restart: always
+    container_name: db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "0.0.0.0:27017:27017"
+    networks:
+      - drive-networks
+    volumes:
+      - type: volume
+        source: DB_DATA
+        target: /data/db
+      - type: volume
+        source: DB_CONFIG
+        target: /data/configdb
+networks:
+  drive-networks:
+    name: drive-networks
+
+volumes:
+  DB_DATA:
+    name: DB_DATA
+  DB_CONFIG:
+    name: DB_CONFIG

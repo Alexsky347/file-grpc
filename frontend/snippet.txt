@@ -1,0 +1,10 @@
+docker image build -t react:v1 .
+
+docker run -d -p 3300:80 --name react react:v1
+
+docker container ls 
+docker container commit <id-container> react:v1
+docker images
+docker push <repository>/<tag>
+
+docker push luizcalaca/react:react
