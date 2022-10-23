@@ -10,13 +10,16 @@ services:
     networks:
       - drive-networks
     environment:
-      - SPRING_DATASOURCE_URL=mongodb://admin:admin@db:27017
-      - SPRING_DATA_MONGODB_DATABASE=drive-clone
+      - MONGO_DB_HOSTNAME=db
+      - MONGO_DB_USERNAME=admin
+      - MONGO_DB_PASSWORD=admin
+      - MONGO_DB_NAME=drive-clone
     volumes:
-      - ./backend/uploads
+      - ./backend/uploads:/usr/app/uploads
     ports:
       - '8080:8080'
   frontend:
+    # https://mindsers.blog/post/https-using-nginx-certbot-docker/
     image: 'front:0.0.1'
     build:
       context: ./frontend
@@ -26,31 +29,24 @@ services:
     networks:
       - drive-networks
     ports:
-      - '80:3300'
+      - '3000:80'
   db:
     image: mongo:latest
-    restart: always
-    container_name: db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
-    ports:
-      - "0.0.0.0:27017:27017"
+    - MONGO_INITDB_ROOT_USERNAME=admin
+    - MONGO_INITDB_ROOT_PASSWORD=admin
+    volumes:
+      - mongodb:/data/db
+    restart: always
     networks:
       - drive-networks
-    volumes:
-      - type: volume
-        source: DB_DATA
-        target: /data/db
-      - type: volume
-        source: DB_CONFIG
-        target: /data/configdb
+    ports:
+      - '27017:27017'
+
 networks:
   drive-networks:
-    name: drive-networks
+    driver: bridge
 
 volumes:
-  DB_DATA:
-    name: DB_DATA
-  DB_CONFIG:
-    name: DB_CONFIG
+  mongodb:
+    driver: local
