@@ -40,6 +40,17 @@ export class FileService {
             });
     };
 
+    async uploadMultipleFiles(fileFormData) {
+        return http
+            .post(`/files/`, fileFormData, this.config)
+            .then(response => {
+                return response;
+            })
+            .catch((e) => {
+                return e
+            });
+    };
+
     async deleteFile(filename) {
         return http
             .delete(`/file/${filename}`, this.config)
