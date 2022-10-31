@@ -18,18 +18,18 @@ services:
       - ./backend/uploads:/usr/app/uploads
     ports:
       - '8080:8080'
-  # frontend:
-  #   # https://mindsers.blog/post/https-using-nginx-certbot-docker/
-  #   image: 'front:0.0.1'
-  #   build:
-  #     context: ./frontend
-  #   container_name: drive-front
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - drive-networks
-  #   ports:
-  #     - '3000:80'
+  frontend:
+    # https://mindsers.blog/post/https-using-nginx-certbot-docker/
+    image: 'front:0.0.1'
+    build:
+      context: ./frontend
+    container_name: drive-front
+    depends_on:
+      - backend
+    networks:
+      - drive-networks
+    ports:
+      - '80:80'
   db:
     image: mongo:latest
     environment:
