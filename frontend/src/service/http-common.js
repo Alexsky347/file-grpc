@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: process.env.BACKEND_URL || 'http://localhost:8080/api'
+  baseURL: process.env.BACKEND_URL || 'http://ledainalexis.com:8080/api'
 });
