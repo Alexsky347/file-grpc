@@ -8,12 +8,9 @@ services:
     depends_on:
       - db
     networks:
-      - drive-networks
-    environment:
-      - MONGO_DB_HOSTNAME=db
-      - MONGO_DB_USERNAME=admin
-      - MONGO_DB_PASSWORD=admin
-      - MONGO_DB_NAME=drive-clone
+      - $NETWORK_NAME
+    env_file:
+    - .env
     volumes:
       - ./backend/uploads:/usr/app/uploads
     ports:
@@ -24,27 +21,27 @@ services:
     build:
       context: ./frontend
     container_name: drive-front
+
     depends_on:
       - backend
     networks:
-      - drive-networks
+      - $NETWORK_NAME
     ports:
       - '3000:80'
   db:
     image: mongo:latest
-    environment:
-    - MONGO_INITDB_ROOT_USERNAME=admin
-    - MONGO_INITDB_ROOT_PASSWORD=admin
+    env_file: 
+    - .env
     volumes:
       - mongodb:/data/db
     restart: always
     networks:
-      - drive-networks
+      - $NETWORK_NAME
     ports:
-      - '27017:27017'
+      - $DB_PORT
 
 networks:
-  drive-networks:
+  $NETWORK_NAME:
     driver: bridge
 
 volumes:
