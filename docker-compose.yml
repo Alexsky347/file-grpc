@@ -9,8 +9,13 @@ services:
       - db
     networks:
       - main-network
-    env_file:
-    - .env
+    environment:
+    - MONGO_DB_HOSTNAME=$MONGO_DB_HOSTNAME
+    - MONGO_DB_USERNAME=$MONGO_DB_USERNAME
+    - MONGO_DB_PASSWORD=$MONGO_DB_PASSWORD
+    - MONGO_DB_NAME=$MONGO_DB_NAME
+    - allowedHost1=$allowedHost1
+    - allowedHost2=$allowedHost2
     volumes:
       - ./backend/uploads:/usr/app/uploads
     ports:
@@ -21,7 +26,8 @@ services:
     build:
       context: ./frontend
     container_name: drive-front
-
+    environment:
+      - BACKEND_URL=$BACKEND_URL
     depends_on:
       - backend
     networks:
@@ -30,8 +36,10 @@ services:
       - '3000:80'
   db:
     image: mongo:latest
-    env_file: 
-    - .env
+    environment:
+    - MONGO_DB_PASSWORD=$MONGO_DB_PASSWORD
+    - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+    - MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
     volumes:
       - mongodb:/data/db
     restart: always
