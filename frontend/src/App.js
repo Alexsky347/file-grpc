@@ -8,7 +8,6 @@ import { useState } from 'react';
 
 // minified version is also included
 // import 'react-toastify/dist/ReactToastify.min.css';
-require('dotenv').config();
 
 function App() {
 	const [username, setUsername] = useState('');
