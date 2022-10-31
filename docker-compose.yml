@@ -8,7 +8,7 @@ services:
     depends_on:
       - db
     networks:
-      - $NETWORK_NAME
+      - main-network
     env_file:
     - .env
     volumes:
@@ -25,7 +25,7 @@ services:
     depends_on:
       - backend
     networks:
-      - $NETWORK_NAME
+      - main-network
     ports:
       - '3000:80'
   db:
@@ -36,13 +36,14 @@ services:
       - mongodb:/data/db
     restart: always
     networks:
-      - $NETWORK_NAME
+      - main-network
     ports:
       - $DB_PORT
 
 networks:
-  $NETWORK_NAME:
-    driver: bridge
+  main-network:
+    external:
+      name: $NETWORK_NAME
 
 volumes:
   mongodb:
