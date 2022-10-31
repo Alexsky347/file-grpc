@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests((auth) -> auth
                         .antMatchers(HttpMethod.POST, "/login/**").permitAll()
+                        .antMatchers("/actuator/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilter(new CustomAuthenticationFilter(authenticationManager))

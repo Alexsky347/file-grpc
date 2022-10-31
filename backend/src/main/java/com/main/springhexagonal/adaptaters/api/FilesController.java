@@ -7,19 +7,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.*;
 
@@ -28,10 +22,6 @@ import java.util.*;
 public class FilesController extends MainController{
     @Autowired
     FilesStorageService storageService;
-    @GetMapping(value="/filesss", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String test(){
-        return "test";
-    }
 
     @PostMapping(value="/files", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
