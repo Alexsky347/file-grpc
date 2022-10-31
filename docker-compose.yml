@@ -29,7 +29,7 @@ services:
     networks:
       - drive-networks
     ports:
-      - '80:80'
+      - '3000:80'
   db:
     image: mongo:latest
     environment:
