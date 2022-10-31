@@ -42,8 +42,7 @@ services:
 
 networks:
   main-network:
-    external:
-      name: $NETWORK_NAME
+    name: $NETWORK_NAME
 
 volumes:
   mongodb:
