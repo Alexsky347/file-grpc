@@ -26,8 +26,8 @@ services:
     image: 'front:0.0.1'
     build:
       context: ./frontend
-      args: 
-          - BACKEND_URL=$BACKEND_URL 
+      # args: 
+      #     - BACKEND_URL=$BACKEND_URL 
     container_name: drive-front
     depends_on:
       - backend
