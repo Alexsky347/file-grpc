@@ -14,7 +14,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins(EnvService.getProp("allowedHost1"), EnvService.getProp("allowedHost2"))
+                        .allowedOrigins(EnvService.getProp("allowedHost1"))
                         .allowedMethods("*");
             }
         };
