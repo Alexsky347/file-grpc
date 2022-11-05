@@ -1,16 +1,12 @@
 FROM node:16.17.0-bullseye-slim AS build-step
 
-# arguments
-ARG BACKEND_URL
-RUN echo "ARGS: "${BACKEND_URL}
 
 WORKDIR /app
 COPY package*.json package-lock.json ./
 RUN npm install
 COPY . .
 
-RUN REACT_APP_BACKEND_URL=${BACKEND_URL} \ 
-  npm run build
+RUN npm run build
 
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html

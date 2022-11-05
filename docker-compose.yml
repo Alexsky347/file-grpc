@@ -9,14 +9,6 @@ services:
       - db
     networks:
       - main-network
-    environment:
-    - MONGO_DB_HOSTNAME=$MONGO_DB_HOSTNAME
-    - MONGO_DB_USERNAME=$MONGO_DB_USERNAME
-    - MONGO_DB_PASSWORD=$MONGO_DB_PASSWORD
-    - MONGO_DB_PORT=$MONGO_DB_PORT
-    - MONGO_DB_NAME=$MONGO_DB_NAME
-    - allowedHost1=$allowedHost1
-    - allowedHost2=$allowedHost2
     volumes:
       - ./backend/uploads:/usr/app/uploads
     ports:
@@ -26,8 +18,6 @@ services:
     image: 'front:0.0.1'
     build:
       context: ./frontend
-      # args: 
-      #     - BACKEND_URL=$BACKEND_URL 
     container_name: drive-front
     depends_on:
       - backend
