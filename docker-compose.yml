@@ -25,6 +25,10 @@ services:
       - main-network
     ports:
       - '3000:80'
+      - '443:443'
+    volumes:
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
   db:
     image: mongo:latest
     environment:
@@ -38,6 +42,13 @@ services:
       - main-network
     ports:
       - $DB_PORT
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 networks:
   main-network:

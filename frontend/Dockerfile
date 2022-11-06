@@ -1,4 +1,4 @@
-FROM node:16.17.0-bullseye-slim AS build-step
+FROM node:16.18.0-alpine3.16 AS build-step
 
 
 WORKDIR /app

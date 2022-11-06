@@ -13,8 +13,8 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
-                        .allowedOrigins(EnvService.getProp("allowedHost1"))
+                registry.addMapping("/**")
+                        .allowedOrigins("http://ledainalexis.com:3000")
                         .allowedMethods("*");
             }
         };
