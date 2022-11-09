@@ -7,9 +7,9 @@ EMAIL=ledain.alexis@gmail.com
 PROTOCOL=http
 
 #DB
-MONGO_DB_PASSWORD=`openssl rand 30 | base64 -w 0`
+MONGO_DB_PASSWORD=`openssl rand -hex 10`
 MONGO_INITDB_ROOT_USERNAME=admin
-MONGO_INITDB_ROOT_PASSWORD=`openssl rand 30 | base64 -w 0`
+MONGO_INITDB_ROOT_PASSWORD=`openssl rand -hex 10`
 DB_CONTAINER_NAME=db
 DB_NAME=drive-clone
 DB_PORT=27019
@@ -17,7 +17,7 @@ DB_PORT=27019
 #BACK
 SERVER_PORT=8080
 USERNAME=alex6
-PWD=`openssl rand 30 | base64 -w 0`
+PWD=`openssl rand -hex 10`
 
 #FRONT
 FRONTEND_PORT=80
