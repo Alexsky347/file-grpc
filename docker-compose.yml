@@ -48,7 +48,7 @@ services:
     networks:
       - main-network
     ports:
-      - "27019:27017"
+      - "27017:27017"
   certbot:
     image: certbot/certbot
     restart: unless-stopped
