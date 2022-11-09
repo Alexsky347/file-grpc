@@ -23,6 +23,7 @@ FRONTEND_PORT=80
 
 #clear file
 echo > .env
+echo > frontend/.env
 
 echo NETWORK_NAME=${NETWORK_NAME} >> .env
 echo DOMAIN=${DOMAIN} >> .env
@@ -37,7 +38,7 @@ echo SERVER_PORT=${SERVER_PORT} >> .env
 echo USERNAME=${USERNAME} >> .env
 echo PWD=${PWD} >> .env
 
-echo FRONTEND_PORT=${FRONTEND_PORT} >> .env
+echo FRONTEND_PORT=${FRONTEND_PORT} >> frontend/.env
 
 echo ALLOWED_HOST=${PROTOCOL}://${DOMAIN}:${FRONTEND_PORT} >> .env
 echo MONGODB_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${DB_CONTAINER_NAME}:${DB_PORT} >> .env
