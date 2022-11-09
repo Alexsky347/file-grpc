@@ -33,7 +33,7 @@ services:
     environment:
       - REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
     ports:
-      - '3000:80'
+      - $FRONTEND_PORT
       - '443:443'
     volumes:
       - ./certbot/www:/var/www/certbot/:ro

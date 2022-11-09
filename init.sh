@@ -20,7 +20,7 @@ USERNAME=alex6
 PWD=`openssl rand 30 | base64 -w 0`
 
 #FRONT
-FRONTEND_PORT=3000
+FRONTEND_PORT=80
 
 
 
@@ -37,6 +37,8 @@ echo DB_PORT=${DB_PORT} >> .env
 echo SERVER_PORT=${SERVER_PORT} >> .env
 echo USERNAME=${USERNAME} >> .env
 echo PWD=${PWD} >> .env
+
+echo FRONTEND_PORT=${FRONTEND_PORT} >> .env
 
 echo ALLOWED_HOST=${PROTOCOL}://${DOMAIN}:${FRONTEND_PORT} >> .env
 echo MONGODB_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${DB_CONTAINER_NAME}:${DB_PORT} >> .env
