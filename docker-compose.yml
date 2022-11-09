@@ -4,13 +4,7 @@ services:
     image: 'back:0.0.1'
     build:
       context: ./backend
-    container_name: drive-back
-    environment:
-      - MONGO_DB_PASSWORD=$MONGO_DB_PASSWORD
-      - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
-      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
-      - ALLOWED_HOST=$ALLOWED_HOST
-      - SERVER_PORT=$SERVER_PORT
+    container_name: drive-back    
     depends_on:
       - db
     networks:
@@ -18,12 +12,14 @@ services:
     volumes:
       - ./backend/uploads:/usr/app/uploads
     ports:
-      - SERVER_PORT:$SERVER_PORT
+      - $SERVER_PORT:$SERVER_PORT
+    environment:
       - MONGODB_URI=$MONGODB_URI
       - DB_NAME=$DB_NAME
       - USERNAME=$USERNAME
       - PWD=$PWD
       - ALLOWED_HOST=$ALLOWED_HOST
+      - SERVER_PORT=$SERVER_PORT
   frontend:
     # https://mindsers.blog/post/https-using-nginx-certbot-docker/
     image: 'front:0.0.1'
