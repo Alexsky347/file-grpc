@@ -7,7 +7,6 @@ EMAIL=ledain.alexis@gmail.com
 PROTOCOL=http
 
 #DB
-MONGO_DB_PASSWORD=`openssl rand -hex 10`
 MONGO_INITDB_ROOT_USERNAME=admin
 MONGO_INITDB_ROOT_PASSWORD=`openssl rand -hex 10`
 DB_CONTAINER_NAME=db
@@ -22,14 +21,14 @@ PWD=`openssl rand -hex 10`
 #FRONT
 FRONTEND_PORT=80
 
-
+#clear file
+echo > .env
 
 echo NETWORK_NAME=${NETWORK_NAME} >> .env
 echo DOMAIN=${DOMAIN} >> .env
 echo EMAIL=${EMAIL} >> .env
 
 
-echo MONGO_DB_PASSWORD=${MONGO_DB_PASSWORD} >> .env
 echo MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME} >> .env
 echo MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD} >> .env
 echo DB_NAME=${DB_NAME} >> .env

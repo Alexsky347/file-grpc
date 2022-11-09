@@ -12,7 +12,7 @@ services:
     volumes:
       - ./backend/uploads:/usr/app/uploads
     ports:
-      - $SERVER_PORT:$SERVER_PORT
+      - "8080:8080"
     environment:
       - MONGODB_URI=$MONGODB_URI
       - DB_NAME=$DB_NAME
@@ -21,7 +21,6 @@ services:
       - ALLOWED_HOST=$ALLOWED_HOST
       - SERVER_PORT=$SERVER_PORT
   frontend:
-    # https://mindsers.blog/post/https-using-nginx-certbot-docker/
     image: 'front:0.0.1'
     build:
       context: ./frontend
@@ -33,7 +32,7 @@ services:
     environment:
       - REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
     ports:
-      - $FRONTEND_PORT
+      - "3000:80"
       - '443:443'
     volumes:
       - ./certbot/www:/var/www/certbot/:ro
@@ -41,7 +40,6 @@ services:
   db:
     image: mongo:latest
     environment:
-    - MONGO_DB_PASSWORD=$MONGO_DB_PASSWORD
     - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
     - MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
     volumes:
@@ -50,7 +48,7 @@ services:
     networks:
       - main-network
     ports:
-      - $DB_PORT:27017
+      - "27019:27017"
   certbot:
     image: certbot/certbot
     restart: unless-stopped
