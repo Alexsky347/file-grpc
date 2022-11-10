@@ -30,11 +30,12 @@ services:
     networks:
       - main-network
     ports:
-      - "$FRONTEND_PORT:80"
+      - "80:80"
       - '443:443'
     volumes:
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
+      - ../etc/nginx/templates:/etc/nginx/templates:ro
+      - ../etc/letsencrypt:/etc/letsencrypt:ro # mounting the folder to the nginx container 
+      - ../certbot/data:/var/www/certbot
   db:
     image: mongo:latest
     environment:
@@ -48,12 +49,17 @@ services:
     ports:
       - "$DB_PORT:27017"
   certbot:
-    image: certbot/certbot
-    restart: unless-stopped
+    container_name: certbot
+    image: certbot/certbot:latest
+    depends_on:
+      - frontend
+    command: >-
+             certonly --reinstall --webroot --webroot-path=/var/www/certbot
+             --email ${EMAIL} --agree-tos --no-eff-email
+             -d ${DOMAIN}
     volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+      - ./etc/letsencrypt:/etc/letsencrypt:rw
+      - ./certbot/data:/var/www/certbot:rw
 
 networks:
   main-network:
