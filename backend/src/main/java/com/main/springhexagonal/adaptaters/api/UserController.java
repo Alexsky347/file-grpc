@@ -6,7 +6,6 @@ import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.Map;
 
@@ -16,15 +15,19 @@ public class UserController extends MainController{
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public UserEntity register(@Valid @RequestBody UserEntity user) {
-        return userService.save(user);
-    }
-
-
     @PostMapping("/editCustomFields")
     public UserEntity editCustomFields(@RequestBody Map<String, ?> customFields, HttpServletRequest httpServletRequest) throws ParseException, JOSEException {
         String username = retrieveUser(httpServletRequest);
         return userService.editCustomFields(customFields, username);
     }
+
+//    @PostMapping
+//    public UserEntity register(@Valid @RequestBody UserEntity user) {
+//        return userService.save(user);
+//    }
+//    @GetMapping("/username")
+//    public UserEntity findByUsername(HttpServletRequest httpServletRequest) throws ParseException, JOSEException {
+//        String usernameFromJWT = retrieveUser(httpServletRequest);
+//        return userService.findByUsername(usernameFromJWT);
+//    }
 }

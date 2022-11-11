@@ -15,11 +15,12 @@ DB_PORT=27017
 
 #BACK
 SERVER_PORT=8080
-USERNAME=alex6
-PWD=`openssl rand -hex 10`
+DRIVE_USER_USERNAME=alex6
+DRIVE_USER_PWD=`openssl rand -hex 10`
+# PWD=`openssl rand -hex 10`
 
 #FRONT
-FRONTEND_PORT=80
+FRONTEND_PORT=3000
 
 #clear file
 echo > .env
@@ -35,8 +36,8 @@ echo MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD} >> .env
 echo DB_NAME=${DB_NAME} >> .env
 echo DB_PORT=${DB_PORT} >> .env
 echo SERVER_PORT=${SERVER_PORT} >> .env
-echo USERNAME=${USERNAME} >> .env
-echo PWD=${PWD} >> .env
+echo USERNAME=${DRIVE_USER_USERNAME} >> .env
+echo PWD=${DRIVE_USER_PWD} >> .env
 
 echo FRONTEND_PORT=${FRONTEND_PORT} >> .env
 
