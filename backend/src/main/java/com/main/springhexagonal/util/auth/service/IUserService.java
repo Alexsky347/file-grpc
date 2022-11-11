@@ -20,4 +20,6 @@ public interface IUserService {
     List<UserEntity> findAll();
 
     Map<String, String> refreshToken(String authorizationHeader, String issuer) throws BadJOSEException, ParseException, JOSEException;
+
+    void deleteUser(UserEntity userEntity);
 }

@@ -10,4 +10,5 @@ public interface UserRepository extends MongoRepository<UserEntity, String> {
 
     @Query("{customFields.email:'?0'}")
     UserEntity findByEmail(String email);
+    void delete(UserEntity user);
 }

@@ -97,4 +97,10 @@ public class UserService implements IUserService, UserDetailsService {
         return Map.of("access_token", accessToken, "refresh_token", refreshToken);
     }
 
+    @Override
+    public void deleteUser(UserEntity userEntity) {
+        logger.info("Deleting user {}", userEntity.getUsername());
+        userRepository.delete(userEntity);
+    }
+
 }

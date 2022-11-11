@@ -45,11 +45,15 @@ public class SpringHexagonalApplication {
 
             String username = EnvService.getProp("user.username");
             logger.debug("USERNAME -> " + username);
-            if (userService.findByUsername(username) == null) {
-                userService.save(new UserEntity(username, EnvService.getProp("user.pwd"), new HashMap<>()));
+
+            if (userService.findByUsername(username) != null) {
+                userService.deleteUser(userService.findByUsername(username));
             }
-            // storageService.deleteAll();
+            userService.save(new UserEntity(username, EnvService.getProp("user.pwd"), new HashMap<>()));
+
+            //init storage
              storageService.init();
+
             // generate RSA keys
             JwtUtil.generateRSAKeys();
         };
