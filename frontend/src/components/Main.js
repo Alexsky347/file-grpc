@@ -4,28 +4,44 @@ import { toast } from "react-toastify";
 import File from "./File";
 import Grid from "@mui/material/Grid";
 import { experimentalStyled as styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
 import CircularProgress from "@mui/material/CircularProgress";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 export default function Main({ sideBarOption, reRender, setReRender }) {
   const fileService = new FileService();
   const [loading, setLoading] = useState(false);
   // UseEffect
   useEffect(() => {
-    initGetFiles(limit, page);
+    async function fetchData() {
+      await initGetFiles(limit, page);
+    }
+    fetchData();
   }, [reRender]);
 
   // State Variables
   const [files, setFiles] = useState();
 
+
   const [count, setCount] = useState(0);
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const handleChange = (event, value) => {
-    setPage(value);
-    initGetFiles(limit, page);
+
+  const handleChangePaginate = async (event, value) => {
+    const page = await value;
+    await initGetFiles(limit, value);
+    setPage(page);
+  };
+
+  const handleChangeLimit = async (event) => {
+    const limit = await event.target.value;
+    await initGetFiles(limit, page);
+    setLimit(limit);
   };
 
 
@@ -36,7 +52,7 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
     setLoading(true);
     const response = await fileService.getFiles(limit, pageNumber, orderBy);
     if (response.status === 200) {
-      setCount(Math.floor(response.data.total.shift() / limit))
+      setCount(Math.ceil(response.data.total.shift() / limit))
       let arrayFiles = await Promise.all(
         response.data.data.map(async (fileName) => {
           let responseFile = await fileService.getFile(fileName);
@@ -115,7 +131,7 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
             <Grid
               container
               spacing={{ xs: 2, md: 3 }}
-              columns={{ xs: 1, sm: 8, md: 20 }}
+              columns={{ xs: 1, sm: 8, md: 16 }}
               justifyContent="space-evenly"
               alignItems="start"
               padding={5}
@@ -132,9 +148,27 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
               ))}
             </Grid>
             <Stack
-              padding={10}
+              padding={5}
               spacing={2}
-              alignItems="center">
+              flexWrap="wrap"
+              flexDirection="row"
+              justifyContent="center"
+              display="flex">
+              <FormControl sx={{ m: 1, minWidth: 5 }}>
+                <InputLabel id="demo-simple-select-autowidth-label">Items</InputLabel>
+                <Select
+                  labelId="demo-simple-select-autowidth-label"
+                  id="demo-simple-select-autowidth"
+                  value={limit}
+                  onChange={handleChangeLimit}
+                  autoWidth
+                  label="Items"
+                >
+                  <MenuItem value={10} defaultValue >10</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={50}>50</MenuItem>
+                </Select>
+              </FormControl>
               <Pagination
                 defaultPage={1}
                 siblingCount={0}
@@ -142,8 +176,9 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
                 count={count}
                 color={"primary"}
                 page={page}
-                onChange={handleChange}
-                variant="outlined" />
+                onChange={handleChangePaginate}
+                variant="outlined"
+                showFirstButton showLastButton />
             </Stack>
           </>
 

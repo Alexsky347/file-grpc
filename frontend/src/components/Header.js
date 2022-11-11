@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router';
 import { AuthService } from '../service/auth.service.js';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import MenuIcon from '@mui/icons-material/Menu';
 import { useViewport } from '../utils/useViewport';
 import { useEffect, useState } from 'react';
 import { Sling as Hamburger } from 'hamburger-react'
@@ -41,7 +40,13 @@ function Header({ userName, handleisLogged, handleSideNav }) {
 	return (
 		<div className="header">
 			<div className="logo">
-				<Hamburger toggled={isOpen} toggle={handleSideNavChildren} />
+				<Hamburger toggled={isOpen}
+					toggle={handleSideNavChildren}
+					duration={0.8}
+					rounded
+					label="Show menu"
+					size={36}
+					/>
 				<img
 					src='/static/drive.png'
 					alt="Logo"
