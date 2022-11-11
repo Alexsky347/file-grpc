@@ -18,8 +18,8 @@ services:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
       - MONGODB_URI=$MONGODB_URI
       - DB_NAME=$DB_NAME
-      - USERNAME=$USERNAME
-      - PWD=$PWD
+      - DRIVE_USER_USERNAME=$DRIVE_USER_USERNAME
+      - DRIVE_USER_PWD=$DRIVE_USER_PWD
       - ALLOWED_HOST=$ALLOWED_HOST
       - SERVER_PORT=$SERVER_PORT
   frontend:
