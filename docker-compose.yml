@@ -13,7 +13,9 @@ services:
       - ./backend/uploads:/usr/app/uploads
     ports:
       - "$SERVER_PORT:$SERVER_PORT"
+      - "5005:5005"
     environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
       - MONGODB_URI=$MONGODB_URI
       - DB_NAME=$DB_NAME
       - USERNAME=$USERNAME
