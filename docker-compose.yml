@@ -33,9 +33,9 @@ services:
       - "80:80"
       - '443:443'
     volumes:
-      - ../etc/nginx/templates:/etc/nginx/templates:ro
-      - ../etc/letsencrypt:/etc/letsencrypt:ro # mounting the folder to the nginx container 
-      - ../certbot/data:/var/www/certbot
+      - ./etc/nginx/templates:/etc/nginx/templates:ro
+      - ./etc/letsencrypt:/etc/letsencrypt:ro # mounting the folder to the nginx container 
+      - ./certbot/data:/var/www/certbot
   db:
     image: mongo:latest
     environment:
