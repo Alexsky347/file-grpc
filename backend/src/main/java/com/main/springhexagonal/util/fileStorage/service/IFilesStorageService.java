@@ -17,7 +17,7 @@ public interface IFilesStorageService {
     public void init() throws IOException;
     public Map<String, String> save(MultipartFile file, String username) throws IOException;
     public Resource load(String filename, String username) throws MalformedURLException;
-    public Set<String> loadAll(String username) throws IOException;
+    public Map<String, ?> loadAll(String username, int limit, int offset) throws IOException;
     public void deleteAll();
     public boolean deleteOne(String filename, String username) throws IOException;
     public boolean renameOne(String oldName,String newName, String username) throws IOException;

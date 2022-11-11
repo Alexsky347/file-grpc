@@ -1,7 +1,10 @@
 package com.main.springhexagonal.adaptaters.api;
 
+import com.main.springhexagonal.SpringHexagonalApplication;
 import com.main.springhexagonal.util.fileStorage.service.FilesStorageService;
 import com.nimbusds.jose.JOSEException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +23,9 @@ import java.util.*;
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class FilesController extends MainController{
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(FilesController.class);
     @Autowired
     FilesStorageService storageService;
 
@@ -52,9 +58,15 @@ public class FilesController extends MainController{
 
 
     @GetMapping(value="/files", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Set<String> getListFiles(HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
+    public Map<String, ?> getListFiles(@RequestParam String limit,
+                                    @RequestParam String pageNumber,
+                                    @RequestParam(required = false) String orderBy,
+                                    HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
+        logger.debug("limit: " + limit);
+        logger.debug("pageNumber: " + pageNumber);
+        int offset = (Integer.parseInt(pageNumber) -1) * Integer.parseInt(limit);
         String username = retrieveUser(httpServletRequest);
-        return storageService.loadAll(username);
+        return storageService.loadAll(username, Integer.parseInt(limit), offset);
     }
 
     @GetMapping(value="/file/{filename:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

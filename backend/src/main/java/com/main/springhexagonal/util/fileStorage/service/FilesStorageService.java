@@ -14,10 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,16 +61,25 @@ public class FilesStorageService implements IFilesStorageService {
     }
 
     @Override
-    public Set<String> loadAll(String username) throws IOException {
+    public Map<String, ?> loadAll(String username, int limit, int offset) throws IOException {
         int depth = 1;
         Path userDir = this.getUserDir(username);
+        Map<String, Set<?>> data = new HashMap<>();
+        File directory=new File(userDir.toUri());
+        int fileCount= Objects.requireNonNull(directory.list()).length;
+        data.put("total", Collections.singleton(fileCount));
+        Set<String> files;
         try (Stream<Path> stream = Files.walk(userDir, depth)) {
-            return stream
+            files = stream
                     .filter(file -> !Files.isDirectory(file))
+                    .skip(offset)
+                    .limit(limit)
                     .map(Path::getFileName)
                     .map(Path::toString)
                     .collect(Collectors.toSet());
         }
+        data.put("data", files);
+        return data;
     }
 
     @Override

@@ -44,6 +44,7 @@ public class SpringHexagonalApplication {
         return args -> {
 
             String username = EnvService.getProp("user.username");
+            logger.debug("USERNAME -> " + username);
             if (userService.findByUsername(username) == null) {
                 userService.save(new UserEntity(username, EnvService.getProp("user.pwd"), new HashMap<>()));
             }

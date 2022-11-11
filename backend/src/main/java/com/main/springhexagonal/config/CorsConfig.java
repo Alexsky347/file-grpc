@@ -14,7 +14,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://ledainalexis.com:3000")
+                        .allowedOrigins(EnvService.getProp("allowedHost"))
                         .allowedMethods("*");
             }
         };
