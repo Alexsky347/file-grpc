@@ -6,27 +6,39 @@ import Grid from "@mui/material/Grid";
 import { experimentalStyled as styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import CircularProgress from "@mui/material/CircularProgress";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 export default function Main({ sideBarOption, reRender, setReRender }) {
   const fileService = new FileService();
   const [loading, setLoading] = useState(false);
   // UseEffect
   useEffect(() => {
-    initGetFiles("drive.png");
+    initGetFiles(limit, page);
   }, [reRender]);
 
   // State Variables
   const [files, setFiles] = useState();
 
+  const [count, setCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const handleChange = (event, value) => {
+    setPage(value);
+    initGetFiles(limit, page);
+  };
+
+
   /**
    * init
    */
-  async function initGetFiles(fileName) {
+  async function initGetFiles(limit, pageNumber, orderBy) {
     setLoading(true);
-    const response = await fileService.getFiles(fileName);
+    const response = await fileService.getFiles(limit, pageNumber, orderBy);
     if (response.status === 200) {
+      setCount(Math.floor(response.data.total.shift() / limit))
       let arrayFiles = await Promise.all(
-        response.data.map(async (fileName) => {
+        response.data.data.map(async (fileName) => {
           let responseFile = await fileService.getFile(fileName);
           const { headers, data } = responseFile;
           const fileNickName = getHeaderProp("Content-Disposition", headers);
@@ -99,24 +111,42 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
           />
         ) : null}
         {files ? (
-          <Grid
-            container
-            spacing={{ xs: 2, md: 3 }}
-            columns={{ xs: 1, sm: 8, md: 12 }}
-            justifyContent="space-evenly"
-            alignItems="start"
-          >
-            {files.map((file, i) => (
-              <Grid item xs={2} sm={4} md={3} key={i}>
-                <File
-                  metaData={file}
-                  reRender={reRender}
-                  setReRender={setReRender}
-                  key={i}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <>
+            <Grid
+              container
+              spacing={{ xs: 2, md: 3 }}
+              columns={{ xs: 1, sm: 8, md: 20 }}
+              justifyContent="space-evenly"
+              alignItems="start"
+              padding={5}
+            >
+              {files.map((file, i) => (
+                <Grid item xs={2} sm={4} md={3} key={i}>
+                  <File
+                    metaData={file}
+                    reRender={reRender}
+                    setReRender={setReRender}
+                    key={i}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+            <Stack
+              padding={10}
+              spacing={2}
+              alignItems="center">
+              <Pagination
+                defaultPage={1}
+                siblingCount={0}
+                boundaryCount={1}
+                count={count}
+                color={"primary"}
+                page={page}
+                onChange={handleChange}
+                variant="outlined" />
+            </Stack>
+          </>
+
         ) : (
           <h1>No files yet.</h1>
         )}

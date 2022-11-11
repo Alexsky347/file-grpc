@@ -59,7 +59,7 @@ function Header({ userName, handleisLogged, handleSideNav }) {
 					onClick={handleLogout}
 				>
 					<ExitToAppIcon />
-					Logout
+
 				</Button>
 			</div>
 		</div>

@@ -59,7 +59,7 @@ function Login({ handleUsername, handleisLogged }) {
 		e.preventDefault();
 
 		// Username regex
-		const nameRegex = /^[a-z ,.'-]+$/i;
+		const nameRegex = /^[a-z 0-9 ,.'-]+$/i;
 
 		if (nameRegex.test(name) && password) {
 			setIsValidated(true);

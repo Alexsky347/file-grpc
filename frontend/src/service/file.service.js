@@ -9,9 +9,9 @@ export class FileService {
     },
   };
 
-  async getFiles() {
+  async getFiles(limit, pageNumber, orderBy) {
     return http
-      .get("/files", this.config)
+      .get(`/files?limit=${limit}&pageNumber=${pageNumber}&orderBy=${orderBy}`, this.config)
       .then((response) => {
         return response;
       })
