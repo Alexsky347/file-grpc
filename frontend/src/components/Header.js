@@ -19,6 +19,7 @@ function Header({ userName, handleisLogged, handleSideNav }) {
 		},
 		avatar: {
 			backgroundColor: 'white',
+			color: 'darkblue',
 			border: '1px solid black'
 		},
 	}));
