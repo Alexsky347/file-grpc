@@ -40,7 +40,7 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
 
   const handleChangeLimit = async (event) => {
     const limit = await event.target.value;
-    await initGetFiles(limit, page);
+    await initGetFiles(limit, 1);
     setLimit(limit);
   };
 
@@ -108,7 +108,6 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
     return null;
   };
 
-  // TODO to implement https://mui.com/material-ui/react-grid/
   // Render main according to side bar option
   if (sideBarOption === 0) {
     return (
@@ -123,6 +122,7 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
               top: "50%",
               left: "50%",
               zIndex: 40,
+              color: 'darkblue'
             }}
           />
         ) : null}

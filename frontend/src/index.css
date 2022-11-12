@@ -259,3 +259,8 @@ body {
 .upload-button {
 	text-align: center;
 }
+
+
+.MuiAvatar-colorDefault {
+	color: darkblue;
+  }

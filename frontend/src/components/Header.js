@@ -7,6 +7,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { useViewport } from '../utils/useViewport';
 import { useEffect, useState } from 'react';
 import { Sling as Hamburger } from 'hamburger-react'
+import { yellow } from '@material-ui/core/colors';
 
 function Header({ userName, handleisLogged, handleSideNav }) {
 	const { isDesktop, isMobile, isTablet } = useViewport();
@@ -17,7 +18,8 @@ function Header({ userName, handleisLogged, handleSideNav }) {
 			margin: 10,
 		},
 		avatar: {
-			backgroundColor: 'red',
+			backgroundColor: 'white',
+			border: '1px solid black'
 		},
 	}));
 
@@ -46,7 +48,7 @@ function Header({ userName, handleisLogged, handleSideNav }) {
 					rounded
 					label="Show menu"
 					size={36}
-					/>
+				/>
 				<img
 					src='/static/drive.png'
 					alt="Logo"
@@ -55,7 +57,7 @@ function Header({ userName, handleisLogged, handleSideNav }) {
 			</div>
 
 			<div className="avatar">
-				<Avatar className={classes.avatar}>{userName[0]}</Avatar>
+				<Avatar className={classes.avatar} >{userName[0]}</Avatar>
 				<Button
 					variant="outlined"
 					size="small"
