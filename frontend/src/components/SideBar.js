@@ -34,7 +34,7 @@ export default function SideBar({
   const [widthNav, setWidthNav] = useState(0);
 
   useEffect(() => {
-    handleSideNav ? setWidthNav("200") : setWidthNav(70);
+    handleSideNav ? setWidthNav(200) : setWidthNav(70);
   }, [handleSideNav]);
 
   const fileService = new FileService();
@@ -126,6 +126,7 @@ export default function SideBar({
             '& [role="button"]': {
               borderRadius: "0 20px 20px 0",
             },
+            height: "100%"
           }}
         >
           <ListItem
@@ -190,7 +191,7 @@ export default function SideBar({
               <p>Created : {metaData.createDate}</p>
               <p>Last modified : {metaData.lastModified}</p>
               <p>size : {metaData.fileSize} MB</p>
-              {}
+              { }
             </div>
           ) : (
             <div className="metaData not-uploaded">

@@ -71,16 +71,21 @@ export default function Main({ metaData, reRender, setReRender }) {
   // Rename
   const handleRename = async () => {
     if (metaData?.filename) {
-      const response = await fileService.renameFile(
-        metaData?.filename,
-        newFileName
-      );
-      if (response.status === 200) {
-        handleClose();
-        toast.success("File renamed !");
-        reRender ? setReRender(0) : setReRender(1);
+      if (metaData?.filename === newFileName) {
+        toast.warning("same file name");
       } else {
-        toast.error(`${response?.response?.data?.errorMessage}`);
+        const response = await fileService.renameFile(
+          metaData?.filename,
+          newFileName
+        );
+        if (response.status === 200) {
+          handleClose();
+          toast.success("File renamed !");
+          reRender ? setReRender(0) : setReRender(1);
+        } else {
+          toast.error(`${response?.response?.data?.errorMessage}`);
+        }
+
       }
     } else {
       toast.error("No file founded !");
@@ -89,7 +94,7 @@ export default function Main({ metaData, reRender, setReRender }) {
 
   const handleFileName = (fileName) => {
     if (fileName) {
-      return fileName.replaceAll("%", " ");
+      return fileName.replaceAll("%20", " ");
     }
     return fileName;
   };
@@ -146,7 +151,7 @@ export default function Main({ metaData, reRender, setReRender }) {
               InputLabelProps={{
                 shrink: true,
               }}
-              defaultValue={metaData?.filename.split(".")[0]}
+              defaultValue={handleFileName(metaData?.filename.split(".")[0])}
               onChange={(e) => {
                 setNewFileName(
                   e.target.value + "." + metaData?.filename.split(".")[1]

@@ -93,7 +93,7 @@ body {
 }
 .main {
 	width: 100%;
-	height: 100vh;
+	height: 100%;
 }
 
 .login-container {
@@ -264,3 +264,13 @@ body {
 .MuiAvatar-colorDefault {
 	color: darkblue;
   }
+
+
+  .MuiPopover-root#menu- {
+    margin-top: 50px;
+}
+
+.MuiCardHeader-content {
+    flex: 1 1 auto;
+    width: 100%;
+}
