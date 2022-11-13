@@ -8,6 +8,7 @@ import { useViewport } from '../utils/useViewport';
 import { useEffect, useState } from 'react';
 import { Sling as Hamburger } from 'hamburger-react'
 import { yellow } from '@material-ui/core/colors';
+import { toast } from 'react-toastify';
 
 function Header({ userName, handleisLogged, handleSideNav }) {
 	const { isDesktop, isMobile, isTablet } = useViewport();
@@ -31,6 +32,7 @@ function Header({ userName, handleisLogged, handleSideNav }) {
 		AuthService.removeUserInfo();
 		handleisLogged(false);
 		history.push('/login');
+		toast.success(`You 're log out`);
 	};
 
 	const handleSideNavChildren = (state) => {

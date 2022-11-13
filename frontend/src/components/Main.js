@@ -17,11 +17,14 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
   const [loading, setLoading] = useState(false);
   // UseEffect
   useEffect(() => {
-    async function fetchData() {
-      await initGetFiles(limit, page);
-    }
-    fetchData();
+    fetchData(limit, page);
   }, [reRender]);
+
+  async function fetchData(limit, page) {
+    // scroll to top on page load
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    await initGetFiles(limit, page);
+  }
 
   // State Variables
   const [files, setFiles] = useState();
@@ -34,13 +37,13 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
 
   const handleChangePaginate = async (event, value) => {
     const page = await value;
-    await initGetFiles(limit, value);
+    await fetchData(limit, value);
     setPage(page);
   };
 
   const handleChangeLimit = async (event) => {
     const limit = await event.target.value;
-    await initGetFiles(limit, 1);
+    await fetchData(limit, 1);
     setLimit(limit);
   };
 
@@ -134,10 +137,10 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
               columns={{ xs: 1, sm: 8, md: 16 }}
               justifyContent="space-evenly"
               alignItems="start"
-              padding={5}
+              padding="2px"
             >
               {files.map((file, i) => (
-                <Grid item xs={2} sm={4} md={3} key={i}>
+                <Grid item xs={2} sm={4} md={3} key={i} maxWidth="100%">
                   <File
                     metaData={file}
                     reRender={reRender}
