@@ -5,12 +5,12 @@ import File from "./File";
 import Grid from "@mui/material/Grid";
 import { experimentalStyled as styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 export default function Main({ sideBarOption, reRender, setReRender }) {
   const fileService = new FileService();
@@ -22,13 +22,12 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
 
   async function fetchData(limit, page) {
     // scroll to top on page load
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     await initGetFiles(limit, page);
   }
 
   // State Variables
   const [files, setFiles] = useState();
-
 
   const [count, setCount] = useState(0);
 
@@ -47,7 +46,6 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
     setLimit(limit);
   };
 
-
   /**
    * init
    */
@@ -55,7 +53,7 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
     setLoading(true);
     const response = await fileService.getFiles(limit, pageNumber, orderBy);
     if (response.status === 200) {
-      setCount(Math.ceil(response.data.total.shift() / limit))
+      setCount(Math.ceil(response.data.total.shift() / limit));
       let arrayFiles = await Promise.all(
         response.data.data.map(async (fileName) => {
           let responseFile = await fileService.getFile(fileName);
@@ -125,7 +123,7 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
               top: "50%",
               left: "50%",
               zIndex: 40,
-              color: 'darkblue'
+              color: "darkblue",
             }}
           />
         ) : null}
@@ -156,9 +154,12 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
               flexWrap="wrap"
               flexDirection="row"
               justifyContent="center"
-              display="flex">
+              display="flex"
+            >
               <FormControl sx={{ m: 1, minWidth: 5 }}>
-                <InputLabel id="demo-simple-select-autowidth-label">Items</InputLabel>
+                <InputLabel id="demo-simple-select-autowidth-label">
+                  Items
+                </InputLabel>
                 <Select
                   labelId="demo-simple-select-autowidth-label"
                   id="demo-simple-select-autowidth"
@@ -167,7 +168,9 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
                   autoWidth
                   label="Items"
                 >
-                  <MenuItem value={10} defaultValue >10</MenuItem>
+                  <MenuItem value={10} defaultValue>
+                    10
+                  </MenuItem>
                   <MenuItem value={20}>20</MenuItem>
                   <MenuItem value={50}>50</MenuItem>
                 </Select>
@@ -181,10 +184,11 @@ export default function Main({ sideBarOption, reRender, setReRender }) {
                 page={page}
                 onChange={handleChangePaginate}
                 variant="outlined"
-                showFirstButton showLastButton />
+                showFirstButton
+                showLastButton
+              />
             </Stack>
           </>
-
         ) : (
           <h1>No files yet.</h1>
         )}

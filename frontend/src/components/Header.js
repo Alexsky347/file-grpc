@@ -10,7 +10,7 @@ import { Sling as Hamburger } from 'hamburger-react'
 import { yellow } from '@material-ui/core/colors';
 import { toast } from 'react-toastify';
 
-function Header({ userName, handleisLogged, handleSideNav }) {
+function Header({ userName, handleIsLogged, handleSideNav }) {
 	const { isDesktop, isMobile, isTablet } = useViewport();
 	const [isOpen, setOpen] = useState(false);
 
@@ -30,7 +30,7 @@ function Header({ userName, handleisLogged, handleSideNav }) {
 
 	const handleLogout = () => {
 		AuthService.removeUserInfo();
-		handleisLogged(false);
+		handleIsLogged(false);
 		history.push('/login');
 		toast.success(`You 're log out`);
 	};
@@ -56,7 +56,7 @@ function Header({ userName, handleisLogged, handleSideNav }) {
 					src='/static/drive.png'
 					alt="Logo"
 				/>
-				<h1>Drive Clone</h1>
+				<h1>{ document.title }</h1>
 			</div>
 
 			<div className="avatar">

@@ -22,7 +22,7 @@ function App() {
 		setUsername(current => current = name)
 	}
 
-	const handleisLogged = state => {
+	const handleIsLogged = state => {
 		setIsLogged(current => current = state)
 	}
 
@@ -32,10 +32,10 @@ function App() {
 			<Router>
 				<Switch>
 					<Route exact path="/login">
-						<Login handleUsername={handleUsername} handleisLogged={handleisLogged} />
+						<Login handleUsername={handleUsername} handleIsLogged={handleIsLogged} />
 					</Route>
 					<Route exact path="/">
-						<Dashboard userName={username} setIsLoggedIn={isLogged} handleisLogged={handleisLogged} />
+						<Dashboard userName={username} setIsLoggedIn={isLogged} handleIsLogged={handleIsLogged} />
 					</Route>
 				</Switch>
 			</Router>

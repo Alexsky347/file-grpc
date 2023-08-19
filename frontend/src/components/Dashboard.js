@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 
 
-export default function Dashboard({ userName, setIsLoggedIn, handleisLogged }) {
+export default function Dashboard({ userName, setIsLoggedIn, handleIsLogged }) {
 
   const history = useHistory();
 
@@ -31,7 +31,7 @@ export default function Dashboard({ userName, setIsLoggedIn, handleisLogged }) {
       <div className="dashboard-container">
         <Header
           userName={userName}
-          handleisLogged={handleisLogged}
+          handleIsLogged={handleIsLogged}
           handleSideNav={handleSideNavParent} />
         <div className="main-flex">
           <SideBar
