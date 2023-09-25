@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ReactElement } from "react";
 
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -7,10 +7,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { FileService } from "../../service/api/file.service";
-import { toast } from "react-toastify";
-import { ReactElement } from "react";
-import CardComponent from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
+import { toast } from "react-toastify";import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";

@@ -1,12 +1,11 @@
 import http from './http-common';
 import { AuthService } from './auth.service';
-import { Config } from '@/models/interface/config';
 import { AxiosRequestConfig } from 'axios';
 
 export class FileService {
   private config: AxiosRequestConfig<any> = {
     headers: {
-      Authorization: AuthService.getBearer(),
+      Authorization: AuthService.getCurrentUser(),
       'Content-Type': 'multipart/form-data',
     },
   };
@@ -27,7 +26,7 @@ export class FileService {
     this.config.responseType = 'blob';
     return http.get(`/file/${fileName}`, this.config);
   }
-  
+
 
   async uploadOneFile(fileFormData: FormData) {
     try {

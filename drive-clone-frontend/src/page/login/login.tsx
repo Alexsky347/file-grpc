@@ -1,8 +1,6 @@
-// import { TextField, Button } from "@material-ui/core";
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect, FormEvent, JSX } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { AuthService } from '../../service/api/auth.service';
 import {
   Avatar,
   Button,
@@ -12,10 +10,17 @@ import {
   Theme,
   Typography,
 } from '@mui/material';
-import { ItToken } from '@/model/interface/it-token';
+
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import { useSelector, useDispatch } from 'react-redux';
+import * as Yup from 'yup';
+import { login } from "../../store/slices/auth";
+import { clearMessage } from "../../store/slices/message";
+import { ItToken } from "../../model/interface/it-token";
+import { AppDispatch, store } from "../../store/store";
+
 
 interface LoginResponse {
   status: number;
@@ -30,42 +35,41 @@ interface LoginResponse {
 function Login(): JSX.Element {
   const navigate = useNavigate();
 
-  // UseEffect
+  const [loading, setLoading] = useState(false);
+
+  const { isLoggedIn } = useSelector((state: {auth: any}) => state.auth);
+  const { message } = useSelector((state: {message: any}) => state.message);
+
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
-    AuthService.checkLoginAndRedirect(navigate);
-  }, [navigate]);
+    dispatch(clearMessage());
+  }, [dispatch]);
 
   async function loginUser(data: FormData) {
+    setLoading(true);
     const username = data.get('username') as string;
     const password = data.get('password') as string;
-    const response = (await AuthService.login({
-      username,
-      password
-    }
-    )) as unknown as LoginResponse;
+    const response = dispatch(
+      login({ username, password })
+    ).unwrap() as unknown as LoginResponse;
 
-    if (
-      response &&
-      response.status === 200 &&
-      response?.headers?.access_token &&
-      response?.headers?.refresh_token
-    ) {
-      AuthService.setUserInfo({
-        username: username,
-        accessToken: response.headers.access_token,
-        refreshToken: response.headers.refresh_token,
-      });
+    if (isLoggedIn) {
       toast.success(`You're logged`);
       navigate('/', { replace: true });
     } else {
+      setLoading(false);
       toast.error(`${response?.response?.data?.errorMessage}`);
     }
   }
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    if (event && event.currentTarget) {
-      const data = new FormData(event.currentTarget);
+    if (event?.currentTarget instanceof HTMLFormElement) {
+      const data = new FormData();
+      const { username, password } = event.currentTarget;
+      data.append('username', username.value);
+      data.append('password', password.value);
       loginUser(data);
     }
   };
@@ -119,12 +123,16 @@ function Login(): JSX.Element {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link to="#"
+                    variant="contained"
+                    color="primary">
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link to="#"
+                    variant="contained"
+                    color="primary">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

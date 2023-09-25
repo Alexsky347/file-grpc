@@ -1,38 +1,37 @@
-import React, {Dispatch, SetStateAction, useState} from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import styles from './header.module.scss';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import { AuthService } from '../../service/api/auth.service';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { useViewPort } from '../../hook/use-view-port/use-view-port';
 import { toast } from 'react-toastify';
 import { Sling as Hamburger } from 'hamburger-react';
-import {Avatar, Button} from "@mui/material";
+import { Avatar, Button } from '@mui/material';
 
 interface HeaderProps {
   handleSideNav: (state: boolean) => boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({  handleSideNav }) => {
+const Header: React.FC<HeaderProps> = ({ handleSideNav }) => {
   // const { isDesktop, isMobile, isTablet } = useViewPort();
   const [isOpen, setOpen] = useState(false);
   const userName = '';
 
-  const useStyles = makeStyles((theme: any) => ({
-    margin: {
-      margin: 10,
-    },
-    avatar: {
-      backgroundColor: 'white',
-      color: 'darkblue',
-      border: '1px solid black',
-    },
-  }));
+  const StyledAvatar = styled(Avatar)({
+    backgroundColor: 'white',
+    color: 'darkblue',
+    border: '1px solid black',
+  });
+
+  const StyledBtn= styled(Button)({
+    margin: 10,
+  });
 
   const navigate = useNavigate();
 
   const handleLogout = (): void => {
-    AuthService.removeUserInfo();
+    AuthService.logout();
     navigate('/login');
     toast.success(`You're logged out`);
   };
@@ -42,7 +41,6 @@ const Header: React.FC<HeaderProps> = ({  handleSideNav }) => {
     setOpen(state);
   };
 
-  const classes = useStyles();
 
   return (
     <div className="header">
@@ -60,16 +58,19 @@ const Header: React.FC<HeaderProps> = ({  handleSideNav }) => {
       </div>
 
       <div className="avatar">
-        <Avatar className={classes.avatar}>{userName?.[0]}</Avatar>
-        <Button
-          variant="outlined"
-          size="small"
-          color="primary"
-          className={classes.margin}
-          onClick={handleLogout}
-        >
-          <ExitToAppIcon />
-        </Button>
+        <StyledAvatar>
+        <Avatar>{userName?.[0]}</Avatar>
+        </StyledAvatar>
+        <StyledBtn>
+          <Button
+              variant="outlined"
+              size="small"
+              color="primary"
+              onClick={handleLogout}>
+            <ExitToAppIcon />
+          </Button>
+        </StyledBtn>
+
       </div>
     </div>
   );

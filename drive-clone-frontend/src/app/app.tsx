@@ -6,16 +6,26 @@ import NxWelcome from './nx-welcome';
 import Login from '../page/login/login';
 import { PrivateRoute } from '../utils/auth/private-route';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import Layout from "../component/layout/layout";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../store/slices/auth";
 
 export function App() {
 
+    const { user: currentUser } = useSelector((state: {auth: any}) => state.auth);
+    const dispatch = useDispatch();
+
+    const logOut = useCallback(() => {
+        dispatch(logout());
+    }, [dispatch]);
+
 useEffect(() => {
   document.title = 'Login - Drive Clone';
-}, []);
+}, [currentUser, logOut]);
 
   return (
+
     <div className="App">
       <Router>
         <Routes>

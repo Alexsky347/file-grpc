@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom'; // Add this line if not already imp
 import { AuthService } from '../../service/api/auth.service';
 
 export function PrivateRoute({ children }: { children: React.ReactNode }) {
-  const token = AuthService.getBearer();
+  const token = AuthService.getCurrentUser();
 
   if (!token) {
     // not logged in so redirect to login page with the return url
