@@ -44,10 +44,11 @@ const Header: React.FC<HeaderProps> = ({ handleSideNav }) => {
 
   return (
     <div className="header">
+
       <div className="logo">
         <Hamburger
           toggled={isOpen}
-          toggle={handleSideNavChildren}
+          onToggle={handleSideNavChildren}
           duration={0.8}
           rounded
           label="Show menu"

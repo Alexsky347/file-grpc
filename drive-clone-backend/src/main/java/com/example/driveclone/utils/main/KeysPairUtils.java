@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public abstract class GenerateKeyUtils {
+public abstract class KeysPairUtils {
 
     @Value("${drive.app.jwtExpirationMs}")
     private static int jwtExpirationMs;
@@ -29,7 +29,7 @@ public abstract class GenerateKeyUtils {
     private static final int expireHourRefreshToken = 72;
     private static JWSSigner signer;
     private static RSAPublicKey publicKey;
-    
+
     @Getter
     private static RSAPrivateKey privateKey;
 

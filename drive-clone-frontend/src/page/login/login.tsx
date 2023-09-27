@@ -20,8 +20,6 @@ import { ItToken } from "../../model/interface/it-token";
 import { AppDispatch, store } from "../../store/store";
 import { RootState } from "@reduxjs/toolkit/dist/query/core/apiState";
 import { CombinedState } from "@reduxjs/toolkit";
-import Cookies from "js-cookie";
-
 
 interface LoginResponse {
   status: number;
@@ -54,20 +52,19 @@ function Login(): JSX.Element {
     const username = data.get('username') as string;
     const password = data.get('password') as string;
 
-    const response = dispatch(
-      login({ username, password })
-    ).unwrap() as unknown as LoginResponse;
+   await dispatch(
+        login({ username, password })
+    );
     if (isLoggedIn) {
       toast.success(`You're logged`);
-      console.log(Cookies.get())
       navigate('/', { replace: true });
     } else {
       setLoading(false);
       toast.error(message);
     }
-    const cookie = Cookies.get('driveCookie')
-    console.log(cookie)
   }
+
+  // TODO handle message error -> undefined first time
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -81,15 +78,16 @@ function Login(): JSX.Element {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" >
       <Box
         sx={{
-          marginTop: 8,
+          padding: '20%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
         }}
       >
+        <img src="/static/drive.png" alt="drive clone logo"/>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
@@ -127,22 +125,6 @@ function Login(): JSX.Element {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link to="#"
-                    variant="contained"
-                    color="primary">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link to="#"
-                    variant="contained"
-                    color="primary">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
         </Box>
       </Box>
     </Container>

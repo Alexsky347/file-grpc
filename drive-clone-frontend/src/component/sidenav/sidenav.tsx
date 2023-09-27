@@ -43,7 +43,6 @@ export function Sidenav({
     handleSideNav ? setWidthNav(200) : setWidthNav(70);
   }, [handleSideNav]);
 
-  const fileService = new FileService();
 
   // styles
     const StyledBtn = styled(Button)({
@@ -92,12 +91,12 @@ export function Sidenav({
 
     if (files?.length === 1) {
       data.append('file', files[0]);
-      response = (await fileService.uploadOneFile(data)) as ItResponse;
+      response = (await FileService.uploadOneFile(data)) as ItResponse;
     } else {
       Array.from(files!).forEach((element) => {
         data.append('file', element);
       });
-      response = (await fileService.uploadMultipleFiles(data)) as ItResponse;
+      response = (await FileService.uploadMultipleFiles(data)) as ItResponse;
     }
 
     if (response.status === 200) {
@@ -120,8 +119,8 @@ export function Sidenav({
           pr: 2,
           width: widthNav,
           border: '1px solid rgba(0, 0, 0, 0.05)',
-          display: 'block',
           height: '91vh',
+          paddingRight: 0
         }}
       >
         <List

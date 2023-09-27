@@ -1,6 +1,7 @@
 package com.example.driveclone.security;
 
 
+import com.example.driveclone.models.ERole;
 import com.example.driveclone.security.jwt.AuthEntryPointJwt;
 import com.example.driveclone.security.jwt.AuthTokenFilter;
 import com.example.driveclone.security.services.UserDetailsServiceImpl;
@@ -51,12 +52,6 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 
       return authProvider;
   }
-
-//  @Bean
-//  @Override
-//  public AuthenticationManager authenticationManagerBean() throws Exception {
-//    return super.authenticationManagerBean();
-//  }
   
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -70,7 +65,9 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf(AbstractHttpConfigurer::disable)
+    http
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(AbstractHttpConfigurer::disable)
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> 

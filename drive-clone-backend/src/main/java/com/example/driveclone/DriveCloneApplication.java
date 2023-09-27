@@ -7,7 +7,7 @@ import com.example.driveclone.models.User;
 import com.example.driveclone.repository.RoleRepository;
 import com.example.driveclone.repository.UserRepository;
 import com.example.driveclone.utils.fileStorage.service.IFilesStorageService;
-import com.example.driveclone.utils.main.GenerateKeyUtils;
+import com.example.driveclone.utils.main.KeysPairUtils;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +75,7 @@ public class DriveCloneApplication {
 			storageService.init();
 
 			// generate RSA keys
-			GenerateKeyUtils.generateRSAKeys();
+			KeysPairUtils.generateRSAKeys();
 		};
 	}
 

@@ -6,14 +6,17 @@ import CreateIcon from "@mui/icons-material/Create";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
+import Card from "@mui/material/Card";
 import { FileService } from "../../service/api/file.service";
-import { toast } from "react-toastify";import CardHeader from "@mui/material/CardHeader";
+import { toast } from "react-toastify";
+import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import {TextField} from "@mui/material";
+import { InsertDriveFileOutlined } from "@mui/icons-material";
 
 interface MainProps {
   metaData: {
@@ -48,7 +51,6 @@ export function CardC({
   const [newFileName, setNewFileName] = useState<string | undefined>(
     metaData?.filename
   );
-  const fileService = new FileService();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -56,12 +58,12 @@ export function CardC({
   // Delete
   const handleDelete = async () => {
     if (metaData?.filename) {
-      const response = await fileService.deleteFile(metaData.filename);
+      const response = await FileService.deleteFile(metaData.filename) as unknown as Response;
       if (response.status === 200) {
         reRender ? setReRender(0) : setReRender(1);
         toast.success("CardComponent removed !");
       } else {
-        toast.error(`${response?.response?.data?.errorMessage}`);
+        toast.error(response.statusText);
       }
     } else {
       toast.error("No file founded !");
@@ -86,7 +88,7 @@ export function CardC({
       if (metaData?.filename === newFileName) {
         toast.warning("same file name");
       } else {
-        const response = await fileService.renameFile(
+        const response = await FileService.renameFile(
           metaData?.filename,
           newFileName as string
         );
@@ -136,7 +138,7 @@ export function CardC({
             <CreateIcon />
           </IconButton>
           <IconButton>
-            <InsertDriveFileIcon />
+            <InsertDriveFileOutlined />
           </IconButton>
           <IconButton onClick={handleDownload} aria-label="download">
             <DownloadIcon />

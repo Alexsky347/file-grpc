@@ -12,6 +12,8 @@ import Select from '@mui/material/Select';
 import {CardC} from "../../component/card-c/card.c";
 import {ItResponse} from "../../model/interface/it-response";
 import {AxiosHeaders, RawAxiosResponseHeaders} from "axios";
+import { styled } from "@mui/system";
+import { Avatar } from "@mui/material";
 interface DashboardProps {
   sideBarOption: number;
   reRender: number;
@@ -19,7 +21,6 @@ interface DashboardProps {
 }
 
 export function Dashboard ({ sideBarOption, reRender, setReRender } :  DashboardProps) {
-  const fileService = new FileService();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -36,6 +37,10 @@ export function Dashboard ({ sideBarOption, reRender, setReRender } :  Dashboard
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
+  const NoDataStyled = styled('h1')({
+    paddingLeft: '50%'
+  });
+
   const handleChangePaginate = async (event: React.ChangeEvent<unknown>, value: number) => {
     await fetchData(limit, value);
     setPage(value);
@@ -49,12 +54,12 @@ export function Dashboard ({ sideBarOption, reRender, setReRender } :  Dashboard
 
   async function initGetFiles(limit: number, pageNumber: number, orderBy?: string) {
     setLoading(true);
-    const response : ItResponse= await fileService.getFiles(limit, pageNumber, orderBy) as unknown as ItResponse;
+    const response : ItResponse= await FileService.getFiles(limit, pageNumber, orderBy) as unknown as ItResponse;
     if (response.status === 200) {
       setCount(Math.ceil(response.data.total.shift() / limit));
       const arrayFiles = await Promise.all(
         response.data.data.map(async (fileName: string) => {
-          const responseFile = await fileService.getFile(fileName);
+          const responseFile = await FileService.getFile(fileName);
           const { headers, data } = responseFile;
           const fileNickName = getHeaderProp('Content-Disposition', headers) as string;
 
@@ -166,7 +171,9 @@ export function Dashboard ({ sideBarOption, reRender, setReRender } :  Dashboard
             </Stack>
           </>
         ) : (
-          <h1>No files yet.</h1>
+            <NoDataStyled>
+              <h1>No files yet.</h1>
+            </NoDataStyled>
         )}
       </div>
     );

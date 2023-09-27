@@ -10,12 +10,12 @@ import { useCallback, useEffect } from 'react';
 import Layout from "../component/layout/layout";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/slices/auth";
-import Cookies from "js-cookie";
+import { AppDispatch } from "../store/store";
 
 export function App() {
 
     const { user: currentUser } = useSelector((state: {auth: any}) => state.auth);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const logOut = useCallback(() => {
         dispatch(logout());
@@ -24,10 +24,6 @@ export function App() {
 useEffect(() => {
   document.title = 'Login - Drive Clone';
 }, [currentUser, logOut]);
-
-    const cookie = Cookies.get()
-    console.log(cookie)
-    console.log(document.cookie)
 
   return (
 
