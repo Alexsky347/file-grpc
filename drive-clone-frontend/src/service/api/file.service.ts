@@ -1,11 +1,9 @@
 import http from './http-common';
-import { AuthService } from './auth.service';
 import { AxiosRequestConfig } from 'axios';
 
 export class FileService {
   private config: AxiosRequestConfig<any> = {
     headers: {
-      Authorization: AuthService.getCurrentUser(),
       'Content-Type': 'multipart/form-data',
     },
   };

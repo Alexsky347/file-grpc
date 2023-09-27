@@ -11,18 +11,15 @@ export class AuthService {
   private static URI = '/auth';
 
   static login = async (payload: LoginProps) => {
-    try {
-      console.log(payload)
-      const response = await http.post(`/auth/signin`, payload);
-      console.log('success login', response);
+      const response = await http.post(`${this.URI}/signin`, payload);
+
+      console.log('header', response.headers);
+      console.log('header', response);
+
       if (response.data.username) {
         localStorage.setItem('user', JSON.stringify(response.data));
         return response.data;
       }
-    } catch (e) {
-      console.log('error login', e);
-      return e;
-    }
   };
 
   static logout = async () => {

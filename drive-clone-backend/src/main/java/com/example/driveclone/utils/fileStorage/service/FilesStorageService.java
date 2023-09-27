@@ -64,7 +64,7 @@ public class FilesStorageService implements IFilesStorageService {
         int depth = 1;
         Path userDir = this.getUserDir(username);
         Map<String, Set<?>> data = new HashMap<>();
-        File directory=new File(userDir.toUri());
+        File directory = new File(userDir.toUri());
         int fileCount= Objects.requireNonNull(directory.list()).length;
         data.put("total", Collections.singleton(fileCount));
         Set<String> files;

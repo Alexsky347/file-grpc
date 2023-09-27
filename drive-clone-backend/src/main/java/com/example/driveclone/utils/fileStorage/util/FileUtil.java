@@ -5,6 +5,7 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 public class FileUtil {
+    private FileUtil() {}
 
     public static byte[] compressImage(byte[] data) {
 
@@ -22,6 +23,7 @@ public class FileUtil {
         try {
             outputStream.close();
         } catch (Exception e) {
+            System.out.println(e);
         }
         return outputStream.toByteArray();
     }
@@ -38,6 +40,7 @@ public class FileUtil {
             }
             outputStream.close();
         } catch (Exception exception) {
+            System.out.println(exception);
         }
         return outputStream.toByteArray();
     }

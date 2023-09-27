@@ -2,12 +2,10 @@ import { useState, useEffect, FormEvent, JSX } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
-  Avatar,
   Button,
   Checkbox,
   FormControlLabel,
   TextField,
-  Theme,
   Typography,
 } from '@mui/material';
 
@@ -20,6 +18,9 @@ import { login } from "../../store/slices/auth";
 import { clearMessage } from "../../store/slices/message";
 import { ItToken } from "../../model/interface/it-token";
 import { AppDispatch, store } from "../../store/store";
+import { RootState } from "@reduxjs/toolkit/dist/query/core/apiState";
+import { CombinedState } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 
 interface LoginResponse {
@@ -27,18 +28,20 @@ interface LoginResponse {
   headers: ItToken;
   response: {
     data: {
-      errorMessage: string;
-    };
-  };
+      message: string;
+      status: number;
+      error: string;
+      path: string;
+    }
+  },
 }
 
 function Login(): JSX.Element {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-
-  const { isLoggedIn } = useSelector((state: {auth: any}) => state.auth);
   const { message } = useSelector((state: {message: any}) => state.message);
+  const { isLoggedIn } = useSelector((state: {auth: any}) => state.auth);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -50,17 +53,20 @@ function Login(): JSX.Element {
     setLoading(true);
     const username = data.get('username') as string;
     const password = data.get('password') as string;
+
     const response = dispatch(
       login({ username, password })
     ).unwrap() as unknown as LoginResponse;
-
     if (isLoggedIn) {
       toast.success(`You're logged`);
+      console.log(Cookies.get())
       navigate('/', { replace: true });
     } else {
       setLoading(false);
-      toast.error(`${response?.response?.data?.errorMessage}`);
+      toast.error(message);
     }
+    const cookie = Cookies.get('driveCookie')
+    console.log(cookie)
   }
 
   const handleSubmit = (event: FormEvent) => {

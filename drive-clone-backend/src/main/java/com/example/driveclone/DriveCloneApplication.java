@@ -7,9 +7,8 @@ import com.example.driveclone.models.User;
 import com.example.driveclone.repository.RoleRepository;
 import com.example.driveclone.repository.UserRepository;
 import com.example.driveclone.utils.fileStorage.service.IFilesStorageService;
-import com.example.driveclone.utils.jwt.JwtUtil;
+import com.example.driveclone.utils.main.GenerateKeyUtils;
 import jakarta.annotation.Resource;
-import org.hibernate.mapping.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
@@ -50,7 +48,7 @@ public class DriveCloneApplication {
 			String email = EnvService.getProp("user.email");
 			String pwd = EnvService.getProp("user.pwd");
 
-			logger.debug("USERNAME -> " + username);
+			logger.debug("USERNAME {0} .", username);
 			Optional<User> user = userRepository.findByUsername(username);
 
 			user.ifPresent(userRepository::delete);
@@ -61,7 +59,7 @@ public class DriveCloneApplication {
 							Role newRole = new Role();
 							newRole.setName(role);
 							roleRepository.save(newRole);
-						};
+						}
 					}
 			);
 			// user
@@ -77,7 +75,7 @@ public class DriveCloneApplication {
 			storageService.init();
 
 			// generate RSA keys
-			JwtUtil.generateRSAKeys();
+			GenerateKeyUtils.generateRSAKeys();
 		};
 	}
 
