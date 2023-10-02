@@ -5,7 +5,8 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 public class FileUtil {
-    private FileUtil() {}
+    private FileUtil() {
+    }
 
     public static byte[] compressImage(byte[] data) {
 
@@ -43,5 +44,9 @@ public class FileUtil {
             System.out.println(exception);
         }
         return outputStream.toByteArray();
+    }
+
+    public static String generateFileUrl(String username, String filename) {
+        return String.format("/uploads/%s/%s", username, filename);
     }
 }

@@ -9,18 +9,22 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import {CardC} from "../../component/card-c/card.c";
-import {ItResponse} from "../../model/interface/it-response";
-import {AxiosHeaders, RawAxiosResponseHeaders} from "axios";
-import { styled } from "@mui/system";
-import { Avatar } from "@mui/material";
+import { CardC } from '../../component/card-c/card.c';
+import { ItResponse } from '../../model/interface/it-response';
+import { AxiosHeaders, AxiosResponse, RawAxiosResponseHeaders } from 'axios';
+import { styled } from '@mui/system';
+import { Avatar } from '@mui/material';
 interface DashboardProps {
   sideBarOption: number;
   reRender: number;
   setReRender: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export function Dashboard ({ sideBarOption, reRender, setReRender } :  DashboardProps) {
+export function Dashboard({
+  sideBarOption,
+  reRender,
+  setReRender,
+}: DashboardProps) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -38,47 +42,66 @@ export function Dashboard ({ sideBarOption, reRender, setReRender } :  Dashboard
   const [limit, setLimit] = useState(10);
 
   const NoDataStyled = styled('h1')({
-    paddingLeft: '50%'
+    paddingLeft: '50%',
   });
 
-  const handleChangePaginate = async (event: React.ChangeEvent<unknown>, value: number) => {
+  const handleChangePaginate = async (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
     await fetchData(limit, value);
     setPage(value);
   };
 
-  const handleChangeLimit = async (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleChangeLimit = async (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
     const limit = event.target.value as number;
     await fetchData(limit, 1);
     setLimit(limit);
   };
 
-  async function initGetFiles(limit: number, pageNumber: number, orderBy?: string) {
+  async function initGetFiles(
+    limit: number,
+    pageNumber: number,
+    orderBy?: string
+  ) {
     setLoading(true);
-    const response : ItResponse= await FileService.getFiles(limit, pageNumber, orderBy) as unknown as ItResponse;
-    if (response.status === 200) {
-      setCount(Math.ceil(response.data.total.shift() / limit));
-      const arrayFiles = await Promise.all(
-        response.data.data.map(async (fileName: string) => {
-          const responseFile = await FileService.getFile(fileName);
-          const { headers, data } = responseFile;
-          const fileNickName = getHeaderProp('Content-Disposition', headers) as string;
 
-          return {
-            type: getHeaderProp('Content-Type', headers),
-            url: handleFileUrl(data, fileNickName),
-            urlForDownload: URL.createObjectURL(data),
-            filename: fileNickName,
-            createdate: getHeaderProp('Content-Created', headers),
-            lastmodified: getHeaderProp('Content-Modified', headers),
-            filesize: getHeaderProp('Content-Length', headers) as unknown as number / 1000,
-          };
-        })
+    try {
+      const response: AxiosResponse = await FileService.getFiles(
+        limit,
+        pageNumber,
+        orderBy || 'ASC'
       );
+      if (response.status === 200) {
+        console.log(response);
+        const { files, total } = response.data;
 
-      setFiles(arrayFiles);
-      setLoading(false);
-    } else {
-      toast.error(`${response?.response?.data?.errorMessage}`);
+        setCount(Math.ceil(total / limit));
+
+        const arrayFiles = files.map(
+          (fileInfo: { filename: string; url: string }) => {
+            return {
+              type: '', // Add type if available from the server
+              url: fileInfo.url,
+              urlForDownload: fileInfo.url, // Use the same URL for download
+              filename: fileInfo.filename,
+              createate: '', // Add createate if available from the server
+              lastmodified: '', // Add lastmodified if available from the server
+              filesize: 0, // Add filesize if available from the server
+            };
+          }
+        );
+
+        setFiles(arrayFiles);
+        setLoading(false);
+      } else {
+        toast.error(`${response.data?.message || 'An error occurred.'}`);
+        setLoading(false);
+      }
+    } catch (error: any) {
+      toast.error(`${error?.message}`);
       setLoading(false);
     }
   }
@@ -90,12 +113,14 @@ export function Dashboard ({ sideBarOption, reRender, setReRender } :  Dashboard
     return URL.createObjectURL(data);
   };
 
-  const getHeaderProp = (property: string, headers: RawAxiosResponseHeaders | (RawAxiosResponseHeaders & AxiosHeaders)) => {
-      if (property === 'Content-Disposition') {
-        return headers.get('Content-Disposition')!.split('filename=')[1];
-      }
-      return headers.get(property);
-
+  const getHeaderProp = (
+    property: string,
+    headers: RawAxiosResponseHeaders | (RawAxiosResponseHeaders & AxiosHeaders)
+  ) => {
+    if (property === 'Content-Disposition') {
+      return headers.get('Content-Disposition')!.split('filename=')[1];
+    }
+    return headers.get(property);
   };
 
   if (sideBarOption === 0) {
@@ -115,7 +140,7 @@ export function Dashboard ({ sideBarOption, reRender, setReRender } :  Dashboard
             }}
           />
         ) : null}
-        {files ? (
+        {files && files?.length > 0 ? (
           <>
             <Grid
               container
@@ -127,7 +152,12 @@ export function Dashboard ({ sideBarOption, reRender, setReRender } :  Dashboard
             >
               {files.map((file, i) => (
                 <Grid item xs={2} sm={4} md={3} key={i} maxWidth="100%">
-                  <CardC metaData={file} reRender={reRender} setReRender={setReRender} key={i} />
+                  <CardC
+                    metaData={file}
+                    reRender={reRender}
+                    setReRender={setReRender}
+                    key={i}
+                  />
                 </Grid>
               ))}
             </Grid>
@@ -140,7 +170,9 @@ export function Dashboard ({ sideBarOption, reRender, setReRender } :  Dashboard
               display="flex"
             >
               <FormControl sx={{ m: 1, minWidth: 5 }}>
-                <InputLabel id="demo-simple-select-autowidth-label">Items</InputLabel>
+                <InputLabel id="demo-simple-select-autowidth-label">
+                  Items
+                </InputLabel>
                 <Select
                   labelId="demo-simple-select-autowidth-label"
                   id="demo-simple-select-autowidth"
@@ -171,13 +203,13 @@ export function Dashboard ({ sideBarOption, reRender, setReRender } :  Dashboard
             </Stack>
           </>
         ) : (
-            <NoDataStyled>
-              <h1>No files yet.</h1>
-            </NoDataStyled>
+          <NoDataStyled>
+            <h1>No files yet.</h1>
+          </NoDataStyled>
         )}
       </div>
     );
   } else {
     return null;
   }
-};
+}

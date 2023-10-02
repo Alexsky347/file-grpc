@@ -6,60 +6,47 @@ export class FileService {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
+    responseType: 'json',
   };
 
   private static readonly URI = '/file';
 
-  static getFiles = async(limit: number, pageNumber: number, orderBy: string) => {
-    try {
-      return await http.get(
-          `/files?limit=${limit}&pageNumber=${pageNumber}&orderBy=${orderBy}`,
-          this.config,
-      );
-    } catch (e) {
-      return e;
-    }
-  }
+  static getFiles = async (
+    limit: number,
+    pageNumber: number,
+    orderBy: string
+  ) => {
+    return await http.get(
+      `/files?limit=${limit}&pageNumber=${pageNumber}&orderBy=${orderBy}`,
+      this.config
+    );
+  };
 
   static getFile = async (fileName: string) => {
     this.config.responseType = 'blob';
-    return http.get(`${this.URI}/${fileName}`, this.config);
-  }
-
+    const { headers, data } = await http.get(
+      `${this.URI}/${fileName}`,
+      this.config
+    );
+    return { headers, data };
+  };
 
   static uploadOneFile = async (fileFormData: FormData) => {
-    try {
-      return await http.post(`${this.URI}/`, fileFormData, this.config);
-    } catch (e) {
-      return e;
-    }
-  }
+    return await http.post(`${this.URI}/`, fileFormData, this.config);
+  };
 
   static uploadMultipleFiles = async (fileFormData: FormData) => {
-    try {
-      return await http.post('/files/', fileFormData, this.config);
-    } catch (e) {
-      return e;
-    }
-  }
+    return await http.post('/files/', fileFormData, this.config);
+  };
 
   static deleteFile = async (filename: string) => {
-    try {
-      return await http.delete(`${this.URI}/${filename}`);
-    } catch (e) {
-      return e;
-    }
-  }
+    return await http.delete(`${this.URI}/${filename}`);
+  };
 
-  static renameFile = async (oldName: string, newName: string): Promise<any> => {
-    try {
-      return await http.patch(
-          `/file/${oldName}/${newName}`,
-          {},
-          this.config,
-      );
-    } catch (e) {
-      return e;
-    }
-  }
+  static renameFile = async (
+    oldName: string,
+    newName: string
+  ): Promise<never> => {
+    return await http.patch(`/file/${oldName}/${newName}`, {}, this.config);
+  };
 }

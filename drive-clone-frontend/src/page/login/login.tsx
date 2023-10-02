@@ -14,12 +14,10 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-import { login } from "../../store/slices/auth";
-import { clearMessage } from "../../store/slices/message";
-import { ItToken } from "../../model/interface/it-token";
-import { AppDispatch, store } from "../../store/store";
-import { RootState } from "@reduxjs/toolkit/dist/query/core/apiState";
-import { CombinedState } from "@reduxjs/toolkit";
+import { login } from '../../store/slices/auth';
+import { clearMessage } from '../../store/slices/message';
+import { ItToken } from '../../model/interface/it-token';
+import { AppDispatch, store } from '../../store/store';
 
 interface LoginResponse {
   status: number;
@@ -30,55 +28,48 @@ interface LoginResponse {
       status: number;
       error: string;
       path: string;
-    }
-  },
+    };
+  };
 }
 
 function Login(): JSX.Element {
   const navigate = useNavigate();
-
-  const [loading, setLoading] = useState(false);
-  const { message } = useSelector((state: {message: any}) => state.message);
-  const { isLoggedIn } = useSelector((state: {auth: any}) => state.auth);
-
+  const { message } = useSelector((state: { message: any }) => state.message);
+  const { isLoggedIn } = useSelector((state: { auth: any }) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(clearMessage());
   }, [dispatch]);
 
-  async function loginUser(data: FormData) {
-    setLoading(true);
-    const username = data.get('username') as string;
-    const password = data.get('password') as string;
-
-   await dispatch(
-        login({ username, password })
-    );
+  useEffect(() => {
     if (isLoggedIn) {
       toast.success(`You're logged`);
       navigate('/', { replace: true });
-    } else {
-      setLoading(false);
+    } else if (message) {
       toast.error(message);
     }
+  }, [isLoggedIn, message]);
+
+  async function loginUser(data: FormData) {
+    const username = data.get('username') as string;
+    const password = data.get('password') as string;
+    await dispatch(login({ username, password }));
   }
 
-  // TODO handle message error -> undefined first time
-
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (event?.currentTarget instanceof HTMLFormElement) {
       const data = new FormData();
       const { username, password } = event.currentTarget;
       data.append('username', username.value);
       data.append('password', password.value);
-      loginUser(data);
+      await loginUser(data);
     }
   };
 
   return (
-    <Container component="main" maxWidth="xs" >
+    <Container component="main" maxWidth="xs">
       <Box
         sx={{
           padding: '20%',
@@ -87,7 +78,7 @@ function Login(): JSX.Element {
           alignItems: 'center',
         }}
       >
-        <img src="/static/drive.png" alt="drive clone logo"/>
+        <img src="/static/drive.png" alt="drive clone logo" />
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>

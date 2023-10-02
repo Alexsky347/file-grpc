@@ -1,22 +1,23 @@
-import { useState, ReactElement } from "react";
+import { useState, ReactElement } from 'react';
 
-import DownloadIcon from "@mui/icons-material/Download";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CreateIcon from "@mui/icons-material/Create";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
-import Card from "@mui/material/Card";
-import { FileService } from "../../service/api/file.service";
-import { toast } from "react-toastify";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import {TextField} from "@mui/material";
-import { InsertDriveFileOutlined } from "@mui/icons-material";
+import DownloadIcon from '@mui/icons-material/Download';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CreateIcon from '@mui/icons-material/Create';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import Card from '@mui/material/Card';
+import { FileService } from '../../service/api/file.service';
+import { toast } from 'react-toastify';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { Avatar, TextField } from '@mui/material';
+import { InsertDriveFileOutlined } from '@mui/icons-material';
+import { styled } from '@mui/system';
 
 interface MainProps {
   metaData: {
@@ -31,13 +32,13 @@ interface MainProps {
 }
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 400,
   borderRadius: 5,
-  bgcolor: "background.paper",
+  bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
 };
@@ -58,27 +59,29 @@ export function CardC({
   // Delete
   const handleDelete = async () => {
     if (metaData?.filename) {
-      const response = await FileService.deleteFile(metaData.filename) as unknown as Response;
+      const response = (await FileService.deleteFile(
+        metaData.filename
+      )) as unknown as Response;
       if (response.status === 200) {
         reRender ? setReRender(0) : setReRender(1);
-        toast.success("CardComponent removed !");
+        toast.success('CardComponent removed !');
       } else {
         toast.error(response.statusText);
       }
     } else {
-      toast.error("No file founded !");
+      toast.error('No file founded !');
     }
   };
 
   // download
   const handleDownload = () => {
     if (metaData?.filename && metaData?.urlForDownload) {
-      const alink = document.createElement("a");
+      const alink = document.createElement('a');
       alink.href = metaData.urlForDownload;
       alink.download = metaData.filename;
       alink.click();
     } else {
-      toast.error("No file founded !");
+      toast.error('No file founded !');
     }
   };
 
@@ -86,7 +89,7 @@ export function CardC({
   const handleRename = async () => {
     if (metaData?.filename) {
       if (metaData?.filename === newFileName) {
-        toast.warning("same file name");
+        toast.warning('same file name');
       } else {
         const response = await FileService.renameFile(
           metaData?.filename,
@@ -94,20 +97,20 @@ export function CardC({
         );
         if (response.status === 200) {
           handleClose();
-          toast.success("CardComponent renamed !");
+          toast.success('CardComponent renamed !');
           reRender ? setReRender(0) : setReRender(1);
         } else {
           toast.error(`${response?.response?.data?.errorMessage}`);
         }
       }
     } else {
-      toast.error("No file founded !");
+      toast.error('No file founded !');
     }
   };
 
   const handleFileName = (fileName: string) => {
     if (fileName) {
-      return fileName.replaceAll("%20", " ");
+      return fileName.replaceAll('%20', ' ');
     }
     return fileName;
   };
@@ -117,9 +120,10 @@ export function CardC({
       <Card>
         <CardHeader title={handleFileName(metaData?.filename)} subheader="" />
         <CardMedia
+          sx={{ objectFit: 'contain' }}
           component="img"
           height="194"
-          image={metaData?.url}
+          image={metaData?.url ? metaData?.url : '/static/no-picture.jpg'}
           alt="picture"
         />
         <CardContent>
@@ -164,16 +168,20 @@ export function CardC({
               InputLabelProps={{
                 shrink: true,
               }}
-              defaultValue={handleFileName(metaData?.filename.split(".")[0])}
+              defaultValue={handleFileName(metaData?.filename.split('.')[0])}
               onChange={(e) => {
                 setNewFileName(
-                  e.target.value + "." + metaData?.filename.split(".")[1]
+                  e.target.value + '.' + metaData?.filename.split('.')[1]
                 );
               }}
             />
           </Typography>
 
-          <Button style={{ margin: 8 }} variant="contained" onClick={handleRename}>
+          <Button
+            style={{ margin: 8 }}
+            variant="contained"
+            onClick={handleRename}
+          >
             Save
           </Button>
         </Box>

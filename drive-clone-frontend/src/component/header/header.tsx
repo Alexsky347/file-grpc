@@ -8,6 +8,9 @@ import { useViewPort } from '../../hook/use-view-port/use-view-port';
 import { toast } from 'react-toastify';
 import { Sling as Hamburger } from 'hamburger-react';
 import { Avatar, Button } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/store';
+import { login, logout } from '../../store/slices/auth';
 
 interface HeaderProps {
   handleSideNav: (state: boolean) => boolean;
@@ -15,6 +18,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ handleSideNav }) => {
   // const { isDesktop, isMobile, isTablet } = useViewPort();
+  const dispatch = useDispatch<AppDispatch>();
   const [isOpen, setOpen] = useState(false);
   const userName = '';
 
@@ -24,16 +28,12 @@ const Header: React.FC<HeaderProps> = ({ handleSideNav }) => {
     border: '1px solid black',
   });
 
-  const StyledBtn= styled(Button)({
+  const StyledBtn = styled(Button)({
     margin: 10,
   });
 
-  const navigate = useNavigate();
-
-  const handleLogout = (): void => {
-    AuthService.logout();
-    navigate('/login');
-    toast.success(`You're logged out`);
+  const handleLogout = async (): Promise<void> => {
+    await dispatch(logout());
   };
 
   const handleSideNavChildren = (state: boolean) => {
@@ -41,10 +41,8 @@ const Header: React.FC<HeaderProps> = ({ handleSideNav }) => {
     setOpen(state);
   };
 
-
   return (
     <div className="header">
-
       <div className="logo">
         <Hamburger
           toggled={isOpen}
@@ -60,18 +58,18 @@ const Header: React.FC<HeaderProps> = ({ handleSideNav }) => {
 
       <div className="avatar">
         <StyledAvatar>
-        <Avatar>{userName?.[0]}</Avatar>
+          <Avatar>{userName?.[0]}</Avatar>
         </StyledAvatar>
         <StyledBtn>
           <Button
-              variant="outlined"
-              size="small"
-              color="primary"
-              onClick={handleLogout}>
+            variant="outlined"
+            size="small"
+            color="primary"
+            onClick={handleLogout}
+          >
             <ExitToAppIcon />
           </Button>
         </StyledBtn>
-
       </div>
     </div>
   );

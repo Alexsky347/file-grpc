@@ -24,28 +24,29 @@ import java.util.*;
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class FileController {
 
-    @Autowired
-    JwtUtils jwtUtils;
-
     private static final Logger logger =
             LoggerFactory.getLogger(FileController.class);
+    @Autowired
+    JwtUtils jwtUtils;
     @Autowired
     FilesStorageService storageService;
 
     @PostMapping(value = "/files", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
 
-    public Map<String, List<String>> uploadFiles(@RequestParam("file") MultipartFile[] files, HttpServletRequest httpServletRequest) throws ParseException, JOSEException {
-        String username = jwtUtils.retrieveUser(httpServletRequest);
+    public Map<String, List<String>> uploadFiles(@RequestParam("file") MultipartFile[] files, HttpServletRequest httpServletRequest) {
         List<String> fileNames = new ArrayList<>();
         Map<String, List<String>> response = new HashMap<>();
         Arrays.stream(files).forEach(file -> {
             try {
-                storageService.save(file, username);
+                storageService.save(file, jwtUtils.retrieveUser(httpServletRequest));
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            } catch (JOSEException e) {
+                throw new RuntimeException(e);
             }
-
             fileNames.add(file.getOriginalFilename());
         });
         response.put("Uploaded the files successfully: ", fileNames);
@@ -55,29 +56,24 @@ public class FileController {
     @PostMapping(value = "/file", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
     public Map<String, String> uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
-        String username = jwtUtils.retrieveUser(httpServletRequest);
-        return storageService.save(file, username);
+        return storageService.save(file, jwtUtils.retrieveUser(httpServletRequest));
     }
 
 
     @GetMapping(value = "/files", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, ?> getListFiles(@RequestParam String limit,
-                                       @RequestParam String pageNumber,
-                                       @RequestParam(required = false) String orderBy,
-                                       HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
-        logger.debug("limit: " + limit);
-        logger.debug("pageNumber: " + pageNumber);
+    public Map<String, Object> getListFiles(@RequestParam String limit,
+                                            @RequestParam String pageNumber,
+                                            @RequestParam(required = false) String orderBy,
+                                            HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
         int offset = (Integer.parseInt(pageNumber) - 1) * Integer.parseInt(limit);
-        String username = jwtUtils.retrieveUser(httpServletRequest);
-        return storageService.loadAll(username, Integer.parseInt(limit), offset);
+        return storageService.loadAll(jwtUtils.retrieveUser(httpServletRequest), Integer.parseInt(limit), offset);
     }
 
     @GetMapping(value = "/file/{filename:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public Resource getFile(@PathVariable String filename,
                             HttpServletRequest httpServletRequest,
                             HttpServletResponse httpServletResponse) throws MalformedURLException, ParseException, JOSEException {
-        String username = jwtUtils.retrieveUser(httpServletRequest);
-        Resource file = storageService.load(filename, username);
+        Resource file = storageService.load(filename, jwtUtils.retrieveUser(httpServletRequest));
         httpServletResponse.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilename());
         httpServletResponse.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
         return file;
@@ -85,14 +81,12 @@ public class FileController {
 
     @DeleteMapping(value = "/file/{filename:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean deleteFile(@PathVariable String filename, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
-        String username = jwtUtils.retrieveUser(httpServletRequest);
-        return storageService.deleteOne(filename, username);
+        return storageService.deleteOne(filename, jwtUtils.retrieveUser(httpServletRequest));
     }
 
 
     @PatchMapping(value = "/file/{oldName:.+}/{newName:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean renameFile(@PathVariable String oldName, @PathVariable String newName, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
-        String username = jwtUtils.retrieveUser(httpServletRequest);
-        return storageService.renameOne(oldName, newName, username);
+        return storageService.renameOne(oldName, newName, jwtUtils.retrieveUser(httpServletRequest));
     }
 }
