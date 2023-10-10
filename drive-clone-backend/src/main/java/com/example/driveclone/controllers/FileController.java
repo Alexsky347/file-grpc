@@ -1,7 +1,8 @@
 package com.example.driveclone.controllers;
 
 import com.example.driveclone.security.jwt.JwtUtils;
-import com.example.driveclone.utils.fileStorage.service.FilesStorageService;
+import com.example.driveclone.utils.exception.CustomRuntimeException;
+import com.example.driveclone.utils.storage.service.FilesStorageService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,7 +32,7 @@ public class FileController {
     @Autowired
     FilesStorageService storageService;
 
-    @PostMapping(value = "/files", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/files/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
 
     public Map<String, List<String>> uploadFiles(@RequestParam("file") MultipartFile[] files, HttpServletRequest httpServletRequest) {
@@ -40,12 +41,8 @@ public class FileController {
         Arrays.stream(files).forEach(file -> {
             try {
                 storageService.save(file, jwtUtils.retrieveUser(httpServletRequest));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            } catch (JOSEException e) {
-                throw new RuntimeException(e);
+            } catch (IOException | ParseException | JOSEException e) {
+                throw new CustomRuntimeException(e);
             }
             fileNames.add(file.getOriginalFilename());
         });
@@ -53,23 +50,24 @@ public class FileController {
         return response;
     }
 
-    @PostMapping(value = "/file", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/file/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
     public Map<String, String> uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
         return storageService.save(file, jwtUtils.retrieveUser(httpServletRequest));
     }
 
 
-    @GetMapping(value = "/files", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/files/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> getListFiles(@RequestParam String limit,
                                             @RequestParam String pageNumber,
-                                            @RequestParam(required = false) String orderBy,
+                                            @RequestParam(required = false) String sortBy,
+                                            @RequestParam(required = false) String sortMode,
                                             HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
         int offset = (Integer.parseInt(pageNumber) - 1) * Integer.parseInt(limit);
-        return storageService.loadAll(jwtUtils.retrieveUser(httpServletRequest), Integer.parseInt(limit), offset);
+        return storageService.loadAll(jwtUtils.retrieveUser(httpServletRequest), Integer.parseInt(limit), offset, sortBy, sortMode, null);
     }
 
-    @GetMapping(value = "/file/{filename:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "/file/get/{filename:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public Resource getFile(@PathVariable String filename,
                             HttpServletRequest httpServletRequest,
                             HttpServletResponse httpServletResponse) throws MalformedURLException, ParseException, JOSEException {
@@ -79,14 +77,15 @@ public class FileController {
         return file;
     }
 
-    @DeleteMapping(value = "/file/{filename:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
+    //DELETE AND PUT /PATCH = > CORS ISSUE
+    @GetMapping(value = "/file/delete/{filename:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean deleteFile(@PathVariable String filename, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
         return storageService.deleteOne(filename, jwtUtils.retrieveUser(httpServletRequest));
     }
 
 
-    @PatchMapping(value = "/file/{oldName:.+}/{newName:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public boolean renameFile(@PathVariable String oldName, @PathVariable String newName, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
+    @GetMapping(value = "/file/edit-name", produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean renameFile(@RequestParam String oldName, @RequestParam String newName, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
         return storageService.renameOne(oldName, newName, jwtUtils.retrieveUser(httpServletRequest));
     }
 }

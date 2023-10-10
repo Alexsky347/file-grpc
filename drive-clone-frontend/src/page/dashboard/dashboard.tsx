@@ -14,6 +14,7 @@ import { ItResponse } from '../../model/interface/it-response';
 import { AxiosHeaders, AxiosResponse, RawAxiosResponseHeaders } from 'axios';
 import { styled } from '@mui/system';
 import { Avatar } from '@mui/material';
+import SearchInput from '../../component/search-input/search-input';
 interface DashboardProps {
   sideBarOption: number;
   reRender: number;
@@ -142,6 +143,7 @@ export function Dashboard({
         ) : null}
         {files && files?.length > 0 ? (
           <>
+            <SearchInput sx={{ width: '100%', textAlign: 'center' }} />
             <Grid
               container
               spacing={{ xs: 2, md: 3 }}
