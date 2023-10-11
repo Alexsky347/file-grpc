@@ -15,10 +15,11 @@ export class FileService {
   static getFiles = async (
     limit: number,
     pageNumber: number,
+    search: string,
     orderBy: string
   ) => {
     return await http.get(
-      `/files/get?limit=${limit}&pageNumber=${pageNumber}&orderBy=${orderBy}`
+      `/files/get?limit=${limit}&pageNumber=${pageNumber}&search=${search}&orderBy=${orderBy}`
     );
   };
 

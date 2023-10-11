@@ -18,7 +18,7 @@ public interface IFilesStorageService {
 
     Resource load(String filename, String username) throws MalformedURLException;
 
-    Map<String, Object> loadAll(String username, int limit, int offset, String sortBy, String sortMode, String search) throws IOException;
+    Map<String, Object> loadAll(String username, int limit, int offset, String search, String sortMode, String sortBy) throws IOException;
 
     void deleteAll();
 

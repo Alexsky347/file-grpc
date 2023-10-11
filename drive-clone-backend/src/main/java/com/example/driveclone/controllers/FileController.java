@@ -60,11 +60,12 @@ public class FileController {
     @GetMapping(value = "/files/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> getListFiles(@RequestParam String limit,
                                             @RequestParam String pageNumber,
+                                            @RequestParam String search,
                                             @RequestParam(required = false) String sortBy,
                                             @RequestParam(required = false) String sortMode,
                                             HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
         int offset = (Integer.parseInt(pageNumber) - 1) * Integer.parseInt(limit);
-        return storageService.loadAll(jwtUtils.retrieveUser(httpServletRequest), Integer.parseInt(limit), offset, sortBy, sortMode, null);
+        return storageService.loadAll(jwtUtils.retrieveUser(httpServletRequest), Integer.parseInt(limit), offset, search, sortBy, sortMode);
     }
 
     @GetMapping(value = "/file/get/{filename:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

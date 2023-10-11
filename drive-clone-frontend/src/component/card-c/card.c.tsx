@@ -25,7 +25,6 @@ interface MainProps {
     url: string;
     filesize: number;
     createdate: string;
-    urlForDownload: string;
   };
   reRender: number;
   setReRender: React.Dispatch<React.SetStateAction<number>>;
@@ -75,9 +74,9 @@ export function CardC({
 
   // download
   const handleDownload = () => {
-    if (metaData?.filename && metaData?.urlForDownload) {
+    if (metaData?.filename && metaData?.url) {
       const alink = document.createElement('a');
-      alink.href = metaData.urlForDownload;
+      alink.href = metaData.url;
       alink.download = metaData.filename;
       alink.click();
     } else {

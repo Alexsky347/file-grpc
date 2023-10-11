@@ -22,7 +22,7 @@ public class CorsConfig {
                         .allowedOrigins(EnvService.getProp("allowedHost"))
                         .allowCredentials(true)
                         .maxAge(jwtExpirationMs)
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH");
+                        .allowedMethods("*");
             }
 
             @Override

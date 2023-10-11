@@ -49,7 +49,7 @@ function Login(): JSX.Element {
     } else if (message) {
       toast.error(message);
     }
-  }, [isLoggedIn, message]);
+  }, [isLoggedIn, message, navigate]);
 
   async function loginUser(data: FormData) {
     const username = data.get('username') as string;

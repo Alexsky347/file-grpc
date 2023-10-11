@@ -63,7 +63,7 @@ public class FilesStorageService implements IFilesStorageService {
 
 
     @Override
-    public Map<String, Object> loadAll(final String username, final int limit, final int offset, final String sortBy, final String sortMode, final String search) throws IOException {
+    public Map<String, Object> loadAll(final String username, final int limit, final int offset, final String search, final String sortMode, final String sortBy) throws IOException {
         String sortByValue = sortBy != null ? sortBy : "filename";
         String sortModeValue = sortMode != null ? sortMode : "asc";
         int depth = 1;
@@ -73,9 +73,15 @@ public class FilesStorageService implements IFilesStorageService {
         Map<String, Object> data = new HashMap<>();
         int fileCount = Objects.requireNonNull(directory.list()).length;
         data.put("total", fileCount);
+
         try (Stream<Path> stream = Files.walk(userDir, depth)) {
             fileList = stream
-                    .filter(file -> !Files.isDirectory(file))
+                    .filter((file) -> {
+                        if (search.trim().isEmpty()) {
+                            return !Files.isDirectory(file);
+                        }
+                        return !Files.isDirectory(file) && file.getFileName().toString().toLowerCase().contains(search.toLowerCase());
+                    })
                     .sorted(Comparator.comparing(path -> {
                         if (sortModeValue.equals("desc")) {
                             return path.getFileName().toString().compareTo(sortByValue);

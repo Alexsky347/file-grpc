@@ -53,17 +53,14 @@ const authSlice = createSlice({
     builder
       .addCase(login.fulfilled, (state, action) => {
         state.isLoggedIn = true;
-        state.isLoading = true;
         state.user = action.payload.user;
       })
       .addCase(login.rejected, (state) => {
         state.isLoggedIn = false;
-        state.isLoading = false;
         state.user = null;
       })
       .addCase(logout.fulfilled, (state) => {
         state.isLoggedIn = false;
-        state.isLoading = false;
         state.user = null;
       });
   },
