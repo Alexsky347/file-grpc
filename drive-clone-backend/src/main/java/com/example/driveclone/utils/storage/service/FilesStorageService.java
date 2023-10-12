@@ -1,6 +1,8 @@
 package com.example.driveclone.utils.storage.service;
 
 import com.example.driveclone.utils.exception.CustomError;
+import com.example.driveclone.utils.exception.CustomRuntimeException;
+import com.example.driveclone.utils.factory.FileInformationFactory;
 import com.example.driveclone.utils.storage.util.FileUtil;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -92,12 +94,14 @@ public class FilesStorageService implements IFilesStorageService {
                     .skip(offset)
                     .limit(limit)
                     .map(path -> {
-                        Map<String, Object> fileInfo = new HashMap<>();
-                        fileInfo.put("filename", path.getFileName().toString());
-                        fileInfo.put("url", FileUtil.generateFileUrl(username, path.getFileName().toString()));
-                        return fileInfo;
+                        try {
+                            return FileInformationFactory.createFileInformation(username, path);
+                        } catch (IOException e) {
+                            throw new CustomRuntimeException(e);
+                        }
                     })
                     .collect(Collectors.toCollection(ArrayList::new));
+
         }
         data.put("files", fileList);
         return data;

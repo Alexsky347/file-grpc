@@ -1,18 +1,20 @@
-interface File {
+export interface MyFile {
   type: string;
   url: string;
   filename: string;
-  createdate: string;
-  lastmodified: string;
-  filesize: number;
+  createdDate: string;
+  lastModifiedDate: string;
+  size: number;
 }
 
-type FileCollection = File[];
+type FileCollection = MyFile[];
 
 interface FileState {
   isLoading: boolean;
   total: number;
-  data: File[] | null;
+  data: MyFile[] | null;
+  hasDeleted: boolean;
+  hasRenamed: boolean;
 }
 
 export { FileCollection, FileState };

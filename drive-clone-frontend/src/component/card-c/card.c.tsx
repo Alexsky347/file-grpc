@@ -1,4 +1,4 @@
-import { useState, ReactElement } from 'react';
+import { useState, ReactElement, useEffect } from 'react';
 
 import DownloadIcon from '@mui/icons-material/Download';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -18,14 +18,14 @@ import Typography from '@mui/material/Typography';
 import { Avatar, TextField } from '@mui/material';
 import { InsertDriveFileOutlined } from '@mui/icons-material';
 import { styled } from '@mui/system';
+import { format } from 'date-fns';
+import { MyFile } from './../../model/interface/file';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../store/store';
+import { deleteFile, renameFile } from '../../store/slices/file';
 
 interface MainProps {
-  metaData: {
-    filename: string;
-    url: string;
-    filesize: number;
-    createdate: string;
-  };
+  metaData: MyFile;
   reRender: number;
   setReRender: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -48,31 +48,36 @@ export function CardC({
   setReRender,
 }: MainProps): ReactElement {
   const [open, setOpen] = useState(false);
-  const [newFileName, setNewFileName] = useState<string | undefined>(
-    metaData?.filename
+  const [newFileName, setNewFileName] = useState<string | undefined>('');
+  const { message } = useSelector((state: { message: any }) => state.message);
+  const { hasDeleted, hasRenamed } = useSelector(
+    (state: { file: any }) => state.file
   );
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    setNewFileName(metaData?.filename);
+  }, [message, hasDeleted, hasRenamed, metaData?.filename]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleReRender = () => setReRender(reRender ? 0 : 1);
 
   // Delete
   const handleDelete = async () => {
-    if (metaData?.filename) {
-      const response = (await FileService.deleteFile(
-        metaData.filename
-      )) as unknown as Response;
-      if (response.status === 200) {
-        reRender ? setReRender(0) : setReRender(1);
-        toast.success('CardComponent removed !');
-      } else {
-        toast.error(response.statusText);
-      }
+    const response: any = await dispatch(deleteFile(metaData));
+    const { payload } = response;
+    if (response?.error) {
+      toast.error(payload);
     } else {
-      toast.error('No file founded !');
+      handleClose();
+      toast.success(payload);
+      handleReRender();
     }
   };
 
-  // download
+  // download -> TODO can't foun file in browser
   const handleDownload = () => {
     if (metaData?.filename && metaData?.url) {
       const alink = document.createElement('a');
@@ -86,32 +91,25 @@ export function CardC({
 
   // Rename
   const handleRename = async () => {
-    if (metaData?.filename) {
-      if (metaData?.filename === newFileName) {
-        toast.warning('same file name');
-      } else {
-        const response = await FileService.renameFile(
-          metaData?.filename,
-          newFileName as string
-        );
-        if (response.status === 200) {
-          handleClose();
-          toast.success('CardComponent renamed !');
-          reRender ? setReRender(0) : setReRender(1);
-        } else {
-          toast.error(`${response?.response?.data?.errorMessage}`);
-        }
-      }
+    const newFileNamed = handleFileName(newFileName || '');
+    const response: any = await dispatch(
+      renameFile({ metaData, newFileName: newFileNamed })
+    );
+    const { payload } = response;
+    if (response?.error) {
+      toast.error(payload);
     } else {
-      toast.error('No file founded !');
+      handleClose();
+      toast.success(payload);
+      handleReRender();
     }
   };
 
-  const handleFileName = (fileName: string) => {
+  const handleFileName = (fileName: string | undefined) => {
     if (fileName) {
       return fileName.replaceAll('%20', ' ');
     }
-    return fileName;
+    return '';
   };
 
   return (
@@ -127,10 +125,11 @@ export function CardC({
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-            Size: {metaData?.filesize} MB
+            Size: {(metaData?.size / 100).toFixed(2)} GB
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Creation date: {metaData?.createdate}
+            Creation date:
+            {format(new Date(metaData?.createdDate), 'yyyy-MM-dd')}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>

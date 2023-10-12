@@ -29,10 +29,11 @@ export function Dashboard({
   const [files, setFiles] = useState<FileCollection>([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(20);
   const [search, setSearch] = useState('');
-  const dispatch = useDispatch<AppDispatch>();
   const { message } = useSelector((state: { message: any }) => state.message);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const fetchData = async (
@@ -43,7 +44,7 @@ export function Dashboard({
     ) => {
       const response: any = await dispatch(findAll({ limit, page, search }));
       const { files, total } = response.payload;
-      if (files.length === 0) {
+      if (files?.length === 0) {
         toast.error(message || 'No files found');
       }
       setFiles(files);
@@ -127,21 +128,19 @@ export function Dashboard({
               justifyContent="center"
               display="flex"
             >
-              <FormControl sx={{ m: 1, minWidth: 5 }}>
-                <InputLabel id="demo-simple-select-autowidth-label">
-                  Items
-                </InputLabel>
+              <FormControl sx={{ m: 1, minWidth: 80 }}>
+                <InputLabel id="limit-select">Items</InputLabel>
                 <Select
-                  labelId="demo-simple-select-autowidth-label"
-                  id="demo-simple-select-autowidth"
+                  labelId="limit-select"
+                  id="limit-select"
                   value={limit}
                   onChange={handleChangeLimit}
                   autoWidth
                   label="Items"
                 >
-                  <MenuItem value={10}>10</MenuItem>
                   <MenuItem value={20}>20</MenuItem>
                   <MenuItem value={50}>50</MenuItem>
+                  <MenuItem value={100}>100</MenuItem>
                 </Select>
               </FormControl>
               <Pagination
