@@ -24,20 +24,21 @@ export const login = createAsyncThunk<
 >('auth/login', async ({ username, password }, thunkAPI) => {
   try {
     const data = await AuthService.login({ username, password });
+    thunkAPI.dispatch(setMessage({ message: "You're logged!" }));
     return { user: data };
   } catch (error: Error | any) {
     const message =
       (error?.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString();
-    thunkAPI.dispatch(setMessage(message));
+    thunkAPI.dispatch(setMessage({ message, level: 'error' }));
     return thunkAPI.rejectWithValue(message);
   }
 });
 
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   const { message } = await AuthService.logout();
-  thunkAPI.dispatch(setMessage(message));
+  thunkAPI.dispatch(setMessage({ message: "You're logged out!" }));
   return thunkAPI.fulfillWithValue(message);
 });
 

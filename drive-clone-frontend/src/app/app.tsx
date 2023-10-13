@@ -2,13 +2,10 @@
 import {
   BrowserRouter as Router,
   Route,
-  Routes,
-  useLocation,
-  useNavigate,
+  Routes
 } from 'react-router-dom';
 import styles from './app.module.scss';
 import { ToastContainer } from 'react-toastify';
-import NxWelcome from './nx-welcome';
 import Login from '../page/login/login';
 import { PrivateRoute } from '../utils/auth/private-route';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/slices/auth';
 import { AppDispatch } from '../store/store';
 import { CircularProgress } from '@mui/material';
+import { displayToast } from '../utils/toast/toast-service';
 
 export function App() {
   const { user: currentUser } = useSelector(
@@ -26,6 +24,8 @@ export function App() {
   const { isLoading } = useSelector(
     (state: { file: { isLoading: boolean } }) => state.file
   );
+  const { message } = useSelector((state: { message: any }) => state.message);
+
   const dispatch = useDispatch<AppDispatch>();
 
   const logOut = useCallback(() => {
@@ -34,7 +34,8 @@ export function App() {
 
   useEffect(() => {
     document.title = 'Login - Drive Clone';
-  }, [currentUser, logOut]);
+    if (message) displayToast(message);
+  }, [currentUser, logOut, message]);
 
   return (
     <div className="App">
@@ -85,3 +86,4 @@ export function App() {
 }
 
 export default App;
+

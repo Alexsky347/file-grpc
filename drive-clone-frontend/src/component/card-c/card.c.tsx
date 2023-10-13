@@ -8,7 +8,6 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Card from '@mui/material/Card';
 import { FileService } from '../../service/api/file.service';
-import { toast } from 'react-toastify';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
@@ -67,12 +66,7 @@ export function CardC({
   // Delete
   const handleDelete = async () => {
     const response: any = await dispatch(deleteFile(metaData));
-    const { payload } = response;
-    if (response?.error) {
-      toast.error(payload);
-    } else {
-      handleClose();
-      toast.success(payload);
+    if (!response?.error) {
       handleReRender();
     }
   };
@@ -85,7 +79,7 @@ export function CardC({
       alink.download = metaData.filename;
       alink.click();
     } else {
-      toast.error('No file founded !');
+      console.warn('No file founded !');
     }
   };
 
@@ -95,13 +89,9 @@ export function CardC({
     const response: any = await dispatch(
       renameFile({ metaData, newFileName: newFileNamed })
     );
-    const { payload } = response;
-    if (response?.error) {
-      toast.error(payload);
-    } else {
-      handleClose();
-      toast.success(payload);
-      handleReRender();
+    if (!response?.error) {
+        handleClose();
+        handleReRender();
     }
   };
 

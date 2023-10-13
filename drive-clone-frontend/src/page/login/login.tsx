@@ -1,6 +1,5 @@
 import { useState, useEffect, FormEvent, JSX } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import {
   Button,
   Checkbox,
@@ -34,7 +33,6 @@ interface LoginResponse {
 
 function Login(): JSX.Element {
   const navigate = useNavigate();
-  const { message } = useSelector((state: { message: any }) => state.message);
   const { isLoggedIn } = useSelector((state: { auth: any }) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -44,12 +42,9 @@ function Login(): JSX.Element {
 
   useEffect(() => {
     if (isLoggedIn) {
-      toast.success(`You're logged`);
       navigate('/', { replace: true });
-    } else if (message) {
-      toast.error(message);
     }
-  }, [isLoggedIn, message, navigate]);
+  }, [isLoggedIn, navigate]);
 
   async function loginUser(data: FormData) {
     const username = data.get('username') as string;

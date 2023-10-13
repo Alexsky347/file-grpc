@@ -24,7 +24,7 @@ export const findAll = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
-      thunkAPI.dispatch(setMessage(message));
+      thunkAPI.dispatch(setMessage({message, level: 'error'}));
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -36,16 +36,19 @@ export const deleteFile = createAsyncThunk(
     if (metaData?.filename) {
       const response = await FileService.deleteFile(metaData.filename);
       if (response.status === 200) {
-        return 'File deleted successfully !';
+        thunkAPI.dispatch(setMessage({message: 'File deleted successfully !'}));
+        return { hasDeleted: true}
       } else {
         const errorMessage =
           response.data?.message ||
           response?.statusText ||
           'An error occurred.';
+          thunkAPI.dispatch(setMessage({message: errorMessage, level: 'error'}));
         return thunkAPI.rejectWithValue(errorMessage);
       }
     } else {
       const noFileFound = 'No file founded !';
+      thunkAPI.dispatch(setMessage({message: noFileFound, level: 'warning'}));
       return thunkAPI.rejectWithValue(noFileFound);
     }
   }
@@ -58,7 +61,7 @@ export const renameFile = createAsyncThunk(
     if (metaData?.filename) {
       if (metaData?.filename === newFileName) {
         const sameFileName = 'Same file name';
-        thunkAPI.dispatch(setMessage(sameFileName));
+        thunkAPI.dispatch(setMessage({message:sameFileName, level: 'warning'}));
         return thunkAPI.rejectWithValue(sameFileName);
       } else {
         const response = await FileService.renameFile(
@@ -66,18 +69,20 @@ export const renameFile = createAsyncThunk(
           newFileName as string
         );
         if (response.status === 200) {
-          return 'File renamed successfully !';
+          thunkAPI.dispatch(setMessage({message:'File renamed successfully !'}));
+          return thunkAPI.fulfillWithValue('File renamed successfully !');
         } else {
           const errorMessage =
             response.data?.message ||
             response?.statusText ||
             'An error occurred.';
+            thunkAPI.dispatch(setMessage({message:errorMessage, level: 'error'}));
           return thunkAPI.rejectWithValue(errorMessage);
         }
       }
     } else {
-      const noFileFound = 'No file founded !';
-      return thunkAPI.rejectWithValue(noFileFound);
+      thunkAPI.dispatch(setMessage({message:'No file founded !', level: 'warning'}));
+     return thunkAPI.rejectWithValue('No file founded !');
     }
   }
 );

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { toast } from 'react-toastify';
 import Grid from '@mui/material/Grid';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -31,7 +30,6 @@ export function Dashboard({
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [search, setSearch] = useState('');
-  const { message } = useSelector((state: { message: any }) => state.message);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -44,15 +42,12 @@ export function Dashboard({
     ) => {
       const response: any = await dispatch(findAll({ limit, page, search }));
       const { files, total } = response.payload;
-      if (files?.length === 0) {
-        toast.error(message || 'No files found');
-      }
       setFiles(files);
       setCount(total);
       scrollToTop();
     };
     fetchData(limit, page, search, dispatch);
-  }, [reRender, limit, page, search, dispatch, message]);
+  }, [reRender, limit, page, search, dispatch]);
 
   const NoDataStyled = styled('h2')({
     width: '100%',
