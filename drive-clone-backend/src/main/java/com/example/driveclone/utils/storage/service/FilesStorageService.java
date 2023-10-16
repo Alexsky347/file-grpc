@@ -1,9 +1,13 @@
 package com.example.driveclone.utils.storage.service;
 
+import com.example.driveclone.models.FileInfo;
+import com.example.driveclone.models.User;
+import com.example.driveclone.repository.FileRepository;
 import com.example.driveclone.utils.exception.CustomError;
 import com.example.driveclone.utils.exception.CustomRuntimeException;
 import com.example.driveclone.utils.factory.FileInformationFactory;
 import com.example.driveclone.utils.storage.util.FileUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -25,6 +29,9 @@ import java.util.stream.Stream;
 public class FilesStorageService implements IFilesStorageService {
     public final Path root = Paths.get("static");
 
+    @Autowired
+    FileRepository fileRepository;
+
     @Override
     public Path getUserDir(String username) {
         return Paths.get(root + "/" + username);
@@ -39,20 +46,24 @@ public class FilesStorageService implements IFilesStorageService {
     }
 
     @Override
-    public Map<String, String> save(MultipartFile file, String username) throws IOException {
+    public Map<String, String> save(MultipartFile file, User user) throws IOException {
+        String username = user.getUsername();
         Path userDir = this.getUserDir(username);
         if (!Files.exists(userDir)) {
             Files.createDirectory(userDir);
         }
         Path filePath = userDir.resolve(Objects.requireNonNull(file.getOriginalFilename()));
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        FileInfo fileInfo = new FileInfo(filePath.getFileName().toString(), FileUtil.getFileSize(new File(filePath.toString())), user, new Date(), null);
+        fileRepository.save(fileInfo);
         Map<String, String> mp = new HashMap<>();
         mp.put("file uploaded", filePath.getFileName().toString());
         return mp;
     }
 
     @Override
-    public Resource load(String filename, String username) throws MalformedURLException {
+    public Resource load(String filename, User user) throws MalformedURLException {
+        String username = user.getUsername();
         Path userDir = this.getUserDir(username);
         Path file = Paths.get(userDir + "/" + filename);
         Resource resource = new UrlResource(file.toUri());
@@ -65,9 +76,10 @@ public class FilesStorageService implements IFilesStorageService {
 
 
     @Override
-    public Map<String, Object> loadAll(final String username, final int limit, final int offset, final String search, final String sortMode, final String sortBy) throws IOException {
+    public Map<String, Object> loadAll(final User user, final int limit, final int offset, final String search, final String sortMode, final String sortBy) throws IOException {
         String sortByValue = sortBy != null ? sortBy : "filename";
         String sortModeValue = sortMode != null ? sortMode : "asc";
+        String username = user.getUsername();
         int depth = 1;
         Path userDir = getUserDir(username);
         List<Map<String, Object>> fileList = new ArrayList<>();
@@ -113,7 +125,8 @@ public class FilesStorageService implements IFilesStorageService {
     }
 
     @Override
-    public boolean deleteOne(String filename, String username) throws IOException {
+    public boolean deleteOne(String filename, User user) throws IOException {
+        String username = user.getUsername();
         Path userDir = this.getUserDir(username);
         Path file = Paths.get(userDir + "/" + filename);
         Resource resource = new UrlResource(file.toUri());
@@ -125,7 +138,8 @@ public class FilesStorageService implements IFilesStorageService {
     }
 
     @Override
-    public boolean renameOne(String oldName, String newName, String username) throws IOException {
+    public boolean renameOne(String oldName, String newName, User user) throws IOException {
+        String username = user.getUsername();
         Path userDir = this.getUserDir(username);
         Path file = Paths.get(userDir + "/" + oldName);
         Resource resource = new UrlResource(userDir.toUri());

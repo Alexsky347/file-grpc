@@ -1,5 +1,6 @@
 package com.example.driveclone.utils.storage.service;
 
+import com.example.driveclone.models.User;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,16 +15,16 @@ public interface IFilesStorageService {
 
     void init() throws IOException;
 
-    Map<String, String> save(MultipartFile file, String username) throws IOException;
+    Map<String, String> save(MultipartFile file, User user) throws IOException;
 
-    Resource load(String filename, String username) throws MalformedURLException;
+    Resource load(String filename, User user) throws MalformedURLException;
 
-    Map<String, Object> loadAll(String username, int limit, int offset, String search, String sortMode, String sortBy) throws IOException;
+    Map<String, Object> loadAll(User user, int limit, int offset, String search, String sortMode, String sortBy) throws IOException;
 
     void deleteAll();
 
-    boolean deleteOne(String filename, String username) throws IOException;
+    boolean deleteOne(String filename, User user) throws IOException;
 
-    boolean renameOne(String oldName, String newName, String username) throws IOException;
+    boolean renameOne(String oldName, String newName, User user) throws IOException;
 
 }

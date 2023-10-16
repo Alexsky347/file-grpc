@@ -6,7 +6,8 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 @Getter
 @Setter
@@ -22,7 +23,7 @@ public class FileInfo {
     private Long id;
     private String name;
     private String url;
-    private Float size;
+    private double size;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -35,7 +36,7 @@ public class FileInfo {
     public FileInfo() {
     }
 
-    public FileInfo(String name, Float size, User user, Date createdDate, @Nullable Date lastModifiedDate) {
+    public FileInfo(String name, double size, User user, Date createdDate, @Nullable Date lastModifiedDate) {
         this.name = name;
         this.url = "/static/" + user.getUsername() + "/" + name;
         this.size = size;
@@ -44,4 +45,6 @@ public class FileInfo {
         this.lastModifiedDate = lastModifiedDate != null ? new Date(lastModifiedDate.getTime()) : null;
     }
 
+    public FileInfo(String string, double fileSize, String fileCreationTime, String fileLastModifiedTime, String s, User user, java.util.Date date) {
+    }
 }
