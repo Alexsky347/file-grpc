@@ -19,7 +19,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class User {
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "users")
+    @OneToMany(fetch = FetchType.EAGER)
     private final Set<FileInfo> files = new HashSet<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

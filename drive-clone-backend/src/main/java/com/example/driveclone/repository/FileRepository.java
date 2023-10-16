@@ -19,7 +19,4 @@ public interface FileRepository extends JpaRepository<FileInfo, Long> {
 
     void deleteByName(String name);
 
-    void updateById(Long id, FileInfo entity);
-
-    void create(FileInfo entity);
 }
