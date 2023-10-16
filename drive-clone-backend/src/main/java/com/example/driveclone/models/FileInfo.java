@@ -16,7 +16,7 @@ import java.sql.Date;
                 @UniqueConstraint(columnNames = "url"),
                 @UniqueConstraint(columnNames = "name")
         })
-public class FileInfo {git add
+public class FileInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
