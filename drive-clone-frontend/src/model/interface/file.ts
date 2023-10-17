@@ -1,7 +1,7 @@
 export interface MyFile {
   type: string;
   url: string;
-  filename: string;
+  name: string;
   createdDate: string;
   lastModifiedDate: string;
   size: number;

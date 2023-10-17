@@ -3,21 +3,14 @@ package com.example.driveclone.utils.storage.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.jsonwebtoken.io.IOException;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
-
-import javax.print.attribute.standard.DateTimeAtCreation;
-
-import java.io.File;
 
 public class FileUtil {
     private static final Logger logger =
@@ -64,25 +57,11 @@ public class FileUtil {
         return outputStream.toByteArray();
     }
 
-    public static String generateFileUrl(String username, String filename) {
-        return String.format("/static/%s/%s", username, filename);
+    public static long getFileSize(File file) {
+        return file.length();
     }
 
-    public static double getFileSize(File file) {
-        double fileSizeInGB = 0;
-        
-        // Get the file size in bytes
-        long fileSize = file.length();
-            
-        // Convert bytes to kilobytes, megabytes, etc. if needed
-        double fileSizeInKB = fileSize / 1024.0;
-        double fileSizeInMB = fileSizeInKB / 1024.0;
-        fileSizeInGB = fileSizeInMB / 1024.0;
-
-        return fileSizeInGB;
-    }
-
-    public static String getFileCreationTime(Path path) throws java.io.IOException  {
+    public static String getFileCreationTime(Path path) throws java.io.IOException {
         BasicFileAttributeView view = Files.getFileAttributeView(path, BasicFileAttributeView.class);
         BasicFileAttributes attributes = view.readAttributes();
         return attributes.creationTime().toString();

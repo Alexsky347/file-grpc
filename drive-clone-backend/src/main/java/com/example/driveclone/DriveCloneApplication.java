@@ -51,25 +51,27 @@ public class DriveCloneApplication {
             logger.debug("USERNAME {0} .", username);
             Optional<User> user = userRepository.findByUsername(username);
 
-            user.ifPresent(userRepository::delete);
-            // roles
-            Arrays.stream(ERole.values()).forEach(
-                    role -> {
-                        if (roleRepository.findByName(role).isEmpty()) {
-                            Role newRole = new Role();
-                            newRole.setName(role);
-                            roleRepository.save(newRole);
+//            user.ifPresent(userRepository::delete);
+            if (user.isEmpty()) {
+                // roles
+                Arrays.stream(ERole.values()).forEach(
+                        role -> {
+                            if (roleRepository.findByName(role).isEmpty()) {
+                                Role newRole = new Role();
+                                newRole.setName(role);
+                                roleRepository.save(newRole);
+                            }
                         }
-                    }
-            );
-            // user
-            User mainUser = new User(username, email, encoder.encode(pwd));
-            java.util.Set<Role> roles = new HashSet<>();
-            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(adminRole);
-            mainUser.setRoles(roles);
-            userRepository.save(mainUser);
+                );
+                // user
+                User mainUser = new User(username, email, encoder.encode(pwd));
+                java.util.Set<Role> roles = new HashSet<>();
+                Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                roles.add(adminRole);
+                mainUser.setRoles(roles);
+                userRepository.save(mainUser);
+            }
 
             //init storage
             storageService.init();

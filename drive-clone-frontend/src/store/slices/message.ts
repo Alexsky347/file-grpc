@@ -1,26 +1,26 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ToastLevel } from "../../model/type/level";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ToastLevel } from '../../model/type/level';
 
 interface MessageState {
   message: string;
-  level?: ToastLevel
+  level?: ToastLevel;
 }
 
 const initialState: MessageState = {
-  message: "",
-  level: "success"
+  message: '',
+  level: 'error',
 };
 
 const messageSlice = createSlice({
-  name: "message",
+  name: 'message',
   initialState,
   reducers: {
     setMessage: (state, action: PayloadAction<MessageState>) => {
-      state.level = action.payload.level || "success";
+      state.level = action.payload.level ?? 'success';
       state.message = action.payload.message;
     },
     clearMessage: (state) => {
-      state.message = "";
+      state.message = '';
     },
   },
 });

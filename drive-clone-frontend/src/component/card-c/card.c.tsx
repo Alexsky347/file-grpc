@@ -56,8 +56,8 @@ export function CardC({
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    setNewFileName(metaData?.filename);
-  }, [message, hasDeleted, hasRenamed, metaData?.filename]);
+    setNewFileName(metaData?.name);
+  }, [message, hasDeleted, hasRenamed, metaData?.name]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -73,10 +73,10 @@ export function CardC({
 
   // download -> TODO can't foun file in browser
   const handleDownload = () => {
-    if (metaData?.filename && metaData?.url) {
+    if (metaData?.name && metaData?.url) {
       const alink = document.createElement('a');
       alink.href = metaData.url;
-      alink.download = metaData.filename;
+      alink.download = metaData.name;
       alink.click();
     } else {
       console.warn('No file founded !');
@@ -90,8 +90,8 @@ export function CardC({
       renameFile({ metaData, newFileName: newFileNamed })
     );
     if (!response?.error) {
-        handleClose();
-        handleReRender();
+      handleClose();
+      handleReRender();
     }
   };
 
@@ -101,24 +101,24 @@ export function CardC({
     }
     return '';
   };
+  
 
   return (
     <div>
       <Card>
-        <CardHeader title={handleFileName(metaData?.filename)} subheader="" />
+        <CardHeader title={handleFileName(metaData?.name)} subheader="" />
         <CardMedia
           sx={{ objectFit: 'contain' }}
           component="img"
           height="194"
-          image={metaData?.url ? metaData?.url : '/static/no-picture.jpg'}
+          image={metaData?.url}
           alt="picture"
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-            Size: {(metaData?.size / 100).toFixed(2)} GB
+            {(metaData?.size / 100).toFixed(2)} bytes
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Creation date:
             {format(new Date(metaData?.createdDate), 'yyyy-MM-dd')}
           </Typography>
         </CardContent>
@@ -156,10 +156,10 @@ export function CardC({
               InputLabelProps={{
                 shrink: true,
               }}
-              defaultValue={handleFileName(metaData?.filename.split('.')[0])}
+              defaultValue={handleFileName(metaData?.name.split('.')[0])}
               onChange={(e) => {
                 setNewFileName(
-                  e.target.value + '.' + metaData?.filename.split('.')[1]
+                  e.target.value + '.' + metaData?.name.split('.')[1]
                 );
               }}
             />

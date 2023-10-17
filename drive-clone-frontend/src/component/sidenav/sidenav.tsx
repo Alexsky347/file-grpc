@@ -43,39 +43,38 @@ export function Sidenav({
     handleSideNav ? setWidthNav(200) : setWidthNav(70);
   }, [handleSideNav]);
 
-
   // styles
-    const StyledBtn = styled(Button)({
-        color: '#5F6368',
-        width: 36,
-        height: 36,
-    });
+  const StyledBtn = styled(Button)({
+    color: '#5F6368',
+    width: 36,
+    height: 36,
+  });
 
-    const StyledUploadBtn = styled(Button)({
-        color: '#2185FC',
-        fontSize: '40px',
-    });
+  const StyledUploadBtn = styled(Button)({
+    color: '#2185FC',
+    fontSize: '40px',
+  });
 
-    const StyledSidenav = styled('div')({
-        py: 2,
-        pr: 2,
-        width: widthNav,
-        border: '1px solid rgba(0, 0, 0, 0.05)',
-        display: 'block',
-        height: '91vh',
-    });
+  const StyledSidenav = styled('div')({
+    py: 2,
+    pr: 2,
+    width: widthNav,
+    border: '1px solid rgba(0, 0, 0, 0.05)',
+    display: 'block',
+    height: '91vh',
+  });
 
-    const StyledModal = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '60%',
-        borderRadius: 5,
-        bgColor: 'background.paper',
-        boxShadow: '24x',
-        p: 4,
-    };
+  const StyledModal = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '60%',
+    borderRadius: 5,
+    bgColor: 'background.paper',
+    boxShadow: '24x',
+    p: 4,
+  };
   // Functions
   const handleOpen = () => setOpen(true);
 
@@ -91,12 +90,16 @@ export function Sidenav({
 
     if (files?.length === 1) {
       data.append('file', files[0]);
-      response = (await FileService.uploadOneFile(data)) as ItResponse;
+      response = (await FileService.uploadOneFile(
+        data
+      )) as unknown as ItResponse;
     } else {
       Array.from(files!).forEach((element) => {
         data.append('file', element);
       });
-      response = (await FileService.uploadMultipleFiles(data)) as ItResponse;
+      response = (await FileService.uploadMultipleFiles(
+        data
+      )) as unknown as ItResponse;
     }
 
     if (response.status === 200) {
@@ -120,7 +123,7 @@ export function Sidenav({
           width: widthNav,
           border: '1px solid rgba(0, 0, 0, 0.05)',
           height: '91vh',
-          paddingRight: 0
+          paddingRight: 0,
         }}
       >
         <List
@@ -155,12 +158,9 @@ export function Sidenav({
               onClick={handleOpen}
             >
               <ListItemDecorator>
-                  <StyledBtn>
-                      <img
-                          src="/static/add.svg"
-                          alt="Logo"
-                      />
-                  </StyledBtn>
+                <StyledBtn>
+                  <img src="/static/add.svg" alt="Logo" />
+                </StyledBtn>
               </ListItemDecorator>
               {handleSideNav ? <ListItemContent>New</ListItemContent> : null}
             </ListItemButton>
@@ -183,11 +183,9 @@ export function Sidenav({
               }}
             >
               <ListItemDecorator>
-                  <StyledBtn>
-                      <ComputerIcon
-                          fontSize="large"
-                      />
-                  </StyledBtn>
+                <StyledBtn>
+                  <ComputerIcon fontSize="large" />
+                </StyledBtn>
               </ListItemDecorator>
               {handleSideNav ? (
                 <ListItemContent>My Drive</ListItemContent>

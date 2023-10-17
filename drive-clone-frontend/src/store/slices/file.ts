@@ -24,7 +24,7 @@ export const findAll = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
-      thunkAPI.dispatch(setMessage({message, level: 'error'}));
+      thunkAPI.dispatch(setMessage({ message, level: 'error' }));
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -33,22 +33,26 @@ export const findAll = createAsyncThunk(
 export const deleteFile = createAsyncThunk(
   'file/deleteFile',
   async (metaData: MyFile, thunkAPI) => {
-    if (metaData?.filename) {
-      const response = await FileService.deleteFile(metaData.filename);
+    if (metaData?.name) {
+      const response = await FileService.deleteFile(metaData.name);
       if (response.status === 200) {
-        thunkAPI.dispatch(setMessage({message: 'File deleted successfully !'}));
-        return { hasDeleted: true}
+        thunkAPI.dispatch(
+          setMessage({ message: 'File deleted successfully !' })
+        );
+        return { hasDeleted: true };
       } else {
         const errorMessage =
           response.data?.message ||
           response?.statusText ||
           'An error occurred.';
-          thunkAPI.dispatch(setMessage({message: errorMessage, level: 'error'}));
+        thunkAPI.dispatch(
+          setMessage({ message: errorMessage, level: 'error' })
+        );
         return thunkAPI.rejectWithValue(errorMessage);
       }
     } else {
       const noFileFound = 'No file founded !';
-      thunkAPI.dispatch(setMessage({message: noFileFound, level: 'warning'}));
+      thunkAPI.dispatch(setMessage({ message: noFileFound, level: 'warning' }));
       return thunkAPI.rejectWithValue(noFileFound);
     }
   }
@@ -58,31 +62,39 @@ export const renameFile = createAsyncThunk(
   'file/renameFile',
   async (params: { metaData: MyFile; newFileName: string }, thunkAPI) => {
     const { metaData, newFileName } = params;
-    if (metaData?.filename) {
-      if (metaData?.filename === newFileName) {
+    if (metaData?.name) {
+      if (metaData?.name === newFileName) {
         const sameFileName = 'Same file name';
-        thunkAPI.dispatch(setMessage({message:sameFileName, level: 'warning'}));
+        thunkAPI.dispatch(
+          setMessage({ message: sameFileName, level: 'warning' })
+        );
         return thunkAPI.rejectWithValue(sameFileName);
       } else {
         const response = await FileService.renameFile(
-          metaData?.filename,
+          metaData?.name,
           newFileName as string
         );
         if (response.status === 200) {
-          thunkAPI.dispatch(setMessage({message:'File renamed successfully !'}));
+          thunkAPI.dispatch(
+            setMessage({ message: 'File renamed successfully !' })
+          );
           return thunkAPI.fulfillWithValue('File renamed successfully !');
         } else {
           const errorMessage =
             response.data?.message ||
             response?.statusText ||
             'An error occurred.';
-            thunkAPI.dispatch(setMessage({message:errorMessage, level: 'error'}));
+          thunkAPI.dispatch(
+            setMessage({ message: errorMessage, level: 'error' })
+          );
           return thunkAPI.rejectWithValue(errorMessage);
         }
       }
     } else {
-      thunkAPI.dispatch(setMessage({message:'No file founded !', level: 'warning'}));
-     return thunkAPI.rejectWithValue('No file founded !');
+      thunkAPI.dispatch(
+        setMessage({ message: 'No file founded !', level: 'warning' })
+      );
+      return thunkAPI.rejectWithValue('No file founded !');
     }
   }
 );

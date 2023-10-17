@@ -1,20 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { setMessage } from './message';
 import { AuthService } from '../../service/api/auth.service';
+import { User } from '../../model/interface/user';
+import { AuthState } from '../../model/interface/auth-state';
 
-interface User {
-  // Define your user properties here
-  id: number;
-  username: string;
-  email: string;
-  // Add more properties as needed
-}
 
-interface AuthState {
-  isLoggedIn: boolean;
-  user: User | null;
-  isLoading?: boolean;
-}
+
 
 const user = JSON.parse(localStorage.getItem('user') as string);
 

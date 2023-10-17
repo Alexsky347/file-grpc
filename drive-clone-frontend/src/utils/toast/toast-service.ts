@@ -1,27 +1,25 @@
 import { toast } from 'react-toastify';
-import { ToastLevel } from '../../model/type/level';
+import { MessageState } from '../../model/interface/message-state';
 
-function displayToast(
-  msg: string,
-  level: ToastLevel = 'success',
-  duration = 300
-) {
+function displayToast(opt: MessageState) {
+  const { message, level } = opt;
+  const durationInMs = 3000;
   setTimeout(() => {
     switch (level) {
       case 'error':
-        toast.error(msg);
+        toast.error(message);
         break;
       case 'warning':
-        toast.warning(msg);
+        toast.warning(message);
         break;
       case 'info':
-        toast.info(msg);
+        toast.info(message);
         break;
       default:
-        toast.success(msg);
+        toast.success(message);
         break;
     }
-  }, duration);
+  }, durationInMs);
 }
 
 export { displayToast };
