@@ -3,7 +3,7 @@ import { MessageState } from '../../model/interface/message-state';
 
 function displayToast(opt: MessageState) {
   const { message, level } = opt;
-  const durationInMs = 3000;
+  const durationInMs = 300;
   setTimeout(() => {
     switch (level) {
       case 'error':

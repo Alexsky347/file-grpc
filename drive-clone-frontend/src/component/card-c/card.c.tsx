@@ -71,7 +71,7 @@ export function CardC({
     }
   };
 
-  // download -> TODO can't foun file in browser
+  // download -> TODO can't found file in browser
   const handleDownload = () => {
     if (metaData?.name && metaData?.url) {
       const alink = document.createElement('a');
@@ -101,17 +101,20 @@ export function CardC({
     }
     return '';
   };
-  
 
   return (
     <div>
       <Card>
-        <CardHeader title={handleFileName(metaData?.name)} subheader="" />
+        <CardHeader title="" subheader={handleFileName(metaData?.name)} />
         <CardMedia
           sx={{ objectFit: 'contain' }}
           component="img"
           height="194"
-          image={metaData?.url}
+          image={
+            metaData?.url
+              ? `data:image/jpeg;base64,${metaData?.url}`
+              : '/static/no-picture.jpg'
+          }
           alt="picture"
         />
         <CardContent>

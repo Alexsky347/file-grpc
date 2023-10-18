@@ -17,15 +17,13 @@ import { FileService } from '../../service/api/file.service';
 import { ItResponse } from '../../model/interface/it-response';
 
 interface SideBarProps {
-  sideBarOption: number;
   setSideBarOption: React.Dispatch<React.SetStateAction<number>>;
-  reRender: boolean;
+  reRender: number;
   setReRender: React.Dispatch<React.SetStateAction<number>>;
   handleSideNav: boolean;
 }
 
-export function Sidenav({
-  sideBarOption,
+function Sidenav({
   setSideBarOption,
   reRender,
   setReRender,
@@ -273,3 +271,5 @@ export function Sidenav({
     </div>
   );
 }
+
+export { Sidenav };

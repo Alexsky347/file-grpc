@@ -44,7 +44,7 @@ export function App() {
           color="secondary"
           style={{
             width: '10%',
-            height: 10,
+            height: '10%',
             position: 'absolute',
             top: '50%',
             left: '50%',

@@ -5,10 +5,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
@@ -71,5 +75,25 @@ public class FileUtil {
         BasicFileAttributeView view = Files.getFileAttributeView(path, BasicFileAttributeView.class);
         BasicFileAttributes attributes = view.readAttributes();
         return attributes.lastModifiedTime().toString();
+    }
+
+    public static String getContentType(String filePath) {
+        try {
+            Path path = Paths.get(filePath);
+            return Files.probeContentType(path);
+        } catch (IOException e) {
+            logger.error(String.valueOf(e));
+            return null;
+        }
+    }
+
+    public static boolean isImage(String contentType) {
+        Set<String> imageMimeTypes = new HashSet<>();
+        imageMimeTypes.add("image/jpeg");
+        imageMimeTypes.add("image/png");
+        imageMimeTypes.add("image/gif");
+        imageMimeTypes.add("image/bmp");
+
+        return imageMimeTypes.contains(contentType);
     }
 }

@@ -26,7 +26,7 @@ import java.util.*;
 
 @Service
 public class FilesStorageService implements IFilesStorageService {
-    public final Path root = Paths.get("static");
+    public final Path root = Paths.get("src/main/resources/static");
 
     @Autowired
     FileRepository fileRepository;
@@ -116,8 +116,14 @@ public class FilesStorageService implements IFilesStorageService {
         Path file = Paths.get(userDir + "/" + oldName);
         Resource resource = new UrlResource(userDir.toUri());
         if (resource.exists() || resource.isReadable()) {
-            fileRepository.findByNameAndUser(oldName, user).ifPresent(fileInfo -> {
+            Optional<FileInfo> fileFound = fileRepository.findByNameAndUser(oldName, user);
+            if (fileFound.isEmpty()) {
+                throw new CustomError("Could not rename the file!");
+            }
+
+            fileFound.ifPresent(fileInfo -> {
                 fileInfo.setName(newName);
+                fileInfo.setUrl("/static/" + username + "/" + newName);
                 fileInfo.setLastModifiedDate(new Date());
                 fileRepository.save(fileInfo);
             });

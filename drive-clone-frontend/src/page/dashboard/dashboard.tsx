@@ -55,6 +55,10 @@ export function Dashboard({
     textAlign: 'center',
   });
 
+  const Padding = styled('div')({
+    padding: '30px',
+  });
+
   /**
    *
    * @param event
@@ -90,10 +94,15 @@ export function Dashboard({
   if (sideBarOption === 0) {
     return (
       <div className="main">
-        <SearchInput
-          sx={{ width: '100%', textAlign: 'center' }}
-          onChange={handleSearchChange}
-        />
+        <Padding>
+          <div>
+            <SearchInput
+              sx={{ width: '100%', textAlign: 'center' }}
+              onChange={handleSearchChange}
+            />
+          </div>
+        </Padding>
+
         {files && files?.length > 0 ? (
           <>
             <Grid
