@@ -2,6 +2,7 @@ export interface MyFile {
   type: string;
   url: string;
   name: string;
+  contentType: string;
   createdDate: string;
   lastModifiedDate: string;
   size: number;

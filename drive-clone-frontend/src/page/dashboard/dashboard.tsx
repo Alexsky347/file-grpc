@@ -25,10 +25,11 @@ export function Dashboard({
   reRender,
   setReRender,
 }: DashboardProps) {
+  const PAGE_INIT = 10;
   const [files, setFiles] = useState<FileCollection>([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(PAGE_INIT);
   const [search, setSearch] = useState('');
 
   const dispatch = useDispatch<AppDispatch>();
@@ -136,7 +137,7 @@ export function Dashboard({
                   autoWidth
                   label="Items"
                 >
-                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={PAGE_INIT}>10</MenuItem>
                   <MenuItem value={50}>50</MenuItem>
                   <MenuItem value={100}>100</MenuItem>
                 </Select>

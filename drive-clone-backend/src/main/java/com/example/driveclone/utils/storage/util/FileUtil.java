@@ -86,6 +86,7 @@ public class FileUtil {
             return null;
         }
     }
+    
 
     public static boolean isImage(String contentType) {
         Set<String> imageMimeTypes = new HashSet<>();

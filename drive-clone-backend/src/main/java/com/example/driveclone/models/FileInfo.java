@@ -38,6 +38,9 @@ public class FileInfo {
     private long size;
 
     @Getter
+    private String contentType;
+
+    @Getter
     @Setter
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdDate;
@@ -62,17 +65,16 @@ public class FileInfo {
         this.size = size;
         this.user = user;
         this.createdDate = createdDate;
+        this.contentType = FileUtil.getContentType(name);
     }
 
     public String getUrl() {
         try {
             Resource resource = new ClassPathResource(url);
             byte[] fileContent = FileCopyUtils.copyToByteArray(resource.getInputStream());
-            String contentType = FileUtil.getContentType(url);
             String encodedFile = null;
-            if (contentType != null && FileUtil.isImage(contentType)) {
+            if (contentType != null) {
                 encodedFile = Base64.getEncoder().encodeToString(fileContent);
-
             }
             return encodedFile;
         } catch (IOException e) {

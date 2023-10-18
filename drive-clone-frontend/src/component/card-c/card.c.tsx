@@ -71,13 +71,18 @@ export function CardC({
     }
   };
 
-  // download -> TODO can't found file in browser
   const handleDownload = () => {
     if (metaData?.name && metaData?.url) {
-      const alink = document.createElement('a');
-      alink.href = metaData.url;
-      alink.download = metaData.name;
-      alink.click();
+      const anchor = document.createElement('a');
+      const fileType = metaData?.name.split('.')[1];
+      let contentType = `image/${fileType}`;
+      if (fileType === 'pdf') {
+        contentType = `application/${metaData?.name.split('.')[1]}`;
+      }
+      anchor.href = `data:${contentType};base64,${metaData?.url}`;
+      anchor.type = contentType;
+      anchor.download = metaData.name;
+      anchor.click();
     } else {
       console.warn('No file founded !');
     }
@@ -111,8 +116,8 @@ export function CardC({
           component="img"
           height="194"
           image={
-            metaData?.url
-              ? `data:image/jpeg;base64,${metaData?.url}`
+            metaData?.url && metaData?.contentType.includes('image')
+              ? `data:${metaData.contentType};base64,${metaData?.url}`
               : '/static/no-picture.jpg'
           }
           alt="picture"
