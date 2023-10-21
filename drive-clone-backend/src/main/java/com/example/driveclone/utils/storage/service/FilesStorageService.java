@@ -4,6 +4,7 @@ import com.example.driveclone.models.FileInfo;
 import com.example.driveclone.models.User;
 import com.example.driveclone.repository.FileRepository;
 import com.example.driveclone.utils.exception.CustomError;
+import com.example.driveclone.utils.storage.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -36,6 +37,10 @@ public class FilesStorageService implements IFilesStorageService {
         return Paths.get(root + "/" + username);
     }
 
+    public Path getUserZipDir(String username) {
+        return Path.of(this.getUserDir(username) + "/compressed");
+    }
+
 
     @Override
     public void init() throws IOException {
@@ -48,8 +53,10 @@ public class FilesStorageService implements IFilesStorageService {
     public Map<String, String> save(MultipartFile file, User user) throws IOException {
         String username = user.getUsername();
         Path userDir = this.getUserDir(username);
+
         if (!Files.exists(userDir)) {
             Files.createDirectory(userDir);
+            Files.createDirectory(getUserZipDir(username));
         }
         Path filePath = userDir.resolve(Objects.requireNonNull(file.getOriginalFilename()));
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
@@ -107,6 +114,15 @@ public class FilesStorageService implements IFilesStorageService {
         } else {
             throw new CustomError("Could not delete the file!");
         }
+    }
+
+
+    public boolean zipIt(String filename, User user) throws IOException {
+        String username = user.getUsername();
+        Path userDir = this.getUserDir(username);
+        Path file = Paths.get(userDir + "/" + filename);
+        FileUtil.zipFile(file.toString(), getUserZipDir(username) + "/" + file.getFileName().toString() + ".zip");
+        return true;
     }
 
     @Override

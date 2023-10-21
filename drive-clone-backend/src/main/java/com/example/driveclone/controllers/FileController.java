@@ -89,4 +89,10 @@ public class FileController {
     public boolean renameFile(@RequestParam String oldName, @RequestParam String newName, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
         return storageService.renameOne(oldName, newName, jwtUtils.retrieveUser(httpServletRequest));
     }
+
+    @GetMapping(value = "/file/zip/{filename:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(code = HttpStatus.OK)
+    public boolean zipFile(@PathVariable String filename, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
+        return storageService.zipIt(filename, jwtUtils.retrieveUser(httpServletRequest));
+    }
 }

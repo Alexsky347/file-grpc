@@ -15,13 +15,13 @@ import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { Avatar, TextField } from '@mui/material';
-import { InsertDriveFileOutlined } from '@mui/icons-material';
+import { FolderZipOutlined } from '@mui/icons-material';
 import { styled } from '@mui/system';
 import { format } from 'date-fns';
 import { MyFile } from './../../model/interface/file';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
-import { deleteFile, renameFile } from '../../store/slices/file';
+import { deleteFile, renameFile, zipFile } from '../../store/slices/file';
 
 interface MainProps {
   metaData: MyFile;
@@ -100,6 +100,10 @@ export function CardC({
     }
   };
 
+  const handleZip = async () => {
+    await dispatch(zipFile({ name: metaData.name }));
+  };
+
   const handleFileName = (fileName: string | undefined) => {
     if (fileName) {
       return fileName.replaceAll('%20', ' ');
@@ -138,9 +142,9 @@ export function CardC({
             <CreateIcon />
           </IconButton>
           <IconButton>
-            <InsertDriveFileOutlined />
+            <FolderZipOutlined onClick={handleZip} aria-label="zip file" />
           </IconButton>
-          <IconButton onClick={handleDownload} aria-label="download">
+          <IconButton onClick={handleDownload} aria-label="download file">
             <DownloadIcon />
           </IconButton>
         </CardActions>

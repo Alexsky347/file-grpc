@@ -4,9 +4,6 @@ import { AuthService } from '../../service/api/auth.service';
 import { User } from '../../model/interface/user';
 import { AuthState } from '../../model/interface/auth-state';
 
-
-
-
 const user = JSON.parse(localStorage.getItem('user') as string);
 
 export const login = createAsyncThunk<
@@ -40,7 +37,11 @@ const initialState: AuthState = user
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
+      state.isLoggedIn = action.payload.isLoggedIn;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.fulfilled, (state, action) => {
@@ -57,5 +58,5 @@ const authSlice = createSlice({
       });
   },
 });
-
+export const { setIsLoggedIn } = authSlice.actions;
 export default authSlice.reducer;

@@ -3,8 +3,9 @@ package com.example.driveclone.utils.storage.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,52 +14,15 @@ import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.zip.Deflater;
-import java.util.zip.Inflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 
 public class FileUtil {
     private static final Logger logger =
             LoggerFactory.getLogger(FileUtil.class);
 
     private FileUtil() {
-    }
-
-    public static byte[] compressImage(byte[] data) {
-
-        Deflater deflater = new Deflater();
-        deflater.setLevel(Deflater.BEST_COMPRESSION);
-        deflater.setInput(data);
-        deflater.finish();
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
-        byte[] tmp = new byte[4 * 1024];
-        while (!deflater.finished()) {
-            int size = deflater.deflate(tmp);
-            outputStream.write(tmp, 0, size);
-        }
-        try {
-            outputStream.close();
-        } catch (Exception e) {
-            logger.error(String.valueOf(e));
-        }
-        return outputStream.toByteArray();
-    }
-
-    public static byte[] decompressImage(byte[] data) {
-        Inflater inflater = new Inflater();
-        inflater.setInput(data);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
-        byte[] tmp = new byte[4 * 1024];
-        try {
-            while (!inflater.finished()) {
-                int count = inflater.inflate(tmp);
-                outputStream.write(tmp, 0, count);
-            }
-            outputStream.close();
-        } catch (Exception exception) {
-            logger.error(String.valueOf(exception));
-        }
-        return outputStream.toByteArray();
     }
 
     public static long getFileSize(File file) {
@@ -86,7 +50,6 @@ public class FileUtil {
             return null;
         }
     }
-    
 
     public static boolean isImage(String contentType) {
         Set<String> imageMimeTypes = new HashSet<>();
@@ -96,5 +59,25 @@ public class FileUtil {
         imageMimeTypes.add("image/bmp");
 
         return imageMimeTypes.contains(contentType);
+    }
+
+    public static void zipFile(String sourceFilePath, String destinationFilePath) throws IOException {
+        FileOutputStream fos = new FileOutputStream(destinationFilePath);
+        ZipOutputStream zipOut = new ZipOutputStream(fos);
+
+        FileInputStream fis = new FileInputStream(sourceFilePath);
+        ZipEntry zipEntry = new ZipEntry("your_zipped_file_name.zip");
+        zipOut.putNextEntry(zipEntry);
+
+        byte[] bytes = new byte[1024];
+        int length;
+
+        while ((length = fis.read(bytes)) >= 0) {
+            zipOut.write(bytes, 0, length);
+        }
+
+        fis.close();
+        zipOut.close();
+        fos.close();
     }
 }

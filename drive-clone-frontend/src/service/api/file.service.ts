@@ -29,6 +29,11 @@ export class FileService {
     return { headers, data };
   };
 
+  static zipFile = async (fileName: string) => {
+    const { data } = await http.get(`file/zip/${fileName}`);
+    return { data };
+  };
+
   static uploadOneFile = async (fileFormData: FormData) => {
     return await http({
       method: 'post',
