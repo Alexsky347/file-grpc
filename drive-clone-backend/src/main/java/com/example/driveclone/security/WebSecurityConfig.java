@@ -1,7 +1,6 @@
 package com.example.driveclone.security;
 
 
-import com.example.driveclone.security.jwt.AuthEntryPointJwt;
 import com.example.driveclone.security.jwt.AuthTokenFilter;
 import com.example.driveclone.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,6 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -69,7 +66,6 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/auth/**").permitAll()

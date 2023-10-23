@@ -1,7 +1,7 @@
 package com.example.driveclone.controllers;
 
 import com.example.driveclone.security.jwt.JwtUtils;
-import com.example.driveclone.utils.exception.CustomRuntimeException;
+import com.example.driveclone.utils.exception.CustomExceptionWithRequest;
 import com.example.driveclone.utils.storage.service.FilesStorageService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +34,6 @@ public class FileController {
 
     @PostMapping(value = "/files/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-
     public Map<String, List<String>> uploadFiles(@RequestParam("file") MultipartFile[] files, HttpServletRequest httpServletRequest) {
         List<String> fileNames = new ArrayList<>();
         Map<String, List<String>> response = new HashMap<>();
@@ -42,7 +41,7 @@ public class FileController {
             try {
                 storageService.save(file, jwtUtils.retrieveUser(httpServletRequest));
             } catch (IOException | ParseException | JOSEException e) {
-                throw new CustomRuntimeException(e);
+                throw new CustomExceptionWithRequest(e.getMessage(), httpServletRequest);
             }
             fileNames.add(file.getOriginalFilename());
         });
