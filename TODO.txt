@@ -1,9 +1,8 @@
 TODO
 
-add date filter / sortBy
+double toast on every masg on frontend
 
 test zip method -> normally ok
+zip automatically file and gettter with bytes from zip
 
-fix rename file
-
-401 handle it in fr / bk
+fix rename file :/ 

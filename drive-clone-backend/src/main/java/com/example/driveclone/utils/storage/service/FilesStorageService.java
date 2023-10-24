@@ -82,12 +82,12 @@ public class FilesStorageService implements IFilesStorageService {
 
 
     @Override
-    public Map<String, Object> loadAll(final User user, final int limit, final int offset, final String search, final String sortMode, final String sortBy) throws IOException {
-        String sortByValue = sortBy != null ? sortBy : "name";
-        Sort.Direction sortModeValue = Arrays.stream(Sort.Direction.values()).anyMatch(s -> s != null && s.name().equals(sortMode)) ? Sort.Direction.valueOf(sortMode) : Sort.Direction.ASC;
+    public Map<String, Object> loadAll(final User user, final int limit, final int offset, final String search, final String sortBy, final String sortMode) throws IOException {
+        String sortByProperty = sortBy != null ? sortBy : "name";
+        Sort.Direction sortByDirection = Arrays.stream(Sort.Direction.values()).anyMatch(s -> s != null && s.name().equals(sortMode)) ? Sort.Direction.valueOf(sortMode) : Sort.Direction.ASC;
         Map<String, Object> data = new HashMap<>();
         int pageNumber = offset / limit;
-        Pageable pageable = PageRequest.of(pageNumber, limit, Sort.by(sortModeValue, sortByValue));
+        Pageable pageable = PageRequest.of(pageNumber, limit, Sort.by(sortByDirection, sortByProperty));
         Page<FileInfo> f = fileRepository.filterAll(user, search, pageable);
         long totalFiles = f.getTotalElements();
         List<FileInfo> filesContent = f.getContent();
@@ -136,6 +136,7 @@ public class FilesStorageService implements IFilesStorageService {
             if (fileFound.isEmpty()) {
                 throw new CustomError("Could not rename the file!");
             }
+            boolean isRenamed = Files.move(file, file.resolveSibling(newName)).isAbsolute();
 
             fileFound.ifPresent(fileInfo -> {
                 fileInfo.setName(newName);
@@ -143,7 +144,7 @@ public class FilesStorageService implements IFilesStorageService {
                 fileInfo.setLastModifiedDate(new Date());
                 fileRepository.save(fileInfo);
             });
-            return Files.move(file, file.resolveSibling(newName)).isAbsolute();
+            return isRenamed;
         } else {
             throw new CustomError("Could not rename the file!");
         }

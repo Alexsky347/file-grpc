@@ -11,6 +11,11 @@ export const login = createAsyncThunk<
   { username: string; password: string }
 >('auth/login', async ({ username, password }, thunkAPI) => {
   try {
+    if (!username || !password) {
+      const message = 'Username or password is empty';
+      thunkAPI.dispatch(setMessage({ message, level: 'error' }));
+      return thunkAPI.rejectWithValue(message);
+    }
     const data = await AuthService.login({ username, password });
     thunkAPI.dispatch(setMessage({ message: "You're logged!" }));
     return { user: data };

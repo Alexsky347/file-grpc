@@ -16,10 +16,11 @@ export class FileService {
     limit: number,
     pageNumber: number,
     search: string,
-    orderBy: string
+    sortBy: string,
+    sortMode: string
   ) => {
     return await http.get(
-      `/files/get?limit=${limit}&pageNumber=${pageNumber}&search=${search}&orderBy=${orderBy}`
+      `/files/get?limit=${limit}&pageNumber=${pageNumber}&search=${search}&sortBy=${sortBy}&sortMode=${sortMode}`
     );
   };
 

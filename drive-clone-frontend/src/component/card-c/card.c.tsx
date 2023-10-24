@@ -141,8 +141,8 @@ export function CardC({
           <IconButton onClick={handleOpen} aria-label="add">
             <CreateIcon />
           </IconButton>
-          <IconButton>
-            <FolderZipOutlined onClick={handleZip} aria-label="zip file" />
+          <IconButton onClick={handleZip}>
+            <FolderZipOutlined aria-label="zip file" />
           </IconButton>
           <IconButton onClick={handleDownload} aria-label="download file">
             <DownloadIcon />

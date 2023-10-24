@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { findAll } from '../../store/slices/file';
 import { FileCollection } from '../../model/interface/file';
+import SelectC from '../../component/select-c/select-c';
 interface DashboardProps {
   sideBarOption: number;
   reRender: number;
@@ -31,6 +32,7 @@ export function Dashboard({
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(PAGE_INIT);
   const [search, setSearch] = useState('');
+  const [orderBy, setOrderBy] = useState('name-ASC');
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -39,22 +41,19 @@ export function Dashboard({
       limit: number,
       page: number,
       search: string,
+      orderBy: string,
       dispatch: AppDispatch
     ) => {
-      const response: any = await dispatch(findAll({ limit, page, search }));
+      const response: any = await dispatch(
+        findAll({ limit, page, search, orderBy })
+      );
       const { files, total } = response.payload;
       setFiles(files);
       setCount(total);
       scrollToTop();
     };
-    fetchData(limit, page, search, dispatch);
-  }, [reRender, limit, page, search, dispatch]);
-
-  const NoDataStyled = styled('h2')({
-    width: '100%',
-    paddingTop: '10%',
-    textAlign: 'center',
-  });
+    fetchData(limit, page, search, orderBy, dispatch);
+  }, [reRender, limit, page, search, orderBy, dispatch]);
 
   /**
    *
@@ -88,15 +87,32 @@ export function Dashboard({
     debouncedSearch();
   };
 
+  const handleSelectChange = async (event: SelectChangeEvent) => {
+    const {
+      target: { value },
+    } = event;
+    const debouncedSearch = debounce(() => setOrderBy(value || ''), 500);
+    debouncedSearch();
+  };
+
   if (sideBarOption === 0) {
     return (
       <div className="main">
-        <div style={{ padding: '10px' }}>
-          <SearchInput
-            sx={{ width: '100%', textAlign: 'center' }}
-            onChange={handleSearchChange}
-          />
-        </div>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 1, sm: 8, md: 16 }}
+          justifyContent="space-evenly"
+          alignItems="center"
+          padding="2px"
+        >
+          <Grid item xs={2} sm={4} md={3} maxWidth="80%">
+            <SearchInput sx={{ width: '100%' }} onChange={handleSearchChange} />
+          </Grid>
+          <Grid item xs={2} sm={4} md={3} maxWidth="80%">
+            <SelectC onChangeSelect={handleSelectChange} />
+          </Grid>
+        </Grid>
 
         {files && files?.length > 0 ? (
           <>
@@ -157,9 +173,9 @@ export function Dashboard({
             </Stack>
           </>
         ) : (
-          <NoDataStyled>
-            <h2>No files yet.</h2>
-          </NoDataStyled>
+          <h2 style={{ width: '100%', paddingTop: '10%', textAlign: 'center' }}>
+            No files yet.
+          </h2>
         )}
       </div>
     );

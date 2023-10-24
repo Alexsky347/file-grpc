@@ -17,10 +17,12 @@ const dispatchActions = (
 
 export const findAll = createAsyncThunk(
   'file/findAll',
-  async (params: { limit: number; page: number; search: string }, thunkAPI) => {
+  async (params: { limit: number; page: number; search: string, orderBy: string }, thunkAPI) => {
     try {
-      const { limit, page, search } = params;
-      const response = await FileService.getFiles(limit, page, search, 'ASC');
+      const { limit, page, search, orderBy } = params;
+      const sortBy = orderBy.split('-')[0];
+      const sortMode = orderBy.split('-')[1];
+      const response = await FileService.getFiles(limit, page, search, sortBy, sortMode);
       if (response.status === 200) {
         const { files, total } = response.data;
         const totalCeiled = Math.ceil(total / limit);
