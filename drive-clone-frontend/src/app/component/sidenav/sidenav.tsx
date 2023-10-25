@@ -64,8 +64,8 @@ function Sidenav({
     setSideBarOption(option);
   };
 
-  const handleLogout = async (): Promise<void> => {
-    await dispatch(logout());
+  const handleLogout = (): void => {
+    dispatch(logout());
   };
 
   const handleUpload = async (e: MouseEvent) => {

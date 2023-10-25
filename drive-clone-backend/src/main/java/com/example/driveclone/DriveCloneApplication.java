@@ -8,10 +8,8 @@ import com.example.driveclone.repository.RoleRepository;
 import com.example.driveclone.repository.UserRepository;
 import com.example.driveclone.utils.main.KeysPairUtils;
 import com.example.driveclone.utils.storage.service.IFilesStorageService;
-import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,11 +26,14 @@ public class DriveCloneApplication {
     private static final Logger logger =
             LoggerFactory.getLogger(DriveCloneApplication.class);
 
-    @Resource
-    IFilesStorageService storageService;
 
-    @Autowired
+    IFilesStorageService storageService;
     PasswordEncoder encoder;
+
+    DriveCloneApplication(IFilesStorageService storageService, PasswordEncoder encoder) {
+        this.storageService = storageService;
+        this.encoder = encoder;
+    }
 
     public static void main(String[] args) {
         logger.info("running app");

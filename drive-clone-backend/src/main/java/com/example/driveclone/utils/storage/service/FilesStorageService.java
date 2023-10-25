@@ -5,7 +5,6 @@ import com.example.driveclone.models.User;
 import com.example.driveclone.repository.FileRepository;
 import com.example.driveclone.utils.exception.CustomError;
 import com.example.driveclone.utils.storage.util.FileUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -28,9 +27,11 @@ import java.util.*;
 @Service
 public class FilesStorageService implements IFilesStorageService {
     public final Path root = Paths.get("src/main/resources/static");
+    private final FileRepository fileRepository;
 
-    @Autowired
-    FileRepository fileRepository;
+    FilesStorageService(FileRepository fileRepository) {
+        this.fileRepository = fileRepository;
+    }
 
     @Override
     public Path getUserDir(String username) {
@@ -87,10 +88,12 @@ public class FilesStorageService implements IFilesStorageService {
         Sort.Direction sortByDirection = Arrays.stream(Sort.Direction.values()).anyMatch(s -> s != null && s.name().equals(sortMode)) ? Sort.Direction.valueOf(sortMode) : Sort.Direction.ASC;
         Map<String, Object> data = new HashMap<>();
         int pageNumber = offset / limit;
+
+
         Pageable pageable = PageRequest.of(pageNumber, limit, Sort.by(sortByDirection, sortByProperty));
-        Page<FileInfo> f = fileRepository.filterAll(user, search, pageable);
-        long totalFiles = f.getTotalElements();
-        List<FileInfo> filesContent = f.getContent();
+        Page<FileInfo> files = fileRepository.filterAll(user, search, pageable);
+        long totalFiles = files.getTotalElements();
+        List<FileInfo> filesContent = files.getContent();
         data.put("total", totalFiles);
         data.put("files", filesContent);
         return data;

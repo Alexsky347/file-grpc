@@ -70,13 +70,10 @@ export function CardC({
   };
 
   const handleDownload = () => {
+    console.log(metaData);
     if (metaData?.name && metaData?.url) {
       const anchor = document.createElement('a');
-      const fileType = metaData?.name.split('.')[1];
-      let contentType = `image/${fileType}`;
-      if (fileType === 'pdf') {
-        contentType = `application/${metaData?.name.split('.')[1]}`;
-      }
+      const contentType = metaData?.contentType;
       anchor.href = `data:${contentType};base64,${metaData?.url}`;
       anchor.type = contentType;
       anchor.download = metaData.name;
