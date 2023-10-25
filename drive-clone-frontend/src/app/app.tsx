@@ -1,24 +1,19 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useNavigate,
-} from 'react-router-dom';
-import styles from './app.module.scss';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import Login from '../page/login/login';
-import { PrivateRoute } from '../utils/auth/private-route';
+
 import 'react-toastify/dist/ReactToastify.css';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Layout from '../component/layout/layout';
+import React, { useCallback, useEffect } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../store/slices/auth';
-import { AppDispatch } from '../store/store';
+
 import { CircularProgress } from '@mui/material';
-import { displayToast } from '../utils/toast/toast-service';
-import { MessageState } from '../model/interface/message-state';
-import { AuthState } from '../model/interface/auth-state';
+import { AuthState } from './model/interface/auth-state';
+import { AppDispatch } from './store/store';
+import { logout } from './store/slices/auth';
+import Login from './page/login/login';
+import Layout from './component/layout/layout';
+import { PrivateRoute } from './utils/auth/private-route';
 
 export function App() {
   const { user: currentUser } = useSelector(
@@ -26,9 +21,6 @@ export function App() {
   );
   const { isLoading } = useSelector(
     (state: { file: { isLoading: boolean } }) => state.file
-  );
-  const message = useSelector(
-    (state: { message: MessageState }) => state.message
   );
 
   const dispatch = useDispatch<AppDispatch>();
@@ -39,8 +31,7 @@ export function App() {
 
   useEffect(() => {
     document.title = 'Login - Drive Clone';
-    if (message.message) displayToast(message);
-  }, [currentUser, logOut, message]);
+  }, [currentUser, logOut]);
 
   return (
     <div className="App">
@@ -84,10 +75,5 @@ export function App() {
         theme="light"
       />
     </div>
-    // <div>
-    //   <NxWelcome title="drive-clone" />
-    // </div>
   );
 }
-
-export default App;

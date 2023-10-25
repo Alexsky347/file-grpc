@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ToastLevel } from '../../model/type/level';
 import { MessageState } from '../../model/interface/message-state';
+import { displayToast } from '../../utils/toast/toast-service';
 
 const initialState: MessageState = {
   message: '',
@@ -14,6 +14,7 @@ const messageSlice = createSlice({
     setMessage: (state, action: PayloadAction<MessageState>) => {
       state.level = action.payload.level ?? 'success';
       state.message = action.payload.message;
+      displayToast(action.payload);
     },
     clearMessage: (state) => {
       state.message = '';

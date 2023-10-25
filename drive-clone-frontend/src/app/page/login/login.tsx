@@ -1,5 +1,5 @@
-import { useState, useEffect, FormEvent, JSX } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { FormEvent, JSX, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Button,
   Checkbox,
@@ -8,28 +8,12 @@ import {
   Typography,
 } from '@mui/material';
 
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { useSelector, useDispatch } from 'react-redux';
-import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../store/slices/auth';
 import { clearMessage } from '../../store/slices/message';
-import { ItToken } from '../../model/interface/it-token';
-import { AppDispatch, store } from '../../store/store';
-
-interface LoginResponse {
-  status: number;
-  headers: ItToken;
-  response: {
-    data: {
-      message: string;
-      status: number;
-      error: string;
-      path: string;
-    };
-  };
-}
+import { AppDispatch } from '../../store/store';
 
 function Login(): JSX.Element {
   const navigate = useNavigate();

@@ -1,10 +1,6 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import styles from './header.module.scss';
+import React, { useState } from 'react';
 import { styled } from '@mui/system';
-import { useNavigate } from 'react-router-dom';
 import { AuthService } from '../../service/api/auth.service';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { useViewPort } from '../../hook/use-view-port/use-view-port';
 import { Sling as Hamburger } from 'hamburger-react';
 import { Avatar } from '@mui/material';
 
@@ -13,7 +9,6 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ handleSideNav }) => {
-  const { isDesktop, isMobile, isTablet } = useViewPort();
   const [isOpen, setOpen] = useState(false);
   const userName = AuthService.getCurrentUser()?.username ?? '';
 

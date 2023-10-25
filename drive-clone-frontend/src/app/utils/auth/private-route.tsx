@@ -7,7 +7,6 @@ export function PrivateRoute({ children }: { children: React.ReactNode }) {
     (state: { auth: RootState<any, any, any> }) => state.auth
   );
 
-
   if (!isLoggedIn) {
     // not logged in so redirect to login page with the return url
     return <Navigate to="/login" replace />;

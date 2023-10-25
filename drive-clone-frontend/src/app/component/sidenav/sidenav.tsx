@@ -1,12 +1,12 @@
 import styles from './sidenav.module.scss';
-import { useState, useEffect, MouseEvent } from 'react';
+import * as React from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { styled } from '@mui/system';
 import ComputerIcon from '@mui/icons-material/Computer';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { toast } from 'react-toastify';
-import * as React from 'react';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import ListItemDecorator, {
@@ -257,7 +257,7 @@ function Sidenav({
                 multiple
                 onChange={(e) => {
                   setMetaData({
-                    fileName: e.target.files![0].name,
+                    fileName: e.target.files?.[0].name,
                     createDate: new Date(
                       e.target.files![0].lastModified
                     ).toDateString(),
@@ -286,6 +286,3 @@ function Sidenav({
 }
 
 export { Sidenav };
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}

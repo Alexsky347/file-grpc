@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -7,14 +7,14 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { CardC } from '../../component/card-c/card.c';
-import { styled } from '@mui/system';
 import SearchInput from '../../component/search-input/search-input';
 import { debounce } from '../../utils/main/utils';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { findAll } from '../../store/slices/file';
 import { FileCollection } from '../../model/interface/file';
 import SelectC from '../../component/select-c/select-c';
+
 interface DashboardProps {
   sideBarOption: number;
   reRender: number;
