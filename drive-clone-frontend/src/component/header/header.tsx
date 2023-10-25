@@ -5,36 +5,24 @@ import { useNavigate } from 'react-router-dom';
 import { AuthService } from '../../service/api/auth.service';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { useViewPort } from '../../hook/use-view-port/use-view-port';
-import { toast } from 'react-toastify';
 import { Sling as Hamburger } from 'hamburger-react';
-import { Avatar, Button } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store/store';
-import { login, logout } from '../../store/slices/auth';
+import { Avatar } from '@mui/material';
 
 interface HeaderProps {
   handleSideNav: (state: boolean) => boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({ handleSideNav }) => {
-  // const { isDesktop, isMobile, isTablet } = useViewPort();
-  const dispatch = useDispatch<AppDispatch>();
+  const { isDesktop, isMobile, isTablet } = useViewPort();
   const [isOpen, setOpen] = useState(false);
-  const userName = '';
+  const userName = AuthService.getCurrentUser()?.username ?? '';
 
   const StyledAvatar = styled(Avatar)({
     backgroundColor: 'white',
     color: 'darkblue',
     border: '1px solid black',
+    margin: '10px',
   });
-
-  const StyledBtn = styled(Button)({
-    margin: 10,
-  });
-
-  const handleLogout = async (): Promise<void> => {
-    await dispatch(logout());
-  };
 
   const handleSideNavChildren = (state: boolean) => {
     handleSideNav(state);
@@ -60,16 +48,6 @@ const Header: React.FC<HeaderProps> = ({ handleSideNav }) => {
         <StyledAvatar>
           <Avatar>{userName?.[0]}</Avatar>
         </StyledAvatar>
-        <StyledBtn>
-          <Button
-            variant="outlined"
-            size="small"
-            color="primary"
-            onClick={handleLogout}
-          >
-            <ExitToAppIcon />
-          </Button>
-        </StyledBtn>
       </div>
     </div>
   );

@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ToastLevel } from '../../model/type/level';
 import { MessageState } from '../../model/interface/message-state';
 
-
 const initialState: MessageState = {
   message: '',
   level: 'error',

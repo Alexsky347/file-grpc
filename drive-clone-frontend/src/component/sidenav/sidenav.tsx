@@ -1,3 +1,4 @@
+import styles from './sidenav.module.scss';
 import { useState, useEffect, MouseEvent } from 'react';
 import { styled } from '@mui/system';
 import ComputerIcon from '@mui/icons-material/Computer';
@@ -15,6 +16,11 @@ import ListItemContent from '@mui/joy/ListItemContent';
 import ListItemButton from '@mui/joy/ListItemButton';
 import { FileService } from '../../service/api/file.service';
 import { ItResponse } from '../../model/interface/it-response';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { logout } from '../../store/slices/auth';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/store';
+import Divider from '@mui/material/Divider';
 
 interface SideBarProps {
   setSideBarOption: React.Dispatch<React.SetStateAction<number>>;
@@ -36,9 +42,10 @@ function Sidenav({
   const [files, setFiles] = useState<FileList | null>();
   const [open, setOpen] = useState<boolean>(false);
   const [widthNav, setWidthNav] = useState<number>(0);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    handleSideNav ? setWidthNav(200) : setWidthNav(70);
+    handleSideNav ? setWidthNav(200) : setWidthNav(75);
   }, [handleSideNav]);
 
   // styles
@@ -48,31 +55,6 @@ function Sidenav({
     height: 36,
   });
 
-  const StyledUploadBtn = styled(Button)({
-    color: '#2185FC',
-    fontSize: '40px',
-  });
-
-  const StyledSidenav = styled('div')({
-    py: 2,
-    pr: 2,
-    width: widthNav,
-    border: '1px solid rgba(0, 0, 0, 0.05)',
-    display: 'block',
-    height: '91vh',
-  });
-
-  const StyledModal = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '60%',
-    borderRadius: 5,
-    bgColor: 'background.paper',
-    boxShadow: '24x',
-    p: 4,
-  };
   // Functions
   const handleOpen = () => setOpen(true);
 
@@ -80,6 +62,10 @@ function Sidenav({
 
   const handleClick = (option: number) => {
     setSideBarOption(option);
+  };
+
+  const handleLogout = async (): Promise<void> => {
+    await dispatch(logout());
   };
 
   const handleUpload = async (e: MouseEvent) => {
@@ -113,7 +99,7 @@ function Sidenav({
   };
 
   return (
-    <div>
+    <div className={styles['container']}>
       <Box
         sx={{
           py: 2,
@@ -187,6 +173,33 @@ function Sidenav({
               </ListItemDecorator>
               {handleSideNav ? (
                 <ListItemContent>My Drive</ListItemContent>
+              ) : null}
+            </ListItemButton>
+          </ListItem>
+          <Divider variant="middle" component="li" />
+          <ListItem
+            sx={{
+              '&:hover': {
+                backgroundColor: 'white-smoke',
+                opacity: [0.9, 0.8, 0.7],
+              },
+            }}
+          >
+            <ListItemButton
+              className={`list-item ${listActive1}`}
+              onClick={() => {
+                handleLogout();
+                setListActive1('list-item-active');
+                setListActive2('');
+              }}
+            >
+              <ListItemDecorator>
+                <StyledBtn>
+                  <ExitToAppIcon fontSize="large" />
+                </StyledBtn>
+              </ListItemDecorator>
+              {handleSideNav ? (
+                <ListItemContent>Exit App</ListItemContent>
               ) : null}
             </ListItemButton>
           </ListItem>
@@ -273,3 +286,6 @@ function Sidenav({
 }
 
 export { Sidenav };
+function dispatch(arg0: any) {
+  throw new Error('Function not implemented.');
+}

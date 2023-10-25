@@ -10,7 +10,7 @@ import { ToastContainer } from 'react-toastify';
 import Login from '../page/login/login';
 import { PrivateRoute } from '../utils/auth/private-route';
 import 'react-toastify/dist/ReactToastify.css';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Layout from '../component/layout/layout';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/slices/auth';
@@ -39,7 +39,7 @@ export function App() {
 
   useEffect(() => {
     document.title = 'Login - Drive Clone';
-    if (message) displayToast(message);
+    if (message.message) displayToast(message);
   }, [currentUser, logOut, message]);
 
   return (
