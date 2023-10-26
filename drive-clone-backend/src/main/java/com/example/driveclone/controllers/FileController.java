@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,10 +26,14 @@ public class FileController {
 
     private static final Logger logger =
             LoggerFactory.getLogger(FileController.class);
-    @Autowired
-    JwtUtils jwtUtils;
-    @Autowired
-    FilesStorageService storageService;
+    private final JwtUtils jwtUtils;
+    private final FilesStorageService storageService;
+
+    FileController(JwtUtils jwtUtils, FilesStorageService storageService) {
+        this.jwtUtils = jwtUtils;
+        this.storageService = storageService;
+    }
+
 
     @PostMapping(value = "/files/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)

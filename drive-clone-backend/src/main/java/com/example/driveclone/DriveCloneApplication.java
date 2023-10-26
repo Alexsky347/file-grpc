@@ -27,8 +27,8 @@ public class DriveCloneApplication {
             LoggerFactory.getLogger(DriveCloneApplication.class);
 
 
-    IFilesStorageService storageService;
-    PasswordEncoder encoder;
+    private final IFilesStorageService storageService;
+    private final PasswordEncoder encoder;
 
     DriveCloneApplication(IFilesStorageService storageService, PasswordEncoder encoder) {
         this.storageService = storageService;

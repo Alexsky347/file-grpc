@@ -2,8 +2,8 @@ package com.example.driveclone.security;
 
 
 import com.example.driveclone.security.jwt.AuthTokenFilter;
+import com.example.driveclone.security.jwt.JwtUtils;
 import com.example.driveclone.security.services.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,25 +19,24 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-//@EnableWebSecurity
 @EnableMethodSecurity
-//(securedEnabled = true,
-//jsr250Enabled = true,
-//prePostEnabled = true) // by default
-public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
+public class WebSecurityConfig {
 
+    private final UserDetailsServiceImpl userDetailsService;
+    private final JwtUtils jwtUtils;
+
+
+    WebSecurityConfig(UserDetailsServiceImpl userDetailsService, JwtUtils jwtUtils) {
+        this.userDetailsService = userDetailsService;
+        this.jwtUtils = jwtUtils;
+
+    }
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
+        return new AuthTokenFilter(jwtUtils, userDetailsService);
     }
 
-//  @Override
-//  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-//    authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//  }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
