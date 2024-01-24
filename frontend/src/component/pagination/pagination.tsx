@@ -1,12 +1,36 @@
-export default function Pagination () {
+import { ChangeEvent, useState } from "react";
+
+interface PaginationProps {
+    onChange: (event: ChangeEvent<unknown>, value: number) => void;
+    page: number;
+    totalPages: number;
+}
+
+
+export default function Pagination({totalPages, onChange, page}: Readonly<PaginationProps>) {
+    const [currentPage, setCurrentPage] = useState(page);
+
+    const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
+        setCurrentPage(value);
+        onChange(event, value);
+    };
 
     return (
         <div className="join">
-            <button className="join-item btn">1</button>
-            <button className="join-item btn">2</button>
-            <button className="join-item btn btn-disabled">...</button>
-            <button className="join-item btn">99</button>
-            <button className="join-item btn">100</button>
+            {Array.from({length: totalPages}, (_, i) => i + 1)
+                .map((pageNumber) => (
+                    <button
+                        key={pageNumber}
+                        onClick={(event) => handlePageChange(event, pageNumber)}>
+                        <input
+                            className="join-item btn btn-square"
+                            type="radio"
+                            name="options"
+                            aria-label={pageNumber.toString()}
+                            checked={pageNumber === currentPage}
+                        />
+                    </button>
+                ))}
         </div>
     );
 }

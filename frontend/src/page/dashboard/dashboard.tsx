@@ -1,10 +1,11 @@
 import Pagination from "../../component/pagination/pagination.tsx";
 import { CardC } from "../../component/card-c/card.c.tsx";
 import { FileCollection } from "../../model/interface/file.ts";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { AppDispatch } from "../../store/store.ts";
 import { useDispatch } from "react-redux";
 import { findAll } from "../../store/slices/file.ts";
+import { debounce } from "../../utils/main/utils.ts";
 
 interface DashboardProps {
     sideNavOpen: boolean;
@@ -22,7 +23,7 @@ export default function Dashboard({sideNavOpen}: Readonly<DashboardProps>) {
     const dispatch = useDispatch<AppDispatch>();
 
     const scrollToTop = () =>
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
 
     useEffect(() => {
         const fetchData = async (
@@ -33,15 +34,40 @@ export default function Dashboard({sideNavOpen}: Readonly<DashboardProps>) {
             dispatch: AppDispatch
         ) => {
             const response: any = await dispatch(
-                findAll({ limit, page, search, orderBy })
+                findAll({limit, page, search, orderBy})
             );
-            const { files, total } = response.payload;
+            const {files, total} = response.payload;
+            console.log({files, total})
             setFiles(files);
             setCount(total);
             scrollToTop();
         };
         fetchData(limit, page, search, orderBy, dispatch);
     }, [limit, page, search, orderBy, dispatch]);
+
+    /**
+     * Handle search change
+     * @param event
+     */
+    const handleSearchChange = async (event: ChangeEvent<HTMLInputElement>) => {
+        const {
+            target: {value},
+        } = event;
+        const debouncedSearch = debounce(() => setSearch(value || ''), 500);
+        debouncedSearch();
+    };
+
+    /**
+     *
+     * @param _event
+     * @param value
+     */
+    const handleChangePaginate = async (
+        _event: ChangeEvent<unknown>,
+        value: number
+    ) => {
+        setPage(value);
+    };
     return (
         <>
             <div className="m-10">
@@ -49,21 +75,22 @@ export default function Dashboard({sideNavOpen}: Readonly<DashboardProps>) {
                        id="filter"
                        name="filter"
                        placeholder="Filter by ..."
-                       className="input input-bordered w-full max-w-xs"/>
+                       className="input input-bordered w-full max-w-xs"
+                       onChange={handleSearchChange}/>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6"
                  style={{marginLeft: `${widthNav}px`}}>
                 {files && files?.length > 0 ? (
                     <>
-                            {files.map((file, i) => (
-                                    <CardC
-                                        metaData={file}
-                                        key={i}
-                                    />
-                            ))}
+                        {files.map((file, i) => (
+                            <CardC
+                                metaData={file}
+                                key={i}
+                            />
+                        ))}
                     </>
                 ) : (
-                    <h2 style={{ width: '100%', paddingTop: '10%', textAlign: 'center' }}>
+                    <h2 style={{width: '100%', paddingTop: '10%', textAlign: 'center'}}>
                         No files yet.
                     </h2>
                 )}
@@ -72,7 +99,11 @@ export default function Dashboard({sideNavOpen}: Readonly<DashboardProps>) {
                 className="m-10"
                 // className="fixed bottom-10"
             >
-                <Pagination/>
+                <Pagination
+                    totalPages={count}
+                    onChange={handleChangePaginate}
+                    page={page}
+                />
             </div>
         </>
     );
