@@ -1,17 +1,21 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { Dispatch, ReactElement, SetStateAction, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { deleteFile, renameFile, zipFile } from '../../store/slices/file';
 import { MyFile } from '../../model/interface/file';
 import { format } from 'date-fns';
 import { ArchiveIcon, DownloadIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
+import { displayToast } from "../../utils/toast/toast-service.ts";
+import DialogDeleteFile from "../dialog-delete-file/dialog-delete-file.tsx";
 
 interface MainProps {
     metaData: MyFile;
+    reRender: boolean;
+    setReRender: Dispatch<SetStateAction<boolean>>;
 }
 
 
-export function CardC({metaData}: MainProps): ReactElement {
+export function CardC({metaData, reRender, setReRender}: MainProps): ReactElement {
     const [newFileName, setNewFileName] = useState<string | undefined>('');
     const {message} = useSelector((state: { message: any }) => state.message);
     const {hasDeleted, hasRenamed} = useSelector(
@@ -25,11 +29,6 @@ export function CardC({metaData}: MainProps): ReactElement {
     }, [message, hasDeleted, hasRenamed, metaData?.name]);
 
 
-    // Delete
-    const handleDelete = async () => {
-        await dispatch(deleteFile(metaData));
-    };
-
     const handleDownload = () => {
         if (metaData?.name && metaData?.url) {
             const anchor = document.createElement('a');
@@ -39,7 +38,7 @@ export function CardC({metaData}: MainProps): ReactElement {
             anchor.download = metaData.name;
             anchor.click();
         } else {
-            console.warn('No file founded !');
+            displayToast({message: 'No file founded !', level: 'warning'});
         }
     };
 
@@ -93,11 +92,11 @@ export function CardC({metaData}: MainProps): ReactElement {
                         className="btn btn-warning">
                         <Pencil1Icon/>
                     </button>
-                    <button
-                        onClick={handleDelete}
-                        className="btn btn-error">
-                        <TrashIcon/>
-                    </button>
+                    <DialogDeleteFile
+                    metaData={metaData}
+                    reRender={reRender}
+                    setReRender={setReRender}/>
+
                 </div>
             </div>
         </div>

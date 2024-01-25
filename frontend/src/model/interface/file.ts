@@ -1,4 +1,5 @@
 export interface MyFile {
+  id: number;
   type: string;
   url: string;
   name: string;
@@ -18,4 +19,4 @@ interface FileState {
   hasRenamed: boolean;
 }
 
-export { FileCollection, FileState };
+export type { FileCollection, FileState };
