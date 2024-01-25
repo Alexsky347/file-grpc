@@ -1,7 +1,7 @@
 import Pagination from "../../component/pagination/pagination.tsx";
 import { CardC } from "../../component/card-c/card.c.tsx";
 import { FileCollection } from "../../model/interface/file.ts";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { AppDispatch } from "../../store/store.ts";
 import { useDispatch } from "react-redux";
 import { findAll } from "../../store/slices/file.ts";
@@ -9,9 +9,11 @@ import { debounce } from "../../utils/main/utils.ts";
 
 interface DashboardProps {
     sideNavOpen: boolean;
+    reRender: boolean;
+    setReRender: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function Dashboard({sideNavOpen}: Readonly<DashboardProps>) {
+export default function Dashboard({sideNavOpen, reRender, setReRender}: Readonly<DashboardProps>) {
     const PAGE_INIT = 10;
     const widthNav = sideNavOpen ? 190 : 120;
     const [files, setFiles] = useState<FileCollection>([]);
@@ -20,7 +22,6 @@ export default function Dashboard({sideNavOpen}: Readonly<DashboardProps>) {
     const [limit, setLimit] = useState(PAGE_INIT);
     const [search, setSearch] = useState('');
     const [orderBy, setOrderBy] = useState('name-ASC');
-    const [reRender, setReRender] = useState(false);
     const dispatch = useDispatch<AppDispatch>();
 
     const scrollToTop = () =>

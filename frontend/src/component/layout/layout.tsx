@@ -5,13 +5,17 @@ import Dashboard from "../../page/dashboard/dashboard.tsx";
 import SideNav from "../sidenav/sidenav.tsx";
 
 
-
 export default function Layout() {
     useEffect(() => {
         document.title = 'Drive Clone';
     }, []);
 
     const [sideNavOpen, setSideNavOpen] = useState<boolean>(false);
+    const [reRender, setReRender] = useState<boolean>(false);
+
+    const handleRender = () => {
+        setReRender(!reRender);
+    }
 
     const toggleSideNav = () => {
         setSideNavOpen(!sideNavOpen);
@@ -21,8 +25,12 @@ export default function Layout() {
     return (
         <Box>
             <Header handleSideNav={toggleSideNav}/>
-            <SideNav sideNavOpen={sideNavOpen}/>
-            <Dashboard sideNavOpen={sideNavOpen}/>
+            <SideNav sideNavOpen={sideNavOpen}
+                        reRender={reRender}
+                     setReRender={handleRender}/>
+            <Dashboard sideNavOpen={sideNavOpen}
+                       reRender={reRender}
+                       setReRender={handleRender}/>
         </Box>
     );
 }

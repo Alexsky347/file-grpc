@@ -32,7 +32,7 @@ function App() {
         <div className="App">
             {isLoading ? (
                 <div className="flex items-center justify-center h-screen">
-                    <span className="loading loading-dots loading-lg "></span>
+                    <span className="loading loading-dots loading-lg"></span>
                 </div>
             ) : null}
             <Router>
