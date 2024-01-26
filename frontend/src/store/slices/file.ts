@@ -34,8 +34,7 @@ export const findAll = createAsyncThunk(
             );
             if (response.status === 200) {
                 const {files, total} = response.data;
-                const totalCeiled = Math.ceil(total / limit);
-                return {files, total: totalCeiled};
+                return {files, total};
             } else {
                 const errorMessage = response.data?.message || 'An error occurred.';
                 throw new Error(errorMessage);
