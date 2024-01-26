@@ -156,7 +156,7 @@ export default function Dashboard({
         </div>
       </div>
       <div
-        className="fixed bottom-10 m-auto w-full z-20"
+        className="fixed bottom-10 m-auto w-full z-10"
         // className=""
       >
         <Pagination
