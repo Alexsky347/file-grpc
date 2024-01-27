@@ -1,21 +1,24 @@
-import { StrictMode } from 'react';
-import * as ReactDOM from 'react-dom/client';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+import '@radix-ui/themes/styles.css';
+import { Theme, ThemePanel } from "@radix-ui/themes";
+import { Provider } from "react-redux";
+import { store } from "./store/store.ts";
+import { reportWebVitals } from "./utils/main/report-web-vitals.ts";
+import 'react-toastify/dist/ReactToastify.css';
+import App from './App.tsx';
 
-import { Provider } from 'react-redux';
-import { store } from './app/store/store';
-import { App } from './app/app';
-import { reportWebVitals } from './app/utils/main/reportWebVitals';
-
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </StrictMode>
-);
+ReactDOM.createRoot(document.querySelector('#root')!).render(
+    <React.StrictMode>
+        <Theme>
+            <Provider store={store}>
+                <App />
+            </Provider>
+            {/*<ThemePanel />*/}
+        </Theme>
+    </React.StrictMode>,
+)
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

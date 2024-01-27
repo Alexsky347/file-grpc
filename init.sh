@@ -24,7 +24,7 @@ FRONTEND_PORT=3000
 
 #clear file
 echo > .env
-echo > frontend/.env
+echo > drive-clone-frontend/.env
 
 echo NETWORK_NAME=${NETWORK_NAME} >> .env
 echo DOMAIN=${DOMAIN} >> .env
@@ -43,7 +43,7 @@ echo FRONTEND_PORT=${FRONTEND_PORT} >> .env
 
 echo ALLOWED_HOST=${PROTOCOL}://${DOMAIN}:${FRONTEND_PORT} >> .env
 echo MONGODB_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${DB_CONTAINER_NAME}:${DB_PORT} >> .env
-echo REACT_APP_BACKEND_URL=http://localhost/api >> frontend/.env
+echo REACT_APP_BACKEND_URL=http://localhost/api >> drive-clone-frontend/.env
 
 
 # Phase 1
