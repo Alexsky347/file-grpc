@@ -1,4 +1,4 @@
-export interface LoginProps {
+export interface LoginProperties {
   username: string;
   password: string;
 }

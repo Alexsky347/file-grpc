@@ -1,14 +1,13 @@
-import { FC, useState } from "react";
 import { AuthService } from "../../service/api/auth.service.ts";
 import { logout } from "../../store/slices/auth.ts";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store.ts";
 
-interface HeaderProps {
+interface HeaderProperties {
   handleSideNav: () => void;
 }
 
-export default function Header({ handleSideNav }: HeaderProps) {
+export default function Header({ handleSideNav }: HeaderProperties) {
   const userName = AuthService.getCurrentUser()?.username ?? "";
   const dispatch = useDispatch<AppDispatch>();
 

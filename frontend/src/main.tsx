@@ -1,15 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
 import './index.css'
 import '@radix-ui/themes/styles.css';
 import { Theme, ThemePanel } from "@radix-ui/themes";
 import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
-import { reportWebVitals } from "./utils/main/reportWebVitals.ts";
+import { reportWebVitals } from "./utils/main/report-web-vitals.ts";
 import 'react-toastify/dist/ReactToastify.css';
+import App from './App.tsx';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.querySelector('#root')!).render(
     <React.StrictMode>
         <Theme>
             <Provider store={store}>

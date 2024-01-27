@@ -14,8 +14,9 @@ import { AppDispatch } from "../../store/store.ts";
 import { useDispatch } from "react-redux";
 import { findAll } from "../../store/slices/file.ts";
 import { Cross1Icon } from "@radix-ui/react-icons";
+import { debounce } from "../../utils/main/utils.ts";
 
-interface DashboardProps {
+interface DashboardProperties {
   sideNavOpen: boolean;
   reRender: boolean;
   setReRender: Dispatch<SetStateAction<boolean>>;
@@ -25,8 +26,8 @@ export default function Dashboard({
   sideNavOpen,
   reRender,
   setReRender,
-}: Readonly<DashboardProps>) {
-  const LIMIT = 5;
+}: Readonly<DashboardProperties>) {
+  const LIMIT = 10;
   const widthNav = sideNavOpen ? 150 : 0;
   const [files, setFiles] = useState<FileCollection>([]);
   const [count, setCount] = useState(0);
@@ -35,7 +36,7 @@ export default function Dashboard({
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("name-ASC");
   const [index, setIndex] = useState(2);
-  const loaderRef = useRef(null);
+  const loaderReference = useRef(null);
   const dispatch = useDispatch<AppDispatch>();
 
   const scrollToTop = () =>
@@ -73,8 +74,9 @@ export default function Dashboard({
       target: { value },
     } = event;
     setSearch(value || "");
-    // const debouncedSearch = debounce(() => setSearch(value || ""), 1000);
-    // debouncedSearch();
+    const debouncedSearch = debounce(() => setSearch(value || ""), 200);
+    debouncedSearch();
+    // debouncedRequest();
   };
 
   /**
@@ -102,7 +104,7 @@ export default function Dashboard({
           <button className="-mr-7 z-20" onClick={clearSearchBar}>
             <Cross1Icon className="w-5 h-5 text-red-500" />
           </button>
-        ) : null}
+        ) : undefined}
 
         <input
           autoComplete="off"

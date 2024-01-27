@@ -14,7 +14,7 @@ type FileCollection = MyFile[];
 interface FileState {
   isLoading: boolean;
   total: number;
-  data: MyFile[] | null;
+  data: MyFile[] | undefined;
   hasDeleted: boolean;
   hasRenamed: boolean;
 }

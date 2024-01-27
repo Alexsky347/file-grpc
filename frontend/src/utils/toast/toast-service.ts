@@ -6,18 +6,22 @@ function displayToast(opt: MessageState) {
   const durationInMs = 300;
   setTimeout(() => {
     switch (level) {
-      case 'error':
+      case 'error': {
         toast.error(message);
         break;
-      case 'warning':
+      }
+      case 'warning': {
         toast.warning(message);
         break;
-      case 'info':
+      }
+      case 'info': {
         toast.info(message);
         break;
-      default:
+      }
+      default: {
         toast.success(message);
         break;
+      }
     }
   }, durationInMs);
 }

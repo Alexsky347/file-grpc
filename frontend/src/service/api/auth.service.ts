@@ -1,12 +1,12 @@
 import http from './http-common';
-import { LoginProps } from '../../model/interface/login-props';
+import { LoginProps as LoginProperties } from '../../model/interface/login-props';
 import { Constants } from '../../utils/main/constants';
 
 export class AuthService {
   private static readonly URI = '/auth';
   private static readonly USER_KEY = Constants.localStorage.USER_KEY;
 
-  static login = async (payload: LoginProps) => {
+  static login = async (payload: LoginProperties) => {
     const { data } = await http.post(`${this.URI}/signin`, payload);
     if (data?.username) {
       localStorage.setItem(this.USER_KEY, JSON.stringify(data));

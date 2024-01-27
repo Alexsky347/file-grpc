@@ -1,18 +1,20 @@
-import { PlusIcon } from "@radix-ui/react-icons";
+import {
+  CardStackPlusIcon,
+  ContainerIcon,
+  PlusIcon,
+} from "@radix-ui/react-icons";
 import DialogAddFile from "../dialog-add-file/dialog-add-file.tsx";
 import { Dispatch, SetStateAction } from "react";
 
-interface SideNavProps {
+interface SideNavProperties {
   sideNavOpen: boolean;
-  reRender: boolean;
   setReRender: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function SideNav({
   sideNavOpen,
-  reRender,
   setReRender,
-}: Readonly<SideNavProps>) {
+}: Readonly<SideNavProperties>) {
   const widthNav = sideNavOpen ? 150 : 0;
 
   return (
@@ -24,20 +26,19 @@ export default function SideNav({
     >
       <div className="flex flex-col items-center">
         <div className="flex flex-col items-center">
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col">
             <DialogAddFile
-              reRender={reRender}
               setReRender={setReRender}
               sideNavOpen={sideNavOpen}
             />
-            <button className="flex flex-row items-center mb-3 mt-3 rounded hover:bg-base-300">
-              <PlusIcon
+            <button className="flex flex-row mb-3 mt-3 rounded hover:bg-base-300">
+              <CardStackPlusIcon
                 className="w-10 h-10 text-base-content"
                 fill="currentColor"
                 aria-label={"Add file(s)"}
               />
               {sideNavOpen && (
-                <span className="text-base-content">Add file(s)</span>
+                <span className="text-base-content">Create directory</span>
               )}
             </button>
           </div>

@@ -30,7 +30,7 @@ export default function Layout() {
       />
       <div
         style={{ paddingTop: "5.5rem" }}
-        className={`${!sideNavOpen ? "lg:pl-8 lg:pr-8" : ""} `}
+        className={`${sideNavOpen ? "" : "lg:pl-8 lg:pr-8"} `}
       >
         <Dashboard
           sideNavOpen={sideNavOpen}

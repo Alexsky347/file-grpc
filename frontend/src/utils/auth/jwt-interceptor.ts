@@ -12,13 +12,13 @@ jwtInterceptor.interceptors.response.use(
         .get("http://localhost:4000/refresh-token", {
           withCredentials: true,
         })
-        .catch((err) => {
-          return Promise.reject(err);
+        .catch((error_) => {
+          throw error_;
         });
       console.log(error.config);
       return axios(error.config);
     } else {
-      return Promise.reject(error);
+      throw error;
     }
   }
 );

@@ -18,11 +18,11 @@ const dispatchActions = (
 export const findAll = createAsyncThunk(
     'file/findAll',
     async (
-        params: { limit: number; page: number; search: string; orderBy: string },
+        parameters: { limit: number; page: number; search: string; orderBy: string },
         thunkAPI
     ) => {
         try {
-            const {limit, page, search, orderBy} = params;
+            const {limit, page, search, orderBy} = parameters;
             const sortBy = orderBy.split('-')[0];
             const sortMode = orderBy.split('-')[1];
             const response = await FileService.getFiles(
@@ -80,8 +80,8 @@ export const deleteFile = createAsyncThunk(
 
 export const renameFile = createAsyncThunk(
     'file/renameFile',
-    async (params: { metaData: MyFile; newFileName: string }, thunkAPI) => {
-        const {metaData, newFileName} = params;
+    async (parameters: { metaData: MyFile; newFileName: string }, thunkAPI) => {
+        const {metaData, newFileName} = parameters;
         if (metaData?.name) {
             if (metaData?.name === newFileName) {
                 const sameFileName = 'Same file name';
@@ -119,8 +119,8 @@ export const renameFile = createAsyncThunk(
 
 export const zipFile = createAsyncThunk(
     'file/zipFile',
-    async (params: { name: string }, thunkAPI) => {
-        const {name} = params;
+    async (parameters: { name: string }, thunkAPI) => {
+        const {name} = parameters;
         if (name) {
             const response: any = await FileService.zipFile(name as string);
             if (response.data) {
@@ -163,18 +163,18 @@ const dataSlice = createSlice({
             })
             .addCase(findAll.rejected, (state) => {
                 state.isLoading = false;
-                state.data = null;
+                state.data = undefined;
             })
-            .addCase(deleteFile.pending, (state, action) => {
+            .addCase(deleteFile.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(deleteFile.fulfilled, (state, action) => {
+            .addCase(deleteFile.fulfilled, (state) => {
                 state.hasDeleted = true;
             })
             .addCase(deleteFile.rejected, (state) => {
                 state.hasDeleted = false;
             })
-            .addCase(renameFile.fulfilled, (state, action) => {
+            .addCase(renameFile.fulfilled, (state) => {
                 state.hasRenamed = true;
             })
             .addCase(renameFile.rejected, (state) => {

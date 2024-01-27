@@ -1,42 +1,34 @@
 import {
   Button,
-  Dialog,
   Flex,
-  TextField,
-  Text,
   AlertDialog,
 } from "@radix-ui/themes";
-import { PlusIcon, TrashIcon } from "@radix-ui/react-icons";
+import {  TrashIcon } from "@radix-ui/react-icons";
 import { Dispatch, SetStateAction, useState } from "react";
-import { ItResponse } from "../../model/interface/it-response.ts";
-import { FileService } from "../../service/api/file.service.ts";
-import { toast } from "react-toastify";
 import { deleteFile } from "../../store/slices/file.ts";
 import { MyFile } from "../../model/interface/file.ts";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store.ts";
 
-interface DialogDeleteFileProps {
+interface DialogDeleteFileProperties {
   metaData: MyFile;
-  reRender: boolean;
   setReRender: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function DialogDeleteFile({
   metaData,
-  reRender,
   setReRender,
-}: Readonly<DialogDeleteFileProps>) {
+}: Readonly<DialogDeleteFileProperties>) {
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleDelete = async () => {
-    setIsLoading((prevState) => !prevState);
+    setIsLoading((previousState) => !previousState);
     const response: any = await dispatch(deleteFile(metaData));
     if (!response?.error) {
-      setReRender((prev) => !prev);
+      setReRender((previous) => !previous);
     }
-    setIsLoading((prevState) => !prevState);
+    setIsLoading((previousState) => !previousState);
   };
   return (
     <>

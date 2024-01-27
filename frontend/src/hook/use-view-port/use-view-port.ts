@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+ 
 export interface UseViewPort {
   count: number;
   increment: () => void;

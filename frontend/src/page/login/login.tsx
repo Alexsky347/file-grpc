@@ -1,5 +1,5 @@
 import { FormEvent, JSX, useEffect } from 'react';
-import { Avatar, Box, Card, Container, Flex } from "@radix-ui/themes";
+import { Avatar } from "@radix-ui/themes";
 import driveJpg from '../../assets/static/drive.jpg';
 import { useDispatch, useSelector } from "react-redux";
 import { clearMessage } from "../../store/slices/message.ts";

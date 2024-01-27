@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 
-interface PaginationProps {
+interface PaginationProperties {
   onChange: (event: ChangeEvent<unknown>, value: number) => void;
   page: number;
   totalCount: number;
@@ -12,7 +12,7 @@ export default function Pagination({
   onChange,
   page,
   limit,
-}: Readonly<PaginationProps>) {
+}: Readonly<PaginationProperties>) {
   const [currentPage, setCurrentPage] = useState(page);
   const totalPages = Math.ceil(totalCount / limit);
 
@@ -21,16 +21,45 @@ export default function Pagination({
     onChange(event, value);
   };
 
+  const getPages = (totalPages: number, currentPage: number) => {
+    let diff = 0;
+    const result = [
+      currentPage - 2,
+      currentPage - 1,
+      currentPage,
+      currentPage + 1,
+      currentPage + 2,
+    ];
+    if (result[0] < 3) {
+      diff = 1 - result[0];
+    }
+    if (result.at(-1) > totalPages - 2) {
+      diff = totalPages - result.at(-1);
+    }
+    return result
+      .map((r) => r + diff)
+      .map((pageNumber) => (
+        <button
+          key={pageNumber}
+          onClick={(event) => handlePageChange(event, pageNumber)}
+        >
+          <input
+            className="join-item btn btn-square"
+            type="radio"
+            name="options"
+            aria-label={pageNumber.toString()}
+            checked={pageNumber === currentPage}
+            readOnly
+          />
+        </button>
+      ));
+  };
+
   return (
     <div className="join">
-      {Array.from({ length: totalPages }, (_, i) => i + 1)
-        .slice(0, currentPage + 3)
-        .map((pageNumber) =>
-          pageNumber % 3 === 0 ? (
-            <button key={pageNumber} className="join-item btn btn-disabled">
-              ...
-            </button>
-          ) : (
+      {totalPages <= 5 &&
+        Array.from({ length: totalPages }, (_, index) => index + 1).map(
+          (pageNumber) => (
             <button
               key={pageNumber}
               onClick={(event) => handlePageChange(event, pageNumber)}
@@ -46,6 +75,7 @@ export default function Pagination({
             </button>
           )
         )}
+      {totalPages > 5 && getPages(totalPages, currentPage)}
     </div>
   );
 }

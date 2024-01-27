@@ -7,19 +7,15 @@ import {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/store";
-import { deleteFile, renameFile, zipFile } from "../../store/slices/file";
-import { MyFile } from "../../model/interface/file";
+import { renameFile, zipFile } from "../../store/slices/file";
+import { FileState, MyFile } from "../../model/interface/file";
 import { format } from "date-fns";
-import {
-  ArchiveIcon,
-  DownloadIcon,
-  Pencil1Icon,
-  TrashIcon,
-} from "@radix-ui/react-icons";
+import { ArchiveIcon, DownloadIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import { displayToast } from "../../utils/toast/toast-service.ts";
 import DialogDeleteFile from "../dialog-delete-file/dialog-delete-file.tsx";
+import { MessageState } from "../../model/interface/message-state.ts";
 
-interface MainProps {
+interface MainProperties {
   metaData: MyFile;
   reRender: boolean;
   setReRender: Dispatch<SetStateAction<boolean>>;
@@ -29,11 +25,13 @@ export function CardC({
   metaData,
   reRender,
   setReRender,
-}: MainProps): ReactElement {
+}: MainProperties): ReactElement {
   const [newFileName, setNewFileName] = useState<string | undefined>("");
-  const { message } = useSelector((state: { message: any }) => state.message);
+  const { message } = useSelector(
+    (state: { message: MessageState }) => state.message
+  );
   const { hasDeleted, hasRenamed } = useSelector(
-    (state: { file: any }) => state.file
+    (state: { file: FileState }) => state.file
   );
 
   const dispatch = useDispatch<AppDispatch>();
@@ -58,7 +56,7 @@ export function CardC({
   // Rename
   const handleRename = async () => {
     const newFileNamed = handleFileName(newFileName || "");
-    const response: any = await dispatch(
+    await dispatch(
       renameFile({ metaData, newFileName: newFileNamed })
     );
   };

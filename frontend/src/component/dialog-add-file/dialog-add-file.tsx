@@ -1,21 +1,19 @@
-import { Button, Dialog, Flex, TextField, Text } from "@radix-ui/themes";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { Dialog, Flex } from "@radix-ui/themes";
+import { FileIcon, FilePlusIcon } from "@radix-ui/react-icons";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ItResponse } from "../../model/interface/it-response.ts";
 import { FileService } from "../../service/api/file.service.ts";
 import { toast } from "react-toastify";
 
-interface DialogAddFileProps {
+interface DialogAddFileProperties {
   sideNavOpen: boolean;
-  reRender: boolean;
   setReRender: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function DialogAddFile({
   sideNavOpen,
-  reRender,
   setReRender,
-}: Readonly<DialogAddFileProps>) {
+}: Readonly<DialogAddFileProperties>) {
   const [metaData, setMetaData] = useState<Record<string, any>>([]);
   const [files, setFiles] = useState<FileList | null>();
   const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false);
@@ -30,36 +28,40 @@ export default function DialogAddFile({
       return;
     }
     switch (files?.length) {
-      case 0:
+      case 0: {
         toast.error("Please choose file(s) to upload");
         break;
-      case null:
+      }
+      case undefined: {
         toast.error("Please choose file(s) to upload");
         break;
-      case 1:
-        setIsLoading((prevState) => !prevState);
+      }
+      case 1: {
+        setIsLoading((previousState) => !previousState);
         data.append("file", files[0]);
         response = (await FileService.uploadOneFile(
           data
         )) as unknown as ItResponse;
         break;
-      default:
-        setIsLoading((prevState) => !prevState);
-        Array.from(files).forEach((element) => {
+      }
+      default: {
+        setIsLoading((previousState) => !previousState);
+        for (const element of files) {
           data.append("file", element);
-        });
+        }
         response = (await FileService.uploadMultipleFiles(
           data
         )) as unknown as ItResponse;
+      }
     }
 
     if (response?.status === 200) {
       // reRender ? setReRender(0) : setReRender(1);
-      setFiles(null);
+      setFiles(undefined);
       setMetaData([]);
       setIsFileUploaded(false);
-      setReRender((prev) => !prev);
-      setIsLoading((prevState) => !prevState);
+      setReRender((previous) => !previous);
+      setIsLoading((previousState) => !previousState);
     } else {
       toast.error(
         `${response?.response?.data?.errorMessage || "Error uploading file(s)"}`
@@ -75,14 +77,14 @@ export default function DialogAddFile({
       {sideNavOpen ? (
         <Dialog.Root open={open} onOpenChange={setOpen}>
           <Dialog.Trigger>
-            <button className="flex flex-row items-center mb-3 mt-3 rounded hover:bg-base-300">
-              <PlusIcon
-                className="w-10 h-10 text-base-content"
+            <button className="flex flex-row mb-3 mt-3 rounded hover:bg-base-300">
+              <FileIcon
+                className="w-8 h-8 text-base-content"
                 fill="currentColor"
                 aria-label={"Add file(s)"}
               />
               {sideNavOpen && (
-                <span className="text-base-content">Add file(s)</span>
+                <span className="text-base-content ml-4">Add file(s)</span>
               )}
             </button>
           </Dialog.Trigger>
@@ -136,7 +138,7 @@ export default function DialogAddFile({
             </Flex>
           </Dialog.Content>
         </Dialog.Root>
-      ) : null}
+      ) : undefined}
     </>
   );
 }

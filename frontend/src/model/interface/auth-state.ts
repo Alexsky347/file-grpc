@@ -2,6 +2,6 @@ import { User } from "./user";
 
 export interface AuthState {
     isLoggedIn: boolean;
-    user: User | null;
+    user: User | undefined;
     isLoading?: boolean;
   }

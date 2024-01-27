@@ -37,7 +37,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
 
 const initialState: AuthState = user
   ? { isLoggedIn: true, user }
-  : { isLoggedIn: false, user: null };
+  : { isLoggedIn: false, user: undefined };
 
 const authSlice = createSlice({
   name: 'auth',
@@ -55,11 +55,11 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state) => {
         state.isLoggedIn = false;
-        state.user = null;
+        state.user = undefined;
       })
       .addCase(logout.fulfilled, (state) => {
         state.isLoggedIn = false;
-        state.user = null;
+        state.user = undefined;
       });
   },
 });

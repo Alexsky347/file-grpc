@@ -7,8 +7,7 @@ describe('File', () => {
   const myFile = {} as MyFile;
   it('should render successfully', () => {
     const { baseElement } = render(
-      // @ts-ignore
-      <CardC metaData={myFile} reRender={0} setReRender={1} />
+      <CardC metaData={myFile} reRender={false} setReRender={setReRender} />
     );
     expect(baseElement).toBeTruthy();
   });
