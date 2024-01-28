@@ -1,31 +1,31 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from 'react'
 
 function debounce(callback: () => void, delay: number): () => void {
-  let timer: number;
+  let timer: number
   return () => {
-    clearTimeout(timer);
+    clearTimeout(timer)
     timer = setTimeout(() => {
-      callback();
-    }, delay);
-  };
+      callback()
+    }, delay)
+  }
 }
 
 const useDebounce = (callback: () => void) => {
-  const reference = useRef<() => void>();
+  const reference = useRef<() => void>()
 
   useEffect(() => {
-    reference.current = callback;
-  }, [callback]);
+    reference.current = callback
+  }, [callback])
 
   const debouncedCallback = useMemo(() => {
     const function_ = () => {
-      reference.current?.();
-    };
+      reference.current?.()
+    }
 
-    return debounce(function_, 1000);
-  }, []);
+    return debounce(function_, 1000)
+  }, [])
 
-  return debouncedCallback;
-};
+  return debouncedCallback
+}
 
-export { debounce, useDebounce };
+export { debounce, useDebounce }

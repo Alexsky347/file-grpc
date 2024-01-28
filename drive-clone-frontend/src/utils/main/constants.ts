@@ -1,5 +1,5 @@
 export const Constants = {
-    localStorage: {
-        USER_KEY: 'user'
-    }
+  localStorage: {
+    USER_KEY: 'user',
+  },
 }

@@ -1,7 +1,7 @@
 export interface Config {
-    headers:{
-        Authorization: string | object;
-        'Content-Type': string;
-    }
-    responseType?: string;
+  headers: {
+    Authorization: string | object
+    'Content-Type': string
+  }
+  responseType?: string
 }

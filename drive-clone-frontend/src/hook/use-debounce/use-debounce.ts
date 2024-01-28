@@ -1,10 +1,14 @@
-import { useEffect, useCallback, DependencyList, EffectCallback } from 'react';
+import { useEffect, useCallback, DependencyList, EffectCallback } from 'react'
 
-export default function useDebounce(effect: EffectCallback, dependencies: DependencyList, delay: number) {
-    const callback = useCallback(effect, [effect, ...dependencies]);
+export default function useDebounce(
+  effect: EffectCallback,
+  dependencies: DependencyList,
+  delay: number,
+) {
+  const callback = useCallback(effect, [effect, ...dependencies])
 
-    useEffect(() => {
-        const timeout = setTimeout(callback, delay);
-        return () => clearTimeout(timeout);
-    }, [callback, delay]);
+  useEffect(() => {
+    const timeout = setTimeout(callback, delay)
+    return () => clearTimeout(timeout)
+  }, [callback, delay])
 }
