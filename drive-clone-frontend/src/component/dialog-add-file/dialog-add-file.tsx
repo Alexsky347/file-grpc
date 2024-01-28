@@ -1,9 +1,9 @@
 import { Dialog, Flex } from '@radix-ui/themes'
-import { FileIcon, FilePlusIcon } from '@radix-ui/react-icons'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { ItResponse } from '../../model/interface/it-response.ts'
 import { FileService } from '../../service/api/file.service.ts'
 import { toast } from 'react-toastify'
+import fileAddIcon from '../../assets/static/file-add.svg'
 
 interface DialogAddFileProperties {
   sideNavOpen: boolean
@@ -72,11 +72,7 @@ export default function DialogAddFile({
         <Dialog.Root open={open} onOpenChange={setOpen}>
           <Dialog.Trigger>
             <button className='flex flex-row mb-3 mt-3 rounded hover:bg-base-300'>
-              <FileIcon
-                className='w-8 h-8 text-base-content'
-                fill='currentColor'
-                aria-label={'Add file(s)'}
-              />
+              <img src={fileAddIcon} className='w-10 h-10 text-base-content' alt='Add file(s)' />
               {sideNavOpen && <span className='text-base-content ml-4'>Add file(s)</span>}
             </button>
           </Dialog.Trigger>

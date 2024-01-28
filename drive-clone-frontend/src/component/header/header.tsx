@@ -2,6 +2,7 @@ import { AuthService } from '../../service/api/auth.service.ts'
 import { logout } from '../../store/slices/auth.ts'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store/store.ts'
+import hamburgerIcon from '../../assets/static/hamburger.svg'
 
 interface HeaderProperties {
   handleSideNav: () => void
@@ -23,20 +24,18 @@ export default function Header({ handleSideNav }: HeaderProperties) {
     <div className='navbar bg-base-100 w-full border-b-2 fixed top-0 z-20'>
       <div className='flex-none ml-6'>
         <button className='btn btn-square btn-ghost' onClick={handleSideNavChildren}>
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            className='h-8 w-8'
-            fill='none'
-            viewBox='0 0 24 24'
-            stroke='currentColor'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth='2'
-              d='M4 6h16M4 12h16M4 18h7'
-            />
-          </svg>
+          <img
+            style={{
+              stroke: 'currentColor',
+              fill: 'none',
+              strokeWidth: 2,
+              strokeLinecap: 'round',
+              strokeLinejoin: 'round',
+            }}
+            src={hamburgerIcon}
+            className='w-10 h-10 text-base-content'
+            alt='Create directory'
+          />
         </button>
       </div>
       <div className='flex-auto'>
