@@ -55,6 +55,7 @@ export default function Pagination({
   return (
     <div className='join'>
       {totalPages <= 5 &&
+        totalPages > 1 &&
         Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
           <button key={pageNumber} onClick={(event) => handlePageChange(event, pageNumber)}>
             <input

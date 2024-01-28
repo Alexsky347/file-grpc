@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import '@radix-ui/themes/styles.css';
-import { Theme, ThemePanel } from '@radix-ui/themes';
+import { Theme } from '@radix-ui/themes';
 import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
 import { reportWebVitals } from './utils/main/report-web-vitals.ts';
@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import App from './App.tsx';
 
 ReactDOM.createRoot(document.querySelector('#root')!).render(
+  // Strict mode only used in dev mode -> issues: running twice useEffect
   <React.StrictMode>
     <Theme>
       <Provider store={store}>

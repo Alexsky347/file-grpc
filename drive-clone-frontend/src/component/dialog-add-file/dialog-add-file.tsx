@@ -4,6 +4,7 @@ import { ItResponse } from '../../model/interface/it-response.ts';
 import { FileService } from '../../service/api/file.service.ts';
 import { toast } from 'react-toastify';
 import fileAddIcon from '../../assets/static/file-add.svg';
+import directoryAddIcon from '../../assets/static/directory-add.svg';
 
 interface DialogAddFileProperties {
   sideNavOpen: boolean;
@@ -27,6 +28,7 @@ export default function DialogAddFile({
       toast.error('Please choose file(s) to upload');
       return;
     }
+
     switch (files?.length) {
       case 0: {
         toast.error('Please choose file(s) to upload');
@@ -68,59 +70,57 @@ export default function DialogAddFile({
 
   return (
     <>
-      {sideNavOpen ? (
-        <Dialog.Root open={open} onOpenChange={setOpen}>
-          <Dialog.Trigger>
-            <button className='flex flex-row mb-3 mt-3 rounded hover:bg-base-300'>
-              <img src={fileAddIcon} className='w-10 h-10 text-base-content' alt='Add file(s)' />
-              {sideNavOpen && <span className='text-base-content ml-4'>Add file(s)</span>}
-            </button>
-          </Dialog.Trigger>
-          <Dialog.Content style={{ maxWidth: 450 }}>
-            <Dialog.Title>Add one or multiple file(s)</Dialog.Title>
-            <Dialog.Description size='2' mb='4'>
-              It will be import.
-            </Dialog.Description>
+      <Dialog.Root open={open} onOpenChange={setOpen}>
+        <Dialog.Trigger>
+          <button className='mt-4 flex flex-row rounded hover:bg-base-300'>
+            <img src={fileAddIcon} className='w-10 h-10 text-base-content' alt='Add file(s)' />
+            {sideNavOpen && <span className='text-base-content ml-4'>Add file(s)</span>}
+          </button>
+        </Dialog.Trigger>
+        <Dialog.Content style={{ maxWidth: 450 }}>
+          <Dialog.Title>Add one or multiple file(s)</Dialog.Title>
+          <Dialog.Description size='2' mb='4'>
+            It will be import.
+          </Dialog.Description>
 
-            <Flex direction='column' gap='3'>
-              <form>
-                <div className='form-control'>
-                  <input
-                    type='file'
-                    multiple
-                    className='file-input file-input-bordered file-input-primary w-full max-w-xs'
-                    onChange={(e) => {
-                      setMetaData({
-                        fileName: e.target.files?.[0].name,
-                        createDate: new Date(e.target.files![0].lastModified).toDateString(),
-                        lastModified: new Date(e.target.files![0].lastModified).toDateString(),
-                        fileSize: (
-                          Math.round(e.target.files![0].size * Math.pow(10, -6) * 100) / 100
-                        ).toFixed(3),
-                        type: e.target.files![0].type,
-                      });
+          <Flex direction='column' gap='3'>
+            <form>
+              <div className='form-control'>
+                <input
+                  type='file'
+                  multiple
+                  className='file-input file-input-bordered file-input-primary w-full max-w-xs'
+                  onChange={(e) => {
+                    setMetaData({
+                      fileName: e.target.files?.[0].name,
+                      createDate: new Date(e.target.files![0].lastModified).toDateString(),
+                      lastModified: new Date(e.target.files![0].lastModified).toDateString(),
+                      fileSize: (
+                        Math.round(e.target.files![0].size * Math.pow(10, -6) * 100) / 100
+                      ).toFixed(3),
+                      type: e.target.files![0].type,
+                    });
 
-                      setFiles(e.target.files);
-                      setIsFileUploaded(true);
-                    }}
-                  />
-                </div>
-              </form>
-            </Flex>
+                    setFiles(e.target.files);
+                    setIsFileUploaded(true);
+                  }}
+                />
+              </div>
+            </form>
+          </Flex>
 
-            <Flex gap='3' mt='4' justify='end'>
-              <Dialog.Close>
-                <button className='btn'>Cancel</button>
-              </Dialog.Close>
-              <Dialog.Close>
-                <button className='btn btn-primary' onClick={handleUpload}>
-                  Save
-                </button>
-              </Dialog.Close>
-            </Flex>
-          </Dialog.Content>
-        </Dialog.Root>
-      ) : undefined}
+          <Flex gap='3' mt='4' justify='end'>
+            <Dialog.Close>
+              <button className='btn'>Cancel</button>
+            </Dialog.Close>
+            <Dialog.Close>
+              <button className='btn btn-primary' onClick={handleUpload}>
+                Save
+              </button>
+            </Dialog.Close>
+          </Flex>
+        </Dialog.Content>
+      </Dialog.Root>
     </>
   );
 }

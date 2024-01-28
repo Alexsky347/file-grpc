@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { findAll } from '../../store/slices/file.ts';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { debounce } from '../../utils/main/utils.ts';
+import { isMobile } from 'react-device-detect';
 
 interface DashboardProperties {
   sideNavOpen: boolean;
@@ -28,7 +29,8 @@ export default function Dashboard({
   setReRender,
 }: Readonly<DashboardProperties>) {
   const LIMIT = 10;
-  const widthNav = sideNavOpen ? 150 : 0;
+  const screenMinWidth = isMobile ? 0 : 80;
+  const widthNav = sideNavOpen ? 200 : screenMinWidth;
   const [files, setFiles] = useState<FileCollection>([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
