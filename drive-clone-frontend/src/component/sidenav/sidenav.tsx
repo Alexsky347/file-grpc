@@ -1,14 +1,14 @@
-import DialogAddFile from '../dialog-add-file/dialog-add-file.tsx'
-import { Dispatch, SetStateAction } from 'react'
-import directoryAddIcon from '../../assets/static/directory-add.svg'
+import DialogAddFile from '../dialog-add-file/dialog-add-file.tsx';
+import { Dispatch, SetStateAction } from 'react';
+import directoryAddIcon from '../../assets/static/directory-add.svg';
 
 interface SideNavProperties {
-  sideNavOpen: boolean
-  setReRender: Dispatch<SetStateAction<boolean>>
+  sideNavOpen: boolean;
+  setReRender: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function SideNav({ sideNavOpen, setReRender }: Readonly<SideNavProperties>) {
-  const widthNav = sideNavOpen ? 150 : 0
+  const widthNav = sideNavOpen ? 150 : 0;
 
   return (
     <div
@@ -33,5 +33,5 @@ export default function SideNav({ sideNavOpen, setReRender }: Readonly<SideNavPr
         </div>
       </div>
     </div>
-  )
+  );
 }

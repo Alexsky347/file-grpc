@@ -1,17 +1,17 @@
-import { act, renderHook } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react';
 
-import useResponsive from './use-responsive'
+import useResponsive from './use-responsive';
 
 describe('useResponsive', () => {
   it('should render successfully', () => {
-    const { result } = renderHook(() => useResponsive())
+    const { result } = renderHook(() => useResponsive());
 
-    expect(result.current.count).toBe(0)
+    expect(result.current.count).toBe(0);
 
     act(() => {
-      result.current.increment()
-    })
+      result.current.increment();
+    });
 
-    expect(result.current.count).toBe(1)
-  })
-})
+    expect(result.current.count).toBe(1);
+  });
+});

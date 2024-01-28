@@ -1,10 +1,10 @@
 export interface ItResponse {
-  status: number
-  message: string
+  status: number;
+  message: string;
   data: {
-    [key: string]: any
-  }
+    [key: string]: any;
+  };
   response: {
-    [key: string]: any
-  }
+    [key: string]: any;
+  };
 }

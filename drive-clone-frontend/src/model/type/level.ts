@@ -1,1 +1,1 @@
-export type ToastLevel = 'success' | 'error' | 'warning' | 'info'
+export type ToastLevel = 'success' | 'error' | 'warning' | 'info';

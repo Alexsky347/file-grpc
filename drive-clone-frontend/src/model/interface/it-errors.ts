@@ -1,3 +1,3 @@
 export interface ItErrors {
-  [key: string]: string
+  [key: string]: string;
 }

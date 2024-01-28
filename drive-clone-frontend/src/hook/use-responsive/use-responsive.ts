@@ -1,14 +1,14 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react';
 
 export interface UseResponsive {
-  count: number
-  increment: () => void
+  count: number;
+  increment: () => void;
 }
 
 export function useResponsive(): UseResponsive {
-  const [count, setCount] = useState(0)
-  const increment = useCallback(() => setCount((x) => x + 1), [])
-  return { count, increment }
+  const [count, setCount] = useState(0);
+  const increment = useCallback(() => setCount((x) => x + 1), []);
+  return { count, increment };
 }
 
-export default useResponsive
+export default useResponsive;

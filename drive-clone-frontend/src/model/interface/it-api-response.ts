@@ -1,7 +1,7 @@
-import { ItErrors } from './it-errors'
+import { ItErrors } from './it-errors';
 
 interface ItApiResponse<T> {
-  status: number
-  errors: ItErrors[]
-  data: T
+  status: number;
+  errors: ItErrors[];
+  data: T;
 }

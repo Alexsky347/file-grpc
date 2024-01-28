@@ -1,70 +1,70 @@
-import { Dialog, Flex } from '@radix-ui/themes'
-import { Dispatch, SetStateAction, useState } from 'react'
-import { ItResponse } from '../../model/interface/it-response.ts'
-import { FileService } from '../../service/api/file.service.ts'
-import { toast } from 'react-toastify'
-import fileAddIcon from '../../assets/static/file-add.svg'
+import { Dialog, Flex } from '@radix-ui/themes';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { ItResponse } from '../../model/interface/it-response.ts';
+import { FileService } from '../../service/api/file.service.ts';
+import { toast } from 'react-toastify';
+import fileAddIcon from '../../assets/static/file-add.svg';
 
 interface DialogAddFileProperties {
-  sideNavOpen: boolean
-  setReRender: Dispatch<SetStateAction<boolean>>
+  sideNavOpen: boolean;
+  setReRender: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function DialogAddFile({
   sideNavOpen,
   setReRender,
 }: Readonly<DialogAddFileProperties>) {
-  const [metaData, setMetaData] = useState<Record<string, any>>([])
-  const [files, setFiles] = useState<FileList | null>()
-  const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [open, setOpen] = useState(false)
+  const [metaData, setMetaData] = useState<Record<string, any>>([]);
+  const [files, setFiles] = useState<FileList | null>();
+  const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
 
   const handleUpload = async () => {
-    let response: ItResponse | undefined
-    const data = new FormData()
+    let response: ItResponse | undefined;
+    const data = new FormData();
     if (!files) {
-      toast.error('Please choose file(s) to upload')
-      return
+      toast.error('Please choose file(s) to upload');
+      return;
     }
     switch (files?.length) {
       case 0: {
-        toast.error('Please choose file(s) to upload')
-        break
+        toast.error('Please choose file(s) to upload');
+        break;
       }
       case undefined: {
-        toast.error('Please choose file(s) to upload')
-        break
+        toast.error('Please choose file(s) to upload');
+        break;
       }
       case 1: {
-        setIsLoading((previousState) => !previousState)
-        data.append('file', files[0])
-        response = (await FileService.uploadOneFile(data)) as unknown as ItResponse
-        break
+        setIsLoading((previousState) => !previousState);
+        data.append('file', files[0]);
+        response = (await FileService.uploadOneFile(data)) as unknown as ItResponse;
+        break;
       }
       default: {
-        setIsLoading((previousState) => !previousState)
+        setIsLoading((previousState) => !previousState);
         for (const element of files) {
-          data.append('file', element)
+          data.append('file', element);
         }
-        response = (await FileService.uploadMultipleFiles(data)) as unknown as ItResponse
+        response = (await FileService.uploadMultipleFiles(data)) as unknown as ItResponse;
       }
     }
 
     if (response?.status === 200) {
       // reRender ? setReRender(0) : setReRender(1);
-      setFiles(undefined)
-      setMetaData([])
-      setIsFileUploaded(false)
-      setReRender((previous) => !previous)
-      setIsLoading((previousState) => !previousState)
+      setFiles(undefined);
+      setMetaData([]);
+      setIsFileUploaded(false);
+      setReRender((previous) => !previous);
+      setIsLoading((previousState) => !previousState);
     } else {
-      toast.error(`${response?.response?.data?.errorMessage || 'Error uploading file(s)'}`)
+      toast.error(`${response?.response?.data?.errorMessage || 'Error uploading file(s)'}`);
     }
     // e.target?.value = "";
-    handleClose()
-  }
-  const handleClose = () => setOpen(false)
+    handleClose();
+  };
+  const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -98,10 +98,10 @@ export default function DialogAddFile({
                           Math.round(e.target.files![0].size * Math.pow(10, -6) * 100) / 100
                         ).toFixed(3),
                         type: e.target.files![0].type,
-                      })
+                      });
 
-                      setFiles(e.target.files)
-                      setIsFileUploaded(true)
+                      setFiles(e.target.files);
+                      setIsFileUploaded(true);
                     }}
                   />
                 </div>
@@ -122,5 +122,5 @@ export default function DialogAddFile({
         </Dialog.Root>
       ) : undefined}
     </>
-  )
+  );
 }

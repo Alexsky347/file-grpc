@@ -1,44 +1,44 @@
-import { FormEvent, JSX, useEffect } from 'react'
-import { Avatar } from '@radix-ui/themes'
-import driveJpg from '../../assets/static/drive.jpg'
-import { useDispatch, useSelector } from 'react-redux'
-import { clearMessage } from '../../store/slices/message.ts'
-import { AppDispatch } from '../../store/store.ts'
-import { login } from '../../store/slices/auth.ts'
-import { useNavigate } from 'react-router-dom'
+import { FormEvent, JSX, useEffect } from 'react';
+import { Avatar } from '@radix-ui/themes';
+import driveJpg from '../../assets/static/drive.jpg';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearMessage } from '../../store/slices/message.ts';
+import { AppDispatch } from '../../store/store.ts';
+import { login } from '../../store/slices/auth.ts';
+import { useNavigate } from 'react-router-dom';
 
 function Login(): JSX.Element {
-  const navigate = useNavigate()
-  const { isLoggedIn } = useSelector((state: { auth: never }) => state.auth)
-  const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate();
+  const { isLoggedIn } = useSelector((state: { auth: never }) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(clearMessage())
-  }, [dispatch])
+    dispatch(clearMessage());
+  }, [dispatch]);
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/', { replace: true })
+      navigate('/', { replace: true });
     }
-  }, [isLoggedIn, navigate])
+  }, [isLoggedIn, navigate]);
 
   async function loginUser(data: FormData) {
-    const username = data.get('username') as string
-    const password = data.get('password') as string
-    console.log(username, password)
-    await dispatch(login({ username, password }))
+    const username = data.get('username') as string;
+    const password = data.get('password') as string;
+    console.log(username, password);
+    await dispatch(login({ username, password }));
   }
 
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault()
+    event.preventDefault();
     if (event?.currentTarget instanceof HTMLFormElement) {
-      const data = new FormData()
-      const { username, password } = event.currentTarget
-      data.append('username', username.value)
-      data.append('password', password.value)
-      await loginUser(data)
+      const data = new FormData();
+      const { username, password } = event.currentTarget;
+      data.append('username', username.value);
+      data.append('password', password.value);
+      await loginUser(data);
     }
-  }
+  };
 
   return (
     <div className='hero min-h-screen bg-base-200'>
@@ -82,7 +82,7 @@ function Login(): JSX.Element {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

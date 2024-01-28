@@ -1,6 +1,6 @@
-import Pagination from '../../component/pagination/pagination.tsx'
-import { CardC } from '../../component/card-c/card.c.tsx'
-import { FileCollection } from '../../model/interface/file.ts'
+import Pagination from '../../component/pagination/pagination.tsx';
+import { CardC } from '../../component/card-c/card.c.tsx';
+import { FileCollection } from '../../model/interface/file.ts';
 import {
   ChangeEvent,
   Dispatch,
@@ -9,17 +9,17 @@ import {
   useEffect,
   useRef,
   useState,
-} from 'react'
-import { AppDispatch } from '../../store/store.ts'
-import { useDispatch } from 'react-redux'
-import { findAll } from '../../store/slices/file.ts'
-import { Cross1Icon } from '@radix-ui/react-icons'
-import { debounce } from '../../utils/main/utils.ts'
+} from 'react';
+import { AppDispatch } from '../../store/store.ts';
+import { useDispatch } from 'react-redux';
+import { findAll } from '../../store/slices/file.ts';
+import { Cross1Icon } from '@radix-ui/react-icons';
+import { debounce } from '../../utils/main/utils.ts';
 
 interface DashboardProperties {
-  sideNavOpen: boolean
-  reRender: boolean
-  setReRender: Dispatch<SetStateAction<boolean>>
+  sideNavOpen: boolean;
+  reRender: boolean;
+  setReRender: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function Dashboard({
@@ -27,34 +27,34 @@ export default function Dashboard({
   reRender,
   setReRender,
 }: Readonly<DashboardProperties>) {
-  const LIMIT = 10
-  const widthNav = sideNavOpen ? 150 : 0
-  const [files, setFiles] = useState<FileCollection>([])
-  const [count, setCount] = useState(0)
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(LIMIT)
-  const [search, setSearch] = useState('')
-  const [orderBy, setOrderBy] = useState('name-ASC')
-  const [index, setIndex] = useState(2)
-  const loaderReference = useRef(null)
-  const dispatch = useDispatch<AppDispatch>()
+  const LIMIT = 10;
+  const widthNav = sideNavOpen ? 150 : 0;
+  const [files, setFiles] = useState<FileCollection>([]);
+  const [count, setCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(LIMIT);
+  const [search, setSearch] = useState('');
+  const [orderBy, setOrderBy] = useState('name-ASC');
+  const [index, setIndex] = useState(2);
+  const loaderReference = useRef(null);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const scrollToTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+  const scrollToTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 
   const fetchData = useCallback(
     async (limit: number, page: number, search: string, orderBy: string, dispatch: AppDispatch) => {
-      const response: any = await dispatch(findAll({ limit, page, search, orderBy }))
-      const { files, total } = response.payload
-      setFiles(files)
-      setCount(total)
-      scrollToTop()
+      const response: any = await dispatch(findAll({ limit, page, search, orderBy }));
+      const { files, total } = response.payload;
+      setFiles(files);
+      setCount(total);
+      scrollToTop();
     },
     [],
-  )
+  );
 
   useEffect(() => {
-    fetchData(limit, page, search, orderBy, dispatch)
-  }, [limit, page, search, orderBy, reRender, dispatch, fetchData])
+    fetchData(limit, page, search, orderBy, dispatch);
+  }, [limit, page, search, orderBy, reRender, dispatch, fetchData]);
 
   /**
    * Handle search change
@@ -63,19 +63,19 @@ export default function Dashboard({
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const {
       target: { value },
-    } = event
-    setSearch(value || '')
-    const debouncedSearch = debounce(() => setSearch(value || ''), 200)
-    debouncedSearch()
+    } = event;
+    setSearch(value || '');
+    const debouncedSearch = debounce(() => setSearch(value || ''), 200);
+    debouncedSearch();
     // debouncedRequest();
-  }
+  };
 
   /**
    * Clear search bar
    */
   const clearSearchBar = () => {
-    setSearch('')
-  }
+    setSearch('');
+  };
 
   /**
    *
@@ -83,8 +83,8 @@ export default function Dashboard({
    * @param value
    */
   const handleChangePaginate = async (_event: ChangeEvent<unknown>, value: number) => {
-    setPage(value)
-  }
+    setPage(value);
+  };
   return (
     <>
       <div className='mb-7 flex items-center justify-center space-x-2'>
@@ -156,5 +156,5 @@ export default function Dashboard({
         />
       </div>
     </>
-  )
+  );
 }

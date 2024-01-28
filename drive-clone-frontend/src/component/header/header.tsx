@@ -1,24 +1,24 @@
-import { AuthService } from '../../service/api/auth.service.ts'
-import { logout } from '../../store/slices/auth.ts'
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../store/store.ts'
-import hamburgerIcon from '../../assets/static/hamburger.svg'
+import { AuthService } from '../../service/api/auth.service.ts';
+import { logout } from '../../store/slices/auth.ts';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/store.ts';
+import hamburgerIcon from '../../assets/static/hamburger.svg';
 
 interface HeaderProperties {
-  handleSideNav: () => void
+  handleSideNav: () => void;
 }
 
 export default function Header({ handleSideNav }: HeaderProperties) {
-  const userName = AuthService.getCurrentUser()?.username ?? ''
-  const dispatch = useDispatch<AppDispatch>()
+  const userName = AuthService.getCurrentUser()?.username ?? '';
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleSideNavChildren = () => {
-    handleSideNav()
-  }
+    handleSideNav();
+  };
 
   const handleLogout = (): void => {
-    dispatch(logout())
-  }
+    dispatch(logout());
+  };
 
   return (
     <div className='navbar bg-base-100 w-full border-b-2 fixed top-0 z-20'>
@@ -71,5 +71,5 @@ export default function Header({ handleSideNav }: HeaderProperties) {
         </div>
       </div>
     </div>
-  )
+  );
 }

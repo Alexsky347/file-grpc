@@ -1,24 +1,24 @@
-import { useEffect, useState } from 'react'
-import { Box } from '@radix-ui/themes'
-import Header from '../header/header.tsx'
-import Dashboard from '../../page/dashboard/dashboard.tsx'
-import SideNav from '../sidenav/sidenav.tsx'
+import { useEffect, useState } from 'react';
+import { Box } from '@radix-ui/themes';
+import Header from '../header/header.tsx';
+import Dashboard from '../../page/dashboard/dashboard.tsx';
+import SideNav from '../sidenav/sidenav.tsx';
 
 export default function Layout() {
   useEffect(() => {
-    document.title = 'Drive Clone'
-  }, [])
+    document.title = 'Drive Clone';
+  }, []);
 
-  const [sideNavOpen, setSideNavOpen] = useState<boolean>(false)
-  const [reRender, setReRender] = useState<boolean>(false)
+  const [sideNavOpen, setSideNavOpen] = useState<boolean>(false);
+  const [reRender, setReRender] = useState<boolean>(false);
 
   const handleRender = () => {
-    setReRender(!reRender)
-  }
+    setReRender(!reRender);
+  };
 
   const toggleSideNav = () => {
-    setSideNavOpen(!sideNavOpen)
-  }
+    setSideNavOpen(!sideNavOpen);
+  };
 
   return (
     <Box>
@@ -28,5 +28,5 @@ export default function Layout() {
         <Dashboard sideNavOpen={sideNavOpen} reRender={reRender} setReRender={handleRender} />
       </div>
     </Box>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const jwtInterceptor = axios.create({})
+const jwtInterceptor = axios.create({});
 
 jwtInterceptor.interceptors.response.use(
   (response) => {
-    return response
+    return response;
   },
   async (error) => {
     if (error.response.status === 401) {
@@ -13,13 +13,13 @@ jwtInterceptor.interceptors.response.use(
           withCredentials: true,
         })
         .catch((error_) => {
-          throw error_
-        })
-      console.log(error.config)
-      return axios(error.config)
+          throw error_;
+        });
+      console.log(error.config);
+      return axios(error.config);
     } else {
-      throw error
+      throw error;
     }
   },
-)
-export default jwtInterceptor
+);
+export default jwtInterceptor;
