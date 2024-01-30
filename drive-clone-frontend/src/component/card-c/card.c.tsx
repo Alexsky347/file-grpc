@@ -60,6 +60,7 @@ export function CardC({ metaData, reRender, setReRender }: MainProperties): Reac
     <div className='card w-90 bg-base-100 m-6 shadow-xl'>
       <figure>
         <img
+          loading='lazy'
           className='object-contain w-full h-48'
           src={
             metaData?.url && metaData?.contentType.includes('image')
