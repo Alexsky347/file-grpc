@@ -16,7 +16,7 @@ import { findAll } from '../../store/slices/file.ts';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { debounce } from '../../utils/main/utils.ts';
 import { isMobile } from 'react-device-detect';
-import newDirectory from '../../assets/static/new-directory.svg';
+import NewDirectory from '../../component/new-directory/new-directory.tsx';
 
 interface DashboardProperties {
   sideNavOpen: boolean;
@@ -129,17 +129,7 @@ export default function Dashboard({
           className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6'
           style={{ marginLeft: `${widthNav}px` }}
         >
-          <div className='w-90 bg-base-100 m-6 flex flex-col justify-center'>
-            <img src={newDirectory} alt='' className='w-4/6 p-6 m-auto' />
-            <input
-              className='input input-bordered max-w-xs m-auto text-center'
-              type='text'
-              name='new-directory'
-              value='New Directory'
-              id=''
-              readOnly={false}
-            />
-          </div>
+          <NewDirectory isAddingDirectory={true} />
           {files && files?.length > 0 ? (
             <>
               {files.map((file) => (
