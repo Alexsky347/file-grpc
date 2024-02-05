@@ -21,7 +21,7 @@ export default function Header({ handleSideNav }: HeaderProperties) {
   };
 
   return (
-    <div className='navbar bg-base-100 w-full border-b-2 fixed top-0 z-20'>
+    <div className='navbar bg-base-100 w-full border-b-2 fixed top-0 z-20 shadow-xl'>
       <div className='flex-none ml-6'>
         <button className='btn btn-square btn-ghost' onClick={handleSideNavChildren}>
           <img
