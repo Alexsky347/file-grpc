@@ -24,7 +24,7 @@ export function CardC({ metaData, reRender, setReRender }: MainProperties): Reac
 
   useEffect(() => {
     setNewFileName(metaData?.name);
-  }, [message, hasDeleted, hasRenamed, metaData?.name]);
+  }, [message, hasDeleted, hasRenamed, metaData]);
 
   const handleDownload = () => {
     if (metaData?.name && metaData?.url) {
@@ -71,8 +71,11 @@ export function CardC({ metaData, reRender, setReRender }: MainProperties): Reac
         />
       </figure>
       <div className='card-body'>
-        <h2 className='card-title'>{format(new Date(metaData?.createdDate), 'yyyy-MM-dd')}</h2>
-        <p>{(metaData?.size / 100).toFixed(2)} bytes</p>
+        <h2 className='card-title truncate'>{metaData?.name}</h2>
+        <div className='card-body space-x-4 inline-block'>
+          <span>{format(new Date(metaData?.createdDate), 'yyyy-MM-dd')}</span>
+          <span>{(metaData?.size / 100).toFixed(2)} bytes</span>
+        </div>
         <div className='card-actions justify-end'>
           <button onClick={handleZip} className='btn btn-success'>
             <ArchiveIcon />
@@ -83,7 +86,7 @@ export function CardC({ metaData, reRender, setReRender }: MainProperties): Reac
           <button onClick={handleRename} className='btn btn-warning'>
             <Pencil1Icon />
           </button>
-          <DialogDeleteFile metaData={metaData} reRender={reRender} setReRender={setReRender} />
+          <DialogDeleteFile metaData={metaData} setReRender={setReRender} />
         </div>
       </div>
     </div>
