@@ -47,8 +47,8 @@ export const findAll = createAsyncThunk(
 export const deleteFile = createAsyncThunk(
   'file/deleteFile',
   async (metaData: MyFile, thunkAPI) => {
-    if (metaData?.uuid) {
-      const response = await FileService.deleteFile(metaData.uuid);
+    if (metaData?.name) {
+      const response = await FileService.deleteFile(metaData.name);
       if (response.status === 200) {
         thunkAPI.dispatch(setMessage({ message: 'File deleted successfully !' }));
         return { hasDeleted: true };

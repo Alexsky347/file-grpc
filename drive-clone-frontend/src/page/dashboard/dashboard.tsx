@@ -7,7 +7,6 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
-  useId,
   useRef,
   useState,
 } from 'react';
@@ -69,30 +68,32 @@ export default function Dashboard({
   return (
     <>
       <InputSearch searchValue={search} searchSetter={setSearch} />
-
-      {files && files?.length > 0 ? (
-        <>
-          <div className='flex justify-center'>
-            <div
-              className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6'
-              style={{ marginLeft: `${widthNav}px` }}
-            >
-              <NewDirectory isAddingDirectory={false} />
-              {files.map((file) => (
+      <div className='flex justify-center'>
+        <div
+          className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6'
+          style={{ marginLeft: `${widthNav}px` }}
+        >
+          <NewDirectory isAddingDirectory={false} />
+          {files && files?.length > 0 ? (
+            <>
+              {files.map((file, index) => (
                 <CardC
                   metaData={file}
-                  key={file.id}
+                  key={file?.id + index}
                   reRender={reRender}
                   setReRender={setReRender}
                 />
               ))}
-            </div>
-          </div>
-        </>
-      ) : (
-        <h2 className='w-full text-2xl'>No files yet.</h2>
-      )}
-      <div className='fixed bottom-10 m-auto w-full z-10'>
+            </>
+          ) : (
+            <h2 className='w-full m-auto text-center text-2xl'>No files yet.</h2>
+          )}
+        </div>
+      </div>
+      <div
+        className='fixed bottom-10 m-auto w-full z-10'
+        // className=""
+      >
         <Pagination
           key={'pagination'}
           totalCount={count}

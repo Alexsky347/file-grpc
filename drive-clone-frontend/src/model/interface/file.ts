@@ -1,8 +1,6 @@
 export interface MyFile {
   id: number;
-  uuid: string;
   type: string;
-  data: string;
   url: string;
   name: string;
   contentType: string;
