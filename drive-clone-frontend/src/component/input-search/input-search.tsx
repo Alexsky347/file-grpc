@@ -29,7 +29,6 @@ export function InputSearch({ searchValue, searchSetter }: InputSearchProperties
     searchSetter('');
   };
   return (
-    <>
       <div className='mb-7 flex items-center justify-center space-x-2'>
         <svg
           className='text-gray-500 -mr-10 z-10'
@@ -64,6 +63,5 @@ export function InputSearch({ searchValue, searchSetter }: InputSearchProperties
           </button>
         ) : undefined}
       </div>
-    </>
   );
 }
