@@ -23,14 +23,15 @@ export function CardC({ metaData, reRender, setReRender }: MainProperties): Reac
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
+    console.log(metaData);
     setNewFileName(metaData?.name);
   }, [message, hasDeleted, hasRenamed, metaData]);
 
   const handleDownload = () => {
-    if (metaData?.name && metaData?.url) {
+    if (metaData?.name && metaData?.data) {
       const anchor = document.createElement('a');
       const contentType = metaData?.contentType;
-      anchor.href = `data:${contentType};base64,${metaData?.url}`;
+      anchor.href = `data:${contentType};base64,${metaData?.data}`;
       anchor.type = contentType;
       anchor.download = metaData.name;
       anchor.click();
@@ -62,11 +63,7 @@ export function CardC({ metaData, reRender, setReRender }: MainProperties): Reac
         <img
           loading='lazy'
           className='object-contain w-full h-48'
-          src={
-            metaData?.url && metaData?.contentType.includes('image')
-              ? `data:${metaData.contentType};base64,${metaData?.url}`
-              : '/static/no-picture.jpg'
-          }
+          src={`data:${metaData.contentType};base64,${metaData?.data}`}
           alt='Picture'
         />
       </figure>
