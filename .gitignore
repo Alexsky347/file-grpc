@@ -8,5 +8,4 @@ drive-frontend/.eslintcache
 
 drive-clone-backend/log
 drive-clone-backend/.idea
-
-**/static/**/*
+drive-clone-backend/src/main/resources/static
