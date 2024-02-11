@@ -88,11 +88,14 @@ public class FilesStorageService implements IFilesStorageService {
 
 
     @Override
-    public Map<String, Object> loadAll(final User user, final int limit, final int offset, final String search, final String sortBy, final String sortMode) throws IOException {
+    public Map<String, Object> loadAll(final User user, final int limit, final int offset, String search, final String sortBy, final String sortMode) throws IOException {
         String sortByProperty = sortBy != null ? sortBy : "name";
         Sort.Direction sortByDirection = Arrays.stream(Sort.Direction.values()).anyMatch(s -> s != null && s.name().equals(sortMode)) ? Sort.Direction.valueOf(sortMode) : Sort.Direction.ASC;
         Map<String, Object> data = new HashMap<>();
         int pageNumber = offset / limit;
+        if (search.isEmpty()) {
+            search = "%";
+        }
 
 
         Pageable pageable = PageRequest.of(pageNumber, limit, Sort.by(sortByDirection, sortByProperty));
