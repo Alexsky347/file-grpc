@@ -23,7 +23,7 @@ export default function Layout() {
   return (
     <Box>
       <Header handleSideNav={toggleSideNav} />
-      <SideNav sideNavOpen={sideNavOpen} reRender={reRender} setReRender={handleRender} />
+      <SideNav sideNavOpen={sideNavOpen} setReRender={handleRender} addDirectory={() => {}} />
       <div style={{ paddingTop: '5.5rem' }} className={`${sideNavOpen ? '' : 'lg:pl-8 lg:pr-8'} `}>
         <Dashboard sideNavOpen={sideNavOpen} reRender={reRender} setReRender={handleRender} />
       </div>

@@ -1,5 +1,5 @@
 import http from './http-common';
-import { LoginProps as LoginProperties } from '../../model/interface/login-props';
+import { LoginProps as LoginProperties } from '../../model/interface/login-properties';
 import { Constants } from '../../utils/main/constants';
 
 export class AuthService {

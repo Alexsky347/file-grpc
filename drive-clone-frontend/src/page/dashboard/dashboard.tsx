@@ -1,20 +1,10 @@
 import Pagination from '../../component/pagination/pagination.tsx';
 import { CardC } from '../../component/card-c/card.c.tsx';
 import { FileCollection } from '../../model/interface/file.ts';
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { AppDispatch } from '../../store/store.ts';
 import { useDispatch } from 'react-redux';
 import { findAll } from '../../store/slices/file.ts';
-import { Cross1Icon } from '@radix-ui/react-icons';
-import { debounce } from '../../utils/main/utils.ts';
 import { isMobile } from 'react-device-detect';
 import NewDirectory from '../../component/new-directory/new-directory.tsx';
 import { InputSearch } from '../../component/input-search/input-search.tsx';
@@ -76,13 +66,8 @@ export default function Dashboard({
           <NewDirectory isAddingDirectory={false} />
           {files && files?.length > 0 ? (
             <>
-              {files.map((file, index) => (
-                <CardC
-                  metaData={file}
-                  key={file?.id + index}
-                  reRender={reRender}
-                  setReRender={setReRender}
-                />
+              {files.map((file) => (
+                <CardC metaData={file} key={file.id ?? file.name} setReRender={setReRender} />
               ))}
             </>
           ) : (

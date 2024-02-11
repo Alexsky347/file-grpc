@@ -59,12 +59,17 @@ public class FilesStorageService implements IFilesStorageService {
             Files.createDirectory(userDir);
             Files.createDirectory(getUserZipDir(username));
         }
+
         Path filePath = userDir.resolve(Objects.requireNonNull(file.getOriginalFilename()));
+        Map<String, String> mp = new HashMap<>();
+        mp.put("file uploaded", filePath.getFileName().toString());
+        if(!fileRepository.findByNameAndUser(file.getOriginalFilename(), user).isEmpty()){
+            return mp;
+        }
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
         FileInfo fileInfo = new FileInfo(filePath.getFileName().toString(), new File(filePath.toString()).length(), user, new Date());
         fileRepository.save(fileInfo);
-        Map<String, String> mp = new HashMap<>();
-        mp.put("file uploaded", filePath.getFileName().toString());
+
         return mp;
     }
 
@@ -106,13 +111,17 @@ public class FilesStorageService implements IFilesStorageService {
     }
 
     @Override
-    public boolean deleteOne(String filename, User user) throws IOException {
+    public boolean deleteOne(Long id, User user) throws IOException {
         String username = user.getUsername();
         Path userDir = this.getUserDir(username);
-        Path file = Paths.get(userDir + "/" + filename);
+        Optional<FileInfo> fileFound = fileRepository.findById(id);
+        if(fileFound.isEmpty()){
+            throw new CustomError("Could not delete the file!");
+        }
+        Path file = Paths.get(userDir + "/" + fileFound.get().getName());
         Resource resource = new UrlResource(file.toUri());
         if (resource.exists() || resource.isReadable()) {
-            fileRepository.findByName(filename).ifPresent(fileRepository::delete);
+            fileRepository.delete(fileFound.get());
             return FileSystemUtils.deleteRecursively(file);
         } else {
             throw new CustomError("Could not delete the file!");
@@ -135,18 +144,16 @@ public class FilesStorageService implements IFilesStorageService {
         Path file = Paths.get(userDir + "/" + oldName);
         Resource resource = new UrlResource(userDir.toUri());
         if (resource.exists() || resource.isReadable()) {
-            Optional<FileInfo> fileFound = fileRepository.findByNameAndUser(oldName, user);
-            if (fileFound.isEmpty()) {
+            List<FileInfo> fileFound = fileRepository.findByNameAndUser(oldName, user);
+            if (fileFound.size() != 1) {
                 throw new CustomError("Could not rename the file!");
             }
             boolean isRenamed = Files.move(file, file.resolveSibling(newName)).isAbsolute();
-
-            fileFound.ifPresent(fileInfo -> {
-                fileInfo.setName(newName);
-                fileInfo.setUrl("/static/" + username + "/" + newName);
-                fileInfo.setLastModifiedDate(new Date());
-                fileRepository.save(fileInfo);
-            });
+            FileInfo fileFoundInDb = fileFound.get(0);
+            fileFoundInDb.setName(newName);
+            fileFoundInDb.setUrl("/static/" + username + "/" + newName);
+            fileFoundInDb.setLastModifiedDate(new Date());
+            fileRepository.save(fileFoundInDb);
             return isRenamed;
         } else {
             throw new CustomError("Could not rename the file!");

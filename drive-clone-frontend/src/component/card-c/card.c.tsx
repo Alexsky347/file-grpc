@@ -11,11 +11,10 @@ import { MessageState } from '../../model/interface/message-state.ts';
 
 interface MainProperties {
   metaData: MyFile;
-  reRender: boolean;
   setReRender: Dispatch<SetStateAction<boolean>>;
 }
 
-export function CardC({ metaData, reRender, setReRender }: MainProperties): ReactElement {
+export function CardC({ metaData, setReRender }: MainProperties): ReactElement {
   const [newFileName, setNewFileName] = useState<string | undefined>('');
   const { message } = useSelector((state: { message: MessageState }) => state.message);
   const { hasDeleted, hasRenamed } = useSelector((state: { file: FileState }) => state.file);
@@ -41,7 +40,7 @@ export function CardC({ metaData, reRender, setReRender }: MainProperties): Reac
 
   // Rename
   const handleRename = async () => {
-    const newFileNamed = handleFileName(newFileName || '');
+    const newFileNamed = handleFileName(newFileName ?? '');
     await dispatch(renameFile({ metaData, newFileName: newFileNamed }));
   };
 
@@ -67,7 +66,7 @@ export function CardC({ metaData, reRender, setReRender }: MainProperties): Reac
               ? `data:${metaData.contentType};base64,${metaData?.url}`
               : '/static/no-picture.jpg'
           }
-          alt='Picture'
+          alt={metaData?.name}
         />
       </figure>
       <div className='card-body'>

@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEventHandler, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import newDirectory from '../../assets/static/new-directory.svg';
 import { TrashIcon } from '@radix-ui/react-icons';
 

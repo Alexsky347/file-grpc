@@ -25,7 +25,6 @@ function Login(): JSX.Element {
   async function loginUser(data: FormData) {
     const username = data.get('username') as string;
     const password = data.get('password') as string;
-    console.log(username, password);
     await dispatch(login({ username, password }));
   }
 

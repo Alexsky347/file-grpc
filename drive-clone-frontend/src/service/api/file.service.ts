@@ -51,8 +51,8 @@ export class FileService {
     });
   };
 
-  static deleteFile = async (filename: string) => {
-    return await http.get(`file/delete/${filename}`);
+  static deleteFile = async (id: number) => {
+    return await http.get(`file/delete/${id}`);
   };
 
   static renameFile = async (oldName: string, newName: string) => {

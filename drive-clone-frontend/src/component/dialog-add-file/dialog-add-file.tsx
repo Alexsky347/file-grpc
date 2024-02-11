@@ -4,7 +4,6 @@ import { ItResponse } from '../../model/interface/it-response.ts';
 import { FileService } from '../../service/api/file.service.ts';
 import { toast } from 'react-toastify';
 import fileAddIcon from '../../assets/static/file-add.svg';
-import directoryAddIcon from '../../assets/static/directory-add.svg';
 
 interface DialogAddFileProperties {
   sideNavOpen: boolean;
