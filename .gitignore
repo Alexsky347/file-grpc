@@ -1,6 +1,11 @@
 .idea
 .vscode
 .env
-drive-frontend/.env
 
-backend/log
+drive-frontend/.env
+drive-frontend/node_modules
+drive-frontend/.eslintcache
+
+drive-clone-backend/log
+drive-clone-backend/.idea
+drive-clone-backend/src/main/resources/static

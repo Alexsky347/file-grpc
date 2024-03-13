@@ -23,7 +23,7 @@ public interface IFilesStorageService {
 
     void deleteAll();
 
-    boolean deleteOne(String filename, User user) throws IOException;
+    boolean deleteOne(Long id, User user) throws IOException;
 
     boolean renameOne(String oldName, String newName, User user) throws IOException;
 

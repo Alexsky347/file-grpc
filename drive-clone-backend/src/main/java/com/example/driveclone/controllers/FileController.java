@@ -81,9 +81,9 @@ public class FileController {
     }
 
     //DELETE AND PUT /PATCH = > CORS ISSUE
-    @GetMapping(value = "/file/delete/{filename:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public boolean deleteFile(@PathVariable String filename, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
-        return storageService.deleteOne(filename, jwtUtils.retrieveUser(httpServletRequest));
+    @GetMapping(value = "/file/delete/{id:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean deleteFile(@PathVariable Long id, HttpServletRequest httpServletRequest) throws IOException, ParseException, JOSEException {
+        return storageService.deleteOne(id, jwtUtils.retrieveUser(httpServletRequest));
     }
 
 

@@ -24,6 +24,7 @@ public class FileInfo {
             LoggerFactory.getLogger(FileUtil.class);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long id;
 
     @Getter
@@ -53,7 +54,7 @@ public class FileInfo {
     @Getter
     @Setter
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "user_id", nullable = true)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public FileInfo() {
