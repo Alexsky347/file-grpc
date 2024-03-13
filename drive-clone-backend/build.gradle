@@ -1,9 +1,9 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.1.3'
-    id 'io.spring.dependency-management' version '1.1.3'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
     id 'org.hibernate.orm' version '6.2.7.Final'
-    id 'org.graalvm.buildtools.native' version '0.9.24'
+    id 'org.graalvm.buildtools.native'
 }
 
 group = 'com.example'
@@ -23,35 +23,36 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'org.postgresql:postgresql'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'io.projectreactor:reactor-test'
-    testImplementation 'org.springframework.security:spring-security-test'
 
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+dependencies {
+    implementation Spring.boot.data.jpa
+    implementation Spring.boot.jdbc
+    implementation Spring.boot.security
+    implementation Spring.boot.validation
+    implementation Spring.boot.web
+    implementation Spring.boot.webflux
+    compileOnly 'org.projectlombok:lombok:_'
+    developmentOnly Spring.boot.devTools
+    runtimeOnly 'org.postgresql:postgresql:_'
+    annotationProcessor Spring.boot.configurationProcessor
+    annotationProcessor 'org.projectlombok:lombok:_'
+    testImplementation Spring.boot.test
+    testImplementation Spring.reactor.test
+    testImplementation Spring.security.spring_security_test
+
+    implementation 'io.jsonwebtoken:jjwt-api:_'
+    implementation 'io.jsonwebtoken:jjwt-impl:_'
+    implementation 'io.jsonwebtoken:jjwt-jackson:_'
 
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
     implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
     implementation group: 'io.springfox', name: 'springfox-spring-web', version: '3.0.0'
 
-    implementation 'commons-io:commons-io:2.14.0'
+    implementation 'commons-io:commons-io:_'
 
 
-    implementation 'com.nimbusds:nimbus-jose-jwt:9.31'
+    implementation 'com.nimbusds:nimbus-jose-jwt:_'
 
 
 }
