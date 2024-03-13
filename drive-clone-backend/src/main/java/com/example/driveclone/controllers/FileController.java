@@ -2,6 +2,7 @@ package com.example.driveclone.controllers;
 
 import com.example.driveclone.security.jwt.JwtUtils;
 import com.example.driveclone.utils.exception.CustomExceptionWithRequest;
+import com.example.driveclone.utils.main.SecurityEscape;
 import com.example.driveclone.utils.storage.service.FilesStorageService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -70,7 +71,7 @@ public class FileController {
                             HttpServletRequest httpServletRequest,
                             HttpServletResponse httpServletResponse) throws MalformedURLException, ParseException, JOSEException {
         Resource file = storageService.load(filename, jwtUtils.retrieveUser(httpServletRequest));
-        httpServletResponse.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilename());
+        httpServletResponse.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + SecurityEscape.cleanIt(Objects.requireNonNull(file.getFilename())));
         httpServletResponse.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
         return file;
     }
