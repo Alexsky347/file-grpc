@@ -18,7 +18,7 @@ public class Role {
   private ERole name;
 
   public Role() {
-
+    // TODO document why this constructor is empty
   }
 
 }

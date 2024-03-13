@@ -49,7 +49,7 @@ public class DriveCloneApplication {
             String email = EnvService.getProp("user.email");
             String pwd = EnvService.getProp("user.pwd");
 
-            logger.debug("USERNAME {0} .", username);
+            logger.debug("USERNAME {} .", username);
             Optional<User> user = userRepository.findByUsername(username);
 
 //            user.ifPresent(userRepository::delete);

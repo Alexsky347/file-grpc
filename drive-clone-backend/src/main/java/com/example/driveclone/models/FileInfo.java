@@ -21,7 +21,7 @@ import java.util.Date;
 public class FileInfo {
 
     private static final Logger logger =
-            LoggerFactory.getLogger(FileUtil.class);
+            LoggerFactory.getLogger(FileInfo.class);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter

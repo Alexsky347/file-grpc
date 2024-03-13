@@ -23,9 +23,6 @@ import java.util.*;
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class FileController {
-
-    private static final Logger logger =
-            LoggerFactory.getLogger(FileController.class);
     private final JwtUtils jwtUtils;
     private final FilesStorageService storageService;
 

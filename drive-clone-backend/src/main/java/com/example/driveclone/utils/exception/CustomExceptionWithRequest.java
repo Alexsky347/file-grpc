@@ -1,7 +1,9 @@
 package com.example.driveclone.utils.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 
+@Getter
 public class CustomExceptionWithRequest extends RuntimeException {
     private final HttpServletRequest request;
 
@@ -10,7 +12,4 @@ public class CustomExceptionWithRequest extends RuntimeException {
         this.request = request;
     }
 
-    public HttpServletRequest getRequest() {
-        return request;
-    }
 }

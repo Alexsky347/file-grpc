@@ -60,7 +60,7 @@ public abstract class KeysPairUtils {
         var roles = (List<String>) claims.getClaim("roles");
         var authorities = roles == null ? null : roles.stream()
                 .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+                .toList();
         return new UsernamePasswordAuthenticationToken(username, null, authorities);
     }
 
