@@ -4,6 +4,7 @@ import com.example.driveclone.models.User;
 import com.example.driveclone.repository.UserRepository;
 import com.example.driveclone.security.services.UserDetailsImpl;
 import com.example.driveclone.utils.main.KeysPairUtils;
+import com.example.driveclone.utils.main.SecurityEscape;
 import com.nimbusds.jose.JOSEException;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.Cookie;
@@ -105,11 +106,11 @@ public class JwtUtils {
                 if (cookie.getName().equals(jwtCookie)) {
                     String token = cookie.getValue();
                     UsernamePasswordAuthenticationToken authenticationToken = KeysPairUtils.parseToken(token);
-                    user = userRepository.findByUsername((String) authenticationToken.getPrincipal());
+                    String usernameSanitized = SecurityEscape.cleanIt((String) authenticationToken.getPrincipal());
+                    user = userRepository.findByUsername(usernameSanitized);
                 }
             }
         }
-
         return Optional.of(user).get().orElseThrow(() -> new RuntimeException("Error: User is not found."));
     }
 }
