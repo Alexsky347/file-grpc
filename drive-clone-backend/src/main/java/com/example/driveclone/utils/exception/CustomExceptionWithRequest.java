@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class CustomExceptionWithRequest extends RuntimeException {
-    private final HttpServletRequest request;
+    private final transient HttpServletRequest request;
 
     public CustomExceptionWithRequest(String message, HttpServletRequest request) {
         super(message);
