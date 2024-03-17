@@ -1,13 +1,13 @@
 import { Dispatch, ReactElement, SetStateAction, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
-import { renameFile, zipFile } from '../../store/slices/file';
+import { deleteFile, renameFile, zipFile } from '../../store/slices/file';
 import { FileState, MyFile } from '../../model/interface/file';
 import { format } from 'date-fns';
-import { ArchiveIcon, DownloadIcon, Pencil1Icon } from '@radix-ui/react-icons';
+import { ArchiveIcon, DownloadIcon, Pencil1Icon, TrashIcon } from '@radix-ui/react-icons';
 import { displayToast } from '../../utils/toast/toast-service.ts';
-import DialogDeleteFile from '../dialog-delete-file/dialog-delete-file.tsx';
 import { MessageState } from '../../model/interface/message-state.ts';
+import DialogActionFile from '../dialog-action-file copy/dialog-action-file.tsx';
 
 interface MainProperties {
   metaData: MyFile;
@@ -38,10 +38,19 @@ export function CardC({ metaData, setReRender }: MainProperties): ReactElement {
     }
   };
 
-  // Rename
   const handleRename = async () => {
     const newFileNamed = handleFileName(newFileName ?? '');
-    await dispatch(renameFile({ metaData, newFileName: newFileNamed }));
+    const response: any = await dispatch(renameFile({ metaData, newFileName: newFileNamed }));
+    if (!response?.error) {
+      setReRender((previous: boolean) => !previous);
+    }
+  };
+
+  const handleDelete = async () => {
+    const response: any = await dispatch(deleteFile(metaData));
+    if (!response?.error) {
+      setReRender((previous: boolean) => !previous);
+    }
   };
 
   const handleZip = async () => {
@@ -82,10 +91,23 @@ export function CardC({ metaData, setReRender }: MainProperties): ReactElement {
           <button onClick={handleDownload} className='btn btn-success'>
             <DownloadIcon />
           </button>
-          <button onClick={handleRename} className='btn btn-warning'>
-            <Pencil1Icon />
-          </button>
-          <DialogDeleteFile metaData={metaData} setReRender={setReRender} />
+          <DialogActionFile
+            title={'Rename Item'}
+            IconComponent={Pencil1Icon}
+            actionColor={'amber'}
+            actionLabel={'Rename'}
+            callBackFn={handleRename}
+            dataToEdit={metaData?.name}
+            setterCallBackFn={setNewFileName}
+          />
+          <DialogActionFile
+            title={'Delete Item'}
+            description={'Are you sure? This picture will no longer be accessible.'}
+            IconComponent={TrashIcon}
+            actionColor={'red'}
+            actionLabel={'Delete'}
+            callBackFn={handleDelete}
+          />
         </div>
       </div>
     </div>

@@ -31,7 +31,6 @@ public class FileInfo {
     @Setter
     private String name;
 
-    @Setter
     private String url;
 
     @Getter
@@ -82,5 +81,9 @@ public class FileInfo {
             logger.error(String.valueOf(e));
             return null;
         }
+    }
+
+    public void setUrl(String s) {
+        this.url = s;
     }
 }

@@ -33,10 +33,6 @@ export default function DialogAddFile({
         toast.error('Please choose file(s) to upload');
         break;
       }
-      case undefined: {
-        toast.error('Please choose file(s) to upload');
-        break;
-      }
       case 1: {
         setIsLoading((previousState) => !previousState);
         data.append('file', files[0]);
