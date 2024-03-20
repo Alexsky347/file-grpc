@@ -9,33 +9,7 @@ interface DialogActionFileProperties<T> {
   setReRender: Dispatch<SetStateAction<boolean>>;
   title: string;
   IconComponent: React.ComponentType;
-  actionColor:
-    | 'tomato'
-    | 'red'
-    | 'ruby'
-    | 'crimson'
-    | 'pink'
-    | 'plum'
-    | 'purple'
-    | 'violet'
-    | 'iris'
-    | 'indigo'
-    | 'blue'
-    | 'cyan'
-    | 'teal'
-    | 'jade'
-    | 'green'
-    | 'grass'
-    | 'brown'
-    | 'orange'
-    | 'sky'
-    | 'mint'
-    | 'lime'
-    | 'yellow'
-    | 'amber'
-    | 'gold'
-    | 'bronze'
-    | 'gray';
+  actionColor: string;
   actionLabel: string;
   callBackFn: (metaData: MyFile) => void;
   description?: string;
@@ -78,7 +52,7 @@ export default function DialogActionFile({
             </Button>
           </AlertDialog.Cancel>
           <AlertDialog.Action>
-            <Button variant='solid' color='red' onClick={callBackFn}>
+            <Button variant='solid' color={actionColor} onClick={callBackFn}>
               {actionLabel}
             </Button>
           </AlertDialog.Action>

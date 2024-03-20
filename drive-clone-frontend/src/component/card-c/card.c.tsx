@@ -94,7 +94,7 @@ export function CardC({ metaData, setReRender }: MainProperties): ReactElement {
           <DialogActionFile
             title={'Rename Item'}
             IconComponent={Pencil1Icon}
-            actionColor={'amber'}
+            actionColor={'yellow'}
             actionLabel={'Rename'}
             callBackFn={handleRename}
             dataToEdit={metaData?.name}

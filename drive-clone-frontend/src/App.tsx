@@ -12,7 +12,7 @@ import Layout from './component/layout/layout.tsx';
 
 function App() {
   const { user: currentUser } = useSelector((state: { auth: AuthState }) => state.auth);
-  const { isLoading } = useSelector((state: { file: { isLoading: boolean } }) => state.file);
+  const { isLoading } = useSelector((state: { loader: { isLoading: boolean } }) => state.loader);
 
   const dispatch = useDispatch<AppDispatch>();
 

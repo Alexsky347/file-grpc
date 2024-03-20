@@ -12,7 +12,6 @@ export interface MyFile {
 type FileCollection = MyFile[];
 
 interface FileState {
-  isLoading: boolean;
   total: number;
   data: MyFile[] | undefined;
   hasDeleted: boolean;
