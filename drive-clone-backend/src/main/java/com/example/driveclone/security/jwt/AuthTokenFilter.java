@@ -1,5 +1,6 @@
 package com.example.driveclone.security.jwt;
 
+import com.example.driveclone.models.User;
 import com.example.driveclone.security.services.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,9 +33,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getUserNameFromJwtToken(jwt);
+                User user = jwtUtils.retrieveUser(request);
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                if(user == null) {
+                    LOGGER.error("User not found");
+                    return;
+                }
+
+                UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails,

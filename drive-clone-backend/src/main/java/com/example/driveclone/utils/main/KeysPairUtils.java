@@ -63,4 +63,10 @@ public abstract class KeysPairUtils {
         return new UsernamePasswordAuthenticationToken(username, null, authorities);
     }
 
+    public static boolean validateToken(String token) throws ParseException, JOSEException {
+        SignedJWT signedJWT = SignedJWT.parse(token);
+        JWSVerifier verifier = new RSASSAVerifier(publicKey);
+        return signedJWT.verify(verifier);
+    }
+
 }

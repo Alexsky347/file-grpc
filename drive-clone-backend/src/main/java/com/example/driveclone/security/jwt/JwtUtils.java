@@ -59,33 +59,12 @@ public class JwtUtils {
         return ResponseCookie.from(jwtCookie, "").path("/").build();
     }
 
-    public String getUserNameFromJwtToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key()).build()
-                .parseClaimsJws(token).getBody().getSubject();
-    }
-
     private RSAPrivateKey key() {
         return KeysPairUtils.getPrivateKey();
     }
 
-    public boolean validateJwtToken(String authToken) {
-        try {
-            Jwts.parserBuilder()
-                    .setSigningKey(key())
-                    .build()
-                    .parseClaimsJws(authToken);
-            return true;
-        } catch (MalformedJwtException e) {
-            logger.error("Invalid JWT token: {}", e.getMessage());
-        } catch (ExpiredJwtException e) {
-            logger.error("JWT token is expired: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            logger.error("JWT token is unsupported: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            logger.error("JWT claims string is empty: {}", e.getMessage());
-        }
-
-        return false;
+    public boolean validateJwtToken(String authToken) throws ParseException, JOSEException {
+        return KeysPairUtils.validateToken(authToken);
     }
 
     public String generateTokenFromUsername(String username) {
@@ -93,7 +72,7 @@ public class JwtUtils {
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(key(), SignatureAlgorithm.RS256)
+                .signWith(key())
                 .compact();
     }
 
