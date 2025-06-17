@@ -1,0 +1,39 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "io.quarkus.example";
+option java_outer_classname = "FileInfoProto";
+
+package com.drive.backend.grpc.file_info;
+
+service FileService {
+  rpc UploadFile (FileUploadRequest) returns (FileUploadResponse);
+  rpc DeleteFile (FileDeleteRequest) returns (FileOperationResponse);
+  rpc RenameFile (FileRenameRequest) returns (FileOperationResponse);
+}
+
+message FileUploadRequest {
+  string filename = 1;
+  bytes content = 2;
+  string user = 3;
+}
+
+message FileUploadResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message FileDeleteRequest {
+  string filename = 1;
+  string user = 2;
+}
+
+message FileRenameRequest {
+  string oldFilename = 1;
+  string newFilename = 2;
+  string user = 3;
+}
+
+message FileOperationResponse {
+  bool success = 1;
+  string message = 2;
+}
