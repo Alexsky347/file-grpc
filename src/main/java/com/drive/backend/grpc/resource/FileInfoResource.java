@@ -25,6 +25,8 @@ import org.jboss.resteasy.reactive.RestForm;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,19 +64,25 @@ public class FileInfoResource {
                 .onItem().transformToUni(objectName -> {
                     try {
                         byte[] fileContent = Files.readAllBytes(file.uploadedFile());
+                        String trimedObjectName = objectName.trim();
 
                         FileUploadRequest request = FileUploadRequest.newBuilder()
-                                .setFilename(objectName) // Store the MinIO object name in gRPC
+                                .setFilename(trimedObjectName) // Store the MinIO object name in gRPC
                                 .setContent(com.google.protobuf.ByteString.copyFrom(fileContent))
                                 .setUser(username)
                                 .build();
 
                         return fileService.uploadFile(request)
-                                .onItem().transform(response ->
-                                        new FileResponse(response.getSuccess(),
-                                                response.getMessage(),
-                                                minioService.getMinioUrl() + "/" +
-                                                        minioService.getBucketName() + "/" + objectName));
+                                .onItem().transform(response -> {
+                                    // URL encode the objectName to handle spaces and special characters
+                                    String encodedObjectName = URLEncoder.encode(objectName, StandardCharsets.UTF_8)
+                                            .replace("+", "%20"); // Replace + with %20 for spaces
+
+                                    return new FileResponse(response.getSuccess(),
+                                            response.getMessage(),
+                                            minioService.getMinioUrl() + "/" +
+                                                    minioService.getBucketName() + "/" + encodedObjectName);
+                                });
                     } catch (IOException e) {
                         return Uni.createFrom().item(
                                 new FileResponse(false, "Error reading file: " + e.getMessage(), null));

@@ -16,6 +16,8 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
@@ -244,18 +246,22 @@ public class MinioService {
                             String objectName = item.objectName();
                             String filename = extractFilenameFromObjectName(objectName);
 
+                            // URL encode the object name for the file URL
+                            String encodedObjectName = URLEncoder.encode(objectName, StandardCharsets.UTF_8)
+                                    .replace("+", "%20"); // Replace + with %20 for spaces
+
                             files.add(new FileInfo(
                                     objectName,
                                     filename,
                                     item.size(),
                                     Date.from(item.lastModified().toInstant()),
-                                    minioUrl + "/" + bucket + "/" + objectName
+                                    minioUrl + "/" + bucket + "/" + encodedObjectName
                             ));
                         }
                     }
 
                     return files;
-                } catch (CustomRunTimeException e) {
+                } catch (Exception e) {
                     Log.error("Error listing files for user: " + username, e);
                     throw new CustomRunTimeException("Failed to list user files", e);
                 }
