@@ -7,26 +7,26 @@ import java.io.Serial;
  * This class extends RuntimeException and provides several constructors
  * to create exceptions with different levels of detail.
  */
-public class CustomException extends RuntimeException {
+public class CustomRunTimeException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public CustomException() {
+    public CustomRunTimeException() {
     }
 
-    public CustomException(String message) {
+    public CustomRunTimeException(String message) {
         super(message);
     }
 
-    public CustomException(String message, Throwable cause) {
+    public CustomRunTimeException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public CustomException(Throwable cause) {
+    public CustomRunTimeException(Throwable cause) {
         super(cause);
     }
 
-    public CustomException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public CustomRunTimeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

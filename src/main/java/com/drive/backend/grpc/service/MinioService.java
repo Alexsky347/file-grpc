@@ -2,7 +2,7 @@ package com.drive.backend.grpc.service;
 
 import com.drive.backend.grpc.config.GrpcConfig;
 import com.drive.backend.grpc.dto.FileInfo;
-import com.drive.backend.grpc.exception.CustomException;
+import com.drive.backend.grpc.exception.CustomRunTimeException;
 import io.minio.*;
 import io.minio.messages.Item;
 import io.quarkus.logging.Log;
@@ -33,7 +33,7 @@ public class MinioService {
     private final String bucket;
 
     @Inject
-    MinioService(Vertx vertx,GrpcConfig grpcConfig) {
+    MinioService(Vertx vertx, GrpcConfig grpcConfig) {
         this.vertx = vertx;
         this.minioUrl = grpcConfig.minio().url();
         this.accessKey = grpcConfig.minio().accessKey();
@@ -71,11 +71,52 @@ public class MinioService {
             if (!bucketExists) {
                 Log.info("Creating bucket: " + bucket);
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
+
+                // Set the bucket policy to public read
+                setBucketPolicy();
             } else {
                 Log.info("Bucket already exists: " + bucket);
+                // Make sure the policy is set even if the bucket exists
+                setBucketPolicy();
             }
         } catch (Exception e) {
             Log.error("Error checking/creating bucket", e);
+            throw new CustomRunTimeException("Failed to create or access bucket: " + bucket, e);
+        }
+    }
+
+    /**
+     * Set bucket policy to allow public read access
+     */
+    private void setBucketPolicy() {
+        try {
+            // Define a policy that allows public read access to objects
+            String policy = "{\n" +
+                    "    \"Version\": \"2012-10-17\",\n" +
+                    "    \"Statement\": [\n" +
+                    "        {\n" +
+                    "            \"Effect\": \"Allow\",\n" +
+                    "            \"Principal\": \"*\",\n" +
+                    "            \"Action\": [\n" +
+                    "                \"s3:GetObject\"\n" +
+                    "            ],\n" +
+                    "            \"Resource\": [\n" +
+                    "                \"arn:aws:s3:::" + bucket + "/*\"\n" +
+                    "            ]\n" +
+                    "        }\n" +
+                    "    ]\n" +
+                    "}";
+
+            // Set the bucket policy
+            minioClient.setBucketPolicy(SetBucketPolicyArgs.builder()
+                    .bucket(bucket)
+                    .config(policy)
+                    .build());
+
+            Log.info("Bucket policy set to public read for bucket: " + bucket);
+        } catch (Exception e) {
+            Log.error("Error setting bucket policy", e);
+            throw new CustomRunTimeException("Failed to set bucket policy", e);
         }
     }
 
@@ -98,9 +139,9 @@ public class MinioService {
                                     .build());
 
                             return objectName;
-                        } catch (Exception e) {
+                        } catch (CustomRunTimeException e) {
                             Log.error("Error uploading file", e);
-                            throw new CustomException("File upload failed", e);
+                            throw new CustomRunTimeException("File upload failed", e);
                         }
                     })
                     .subscribe().with(emitter::complete, emitter::fail);
@@ -116,7 +157,7 @@ public class MinioService {
                                     .object(objectName)
                                     .build());
                             return true;
-                        } catch (Exception e) {
+                        } catch (CustomRunTimeException e) {
                             Log.error("Error deleting file", e);
                             return false;
                         }
@@ -133,9 +174,9 @@ public class MinioService {
                                     .bucket(bucket)
                                     .object(objectName)
                                     .build());
-                        } catch (Exception e) {
+                        } catch (CustomRunTimeException e) {
                             Log.error("Error downloading file", e);
-                            throw new CustomException("File download failed", e);
+                            throw new CustomRunTimeException("File download failed", e);
                         }
                     })
                     .subscribe().with(emitter::complete, emitter::fail);
@@ -165,9 +206,9 @@ public class MinioService {
                                     .build());
 
                             return Boolean.TRUE;
-                        } catch (Exception e) {
+                        } catch (CustomRunTimeException e) {
                             Log.error("Error renaming file", e);
-                            throw new CustomException("File rename failed", e);
+                            throw new CustomRunTimeException("File rename failed", e);
                         }
                     })
                     .subscribe().with(emitter::complete, emitter::fail);
@@ -214,9 +255,9 @@ public class MinioService {
                     }
 
                     return files;
-                } catch (Exception e) {
+                } catch (CustomRunTimeException e) {
                     Log.error("Error listing files for user: " + username, e);
-                    throw new CustomException("Failed to list user files", e);
+                    throw new CustomRunTimeException("Failed to list user files", e);
                 }
             })
             .subscribe().with(emitter::complete, emitter::fail);
