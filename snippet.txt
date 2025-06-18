@@ -1,9 +1,0 @@
-docker compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d ledainalexis.com
-docker compose run --rm certbot renew
-docker compose up -d
-
-docker compose up certbot
-docker compose exec frontend nginx -s reload
-https://mindsers.blog/post/https-using-nginx-certbot-docker/
-
-docker inspect drive-back --format "{{.Config.Env}}"

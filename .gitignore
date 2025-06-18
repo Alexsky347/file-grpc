@@ -1,11 +1,41 @@
+# Gradle
+.gradle/
+build/
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# IntelliJ
 .idea
+*.ipr
+*.iml
+*.iws
+
+# NetBeans
+nb-configuration.xml
+
+# Visual Studio Code
 .vscode
+.factorypath
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# patch
+*.orig
+*.rej
+
+# Local environment
 .env
 
-drive-frontend/.env
-drive-frontend/node_modules
-drive-frontend/.eslintcache
-
-drive-clone-backend/log
-drive-clone-backend/.idea
-drive-clone-backend/src/main/resources/static
+# Plugin directory
+/.quarkus/cli/plugins/
+# TLS Certificates
+.certs/
