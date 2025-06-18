@@ -2,6 +2,7 @@ package com.drive.backend.grpc.service;
 
 import com.drive.backend.grpc.config.GrpcConfig;
 import com.drive.backend.grpc.dto.FileInfo;
+import com.drive.backend.grpc.exception.CustomException;
 import io.minio.*;
 import io.minio.messages.Item;
 import io.quarkus.logging.Log;
@@ -99,7 +100,7 @@ public class MinioService {
                             return objectName;
                         } catch (Exception e) {
                             Log.error("Error uploading file", e);
-                            throw new RuntimeException("File upload failed", e);
+                            throw new CustomException("File upload failed", e);
                         }
                     })
                     .subscribe().with(emitter::complete, emitter::fail);
@@ -134,7 +135,7 @@ public class MinioService {
                                     .build());
                         } catch (Exception e) {
                             Log.error("Error downloading file", e);
-                            throw new RuntimeException("File download failed", e);
+                            throw new CustomException("File download failed", e);
                         }
                     })
                     .subscribe().with(emitter::complete, emitter::fail);
@@ -166,7 +167,7 @@ public class MinioService {
                             return Boolean.TRUE;
                         } catch (Exception e) {
                             Log.error("Error renaming file", e);
-                            throw new RuntimeException("File rename failed", e);
+                            throw new CustomException("File rename failed", e);
                         }
                     })
                     .subscribe().with(emitter::complete, emitter::fail);
@@ -215,7 +216,7 @@ public class MinioService {
                     return files;
                 } catch (Exception e) {
                     Log.error("Error listing files for user: " + username, e);
-                    throw new RuntimeException("Failed to list user files", e);
+                    throw new CustomException("Failed to list user files", e);
                 }
             })
             .subscribe().with(emitter::complete, emitter::fail);

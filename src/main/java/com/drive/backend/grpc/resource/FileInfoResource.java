@@ -37,6 +37,7 @@ import java.util.List;
 public class FileInfoResource {
 
     private final MinioService minioService;
+
     @GrpcClient
     FileService fileService;
 
