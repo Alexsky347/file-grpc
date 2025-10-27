@@ -1,11 +1,12 @@
 package com.drive.backend.grpc.exception.mapper;
 
-import com.drive.backend.grpc.exception.dto.ErrorResponse;
+import com.drive.backend.grpc.exception.data.EntityResponse;
 import io.quarkus.logging.Log;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -16,13 +17,22 @@ import java.util.UUID;
  */
 @Provider
 public class ThrowableMapper implements ExceptionMapper<Throwable> {
+    private static String getErrorMessage() {
+        try {
+            return ResourceBundle.getBundle("ValidationMessages").getString("System.error");
+        } catch (MissingResourceException e) {
+            Log.warn("ValidationMessages resource bundle not found, using fallback message", e);
+            return "An unexpected error occurred. Please contact support with the error ID.";
+        }
+    }
+
     @Override
     public Response toResponse(Throwable e) {
+        // TODO to change
         String errorId = UUID.randomUUID().toString();
         Log.error("errorId[{}]", errorId, e);
-        String defaultErrorMessage = ResourceBundle.getBundle("ValidationMessages").getString("System.error");
-        ErrorResponse.ErrorMessage errorMessage = new ErrorResponse.ErrorMessage(defaultErrorMessage);
-        ErrorResponse errorResponse = new ErrorResponse(errorId, errorMessage);
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorResponse).build();
+        String defaultErrorMessage = getErrorMessage();
+        EntityResponse entityResponse = new EntityResponse(errorId, defaultErrorMessage, false);
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(entityResponse).build();
     }
 }

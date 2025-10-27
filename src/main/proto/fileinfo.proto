@@ -24,12 +24,12 @@ message FileUploadResponse {
 }
 
 message FileDeleteRequest {
-  string filename = 1;
+  string uuid = 1;
   string user = 2;
 }
 
 message FileRenameRequest {
-  string oldFilename = 1;
+  string uuid = 1;
   string newFilename = 2;
   string user = 3;
 }
@@ -49,6 +49,7 @@ message FileInfo {
   int64 size = 3;
   int64 last_modified = 4; // timestamp in milliseconds
   string file_url = 5;
+  string uuid = 6;
 }
 
 message ListUserFilesResponse {

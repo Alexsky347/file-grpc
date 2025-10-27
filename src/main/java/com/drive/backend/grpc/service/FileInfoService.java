@@ -1,6 +1,9 @@
 package com.drive.backend.grpc.service;
 
-import io.quarkus.example.*;
+import com.drive.backend.grpc.dto.FileInfoDto;
+import io.quarkus.example.FileService;
+import io.quarkus.example.ListUserFilesRequest;
+import io.quarkus.example.ListUserFilesResponse;
 import io.quarkus.grpc.GrpcService;
 import io.smallrye.common.annotation.RunOnVirtualThread;
 import io.smallrye.mutiny.Uni;
@@ -42,7 +45,7 @@ public class FileInfoService implements FileService {
         // For now, just return a dummy response
         io.quarkus.example.FileOperationResponse response = io.quarkus.example.FileOperationResponse.newBuilder()
                 .setSuccess(true)
-                .setMessage("File deleted successfully: " + request.getFilename())
+                .setMessage("File deleted successfully: " + request.getUuid())
                 .build();
         return io.smallrye.mutiny.Uni.createFrom().item(response);
     }
@@ -57,7 +60,7 @@ public class FileInfoService implements FileService {
         // For now, just return a dummy response
         io.quarkus.example.FileOperationResponse response = io.quarkus.example.FileOperationResponse.newBuilder()
                 .setSuccess(true)
-                .setMessage("File renamed successfully from: " + request.getOldFilename() + " to: " + request.getNewFilename())
+                .setMessage("File renamed successfully from: " + request.getUuid() + " to: " + request.getNewFilename())
                 .build();
         return io.smallrye.mutiny.Uni.createFrom().item(response);
     }
@@ -78,13 +81,14 @@ public class FileInfoService implements FileService {
                             .setMessage("Files retrieved successfully for user: " + username);
 
                     // Convert from DTO FileInfo to gRPC FileInfo
-                    for (com.drive.backend.grpc.dto.FileInfo file : files) {
+                    for (FileInfoDto file : files) {
                         io.quarkus.example.FileInfo fileInfo = io.quarkus.example.FileInfo.newBuilder()
-                                .setObjectName(file.getObjectName())
-                                .setFilename(file.getFilename())
-                                .setSize(file.getSize())
-                                .setLastModified(file.getLastModified().getTime())
-                                .setFileUrl(file.getFileUrl())
+                                .setObjectName(file.objectName())
+                                .setFilename(file.filename())
+                                .setSize(file.size())
+                                .setLastModified(file.lastModified().getTime())
+                                .setFileUrl(file.fileUrl())
+                                .setUuid(file.uuid())
                                 .build();
 
                         responseBuilder.addFiles(fileInfo);

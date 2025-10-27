@@ -1,7 +1,7 @@
 package com.drive.backend.grpc.service;
 
 import com.drive.backend.grpc.config.GrpcConfig;
-import com.drive.backend.grpc.dto.FileInfo;
+import com.drive.backend.grpc.dto.FileInfoDto;
 import com.drive.backend.grpc.exception.CustomRunTimeException;
 import io.minio.*;
 import io.minio.messages.Item;
@@ -12,6 +12,7 @@ import io.vertx.mutiny.core.Vertx;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
+import lombok.Getter;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import java.io.ByteArrayInputStream;
@@ -27,32 +28,58 @@ import java.util.UUID;
 @ApplicationScoped
 public class MinioService {
 
+    // Explicit getter methods for minioUrl and bucket
+    @Getter
+    private final String minioUrl;
+    @Getter
+    private final String bucket;
 
     private final Vertx vertx;
-    private final String minioUrl;
     private final String accessKey;
     private final String secretKey;
-    private final String bucket;
+    private MinioClient minioClient;
 
     @Inject
     MinioService(Vertx vertx, GrpcConfig grpcConfig) {
         this.vertx = vertx;
-        this.minioUrl = grpcConfig.minio().url();
-        this.accessKey = grpcConfig.minio().accessKey();
-        this.secretKey = grpcConfig.minio().secretKey();
-        this.bucket = grpcConfig.minio().bucket();
+        minioUrl = grpcConfig.minio().url();
+        accessKey = grpcConfig.minio().accessKey();
+        secretKey = grpcConfig.minio().secretKey();
+        bucket = grpcConfig.minio().bucket();
     }
 
-    // Explicit getter methods for minioUrl and bucket
-    public String getMinioUrl() {
-        return minioUrl;
+    /**
+     * Extract original filename from MinIO object name
+     * Format is: username/uuid-filename
+     */
+    private static String extractFilenameFromObjectName(String objectName) {
+        // Get everything after the last slash
+        String nameWithUuid = objectName.substring(objectName.lastIndexOf('/') + 1);
+        // Remove the UUID prefix (everything before the first dash after the UUID)
+        int dashIndex = nameWithUuid.indexOf('-', 36); // UUID is 36 chars
+        if (dashIndex >= 0 && dashIndex < nameWithUuid.length() - 1) return nameWithUuid.substring(dashIndex + 1);
+        return nameWithUuid; // Fallback if format is unexpected
     }
 
-    public String getBucketName() {
-        return bucket;
+    /**
+     * Extract UUID from MinIO object name
+     * Format is: username/uuid-filename
+     */
+    private static String extractUuidFromObjectName(String objectName) {
+        // Get everything after the last slash
+        String nameWithUuid = objectName.substring(objectName.lastIndexOf('/') + 1);
+        // Extract the UUID (first 36 characters before the dash)
+        if (nameWithUuid.length() > 36 && nameWithUuid.charAt(36) == '-') {
+            return nameWithUuid.substring(0, 36);
+        }
+        return null; // Fallback if format is unexpected
     }
 
-    private MinioClient minioClient;
+    private static String generateObjectName(String filename, String username) {
+        // Create a structure like: username/uuid-filename
+        String uuid = UUID.randomUUID().toString();
+        return username + "/" + uuid + "-" + filename;
+    }
 
     void onStart(@Observes StartupEvent ev) {
         Log.info("Initializing MinIO client");
@@ -223,72 +250,53 @@ public class MinioService {
      * @param username the username whose files to list
      * @return List of file objects with metadata
      */
-    public Uni<List<FileInfo>> listUserFiles(String username) {
+    Uni<List<FileInfoDto>> listUserFiles(String username) {
         return Uni.createFrom().emitter(emitter -> {
             vertx.executeBlocking(() -> {
-                try {
-                    // List objects with the prefix of the username folder
-                    Iterable<Result<Item>> results = minioClient.listObjects(
-                            ListObjectsArgs.builder()
-                                    .bucket(bucket)
-                                    .prefix(username + "/")
-                                    .recursive(true)
-                                    .build());
+                        try {
+                            // List objects with the prefix of the username folder
+                            Iterable<Result<Item>> results = minioClient.listObjects(
+                                    ListObjectsArgs.builder()
+                                            .bucket(bucket)
+                                            .prefix(username + "/")
+                                            .recursive(true)
+                                            .build());
 
-                    List<FileInfo> files = new ArrayList<>();
+                            List<FileInfoDto> files = new ArrayList<>();
 
-                    for (Result<Item> result : results) {
-                        Item item = result.get();
+                            for (Result<Item> result : results) {
+                                Item item = result.get();
 
-                        // Skip folders (they have size 0 and end with /)
-                        if (item.size() > 0 && !item.objectName().endsWith("/")) {
-                            // Extract the original filename (remove UUID prefix)
-                            String objectName = item.objectName();
-                            String filename = extractFilenameFromObjectName(objectName);
+                                // Skip folders (they have size 0 and end with /)
+                                if (item.size() > 0 && !item.objectName().endsWith("/")) {
+                                    // Extract the original filename (remove UUID prefix)
+                                    String objectName = item.objectName();
+                                    String filename = extractFilenameFromObjectName(objectName);
+                                    String uuid = extractUuidFromObjectName(objectName);
 
-                            // URL encode the object name for the file URL
-                            String encodedObjectName = URLEncoder.encode(objectName, StandardCharsets.UTF_8)
-                                    .replace("+", "%20"); // Replace + with %20 for spaces
+                                    // URL encode the object name for the file URL
+                                    String encodedObjectName = URLEncoder.encode(objectName, StandardCharsets.UTF_8)
+                                            .replace("+", "%20"); // Replace + with %20 for spaces
 
-                            files.add(new FileInfo(
-                                    objectName,
-                                    filename,
-                                    item.size(),
-                                    Date.from(item.lastModified().toInstant()),
-                                    minioUrl + "/" + bucket + "/" + encodedObjectName
-                            ));
+                                    files.add(new FileInfoDto(
+                                            objectName,
+                                            filename,
+                                            item.size(),
+                                            Date.from(item.lastModified().toInstant()),
+                                            minioUrl + "/" + bucket + "/" + encodedObjectName,
+                                            uuid
+                                    ));
+                                }
+                            }
+
+                            return files;
+                        } catch (Exception e) {
+                            Log.error("Error listing files for user: " + username, e);
+                            throw new CustomRunTimeException("Failed to list user files", e);
                         }
-                    }
-
-                    return files;
-                } catch (Exception e) {
-                    Log.error("Error listing files for user: " + username, e);
-                    throw new CustomRunTimeException("Failed to list user files", e);
-                }
-            })
-            .subscribe().with(emitter::complete, emitter::fail);
+                    })
+                    .subscribe().with(emitter::complete, emitter::fail);
         });
-    }
-
-    /**
-     * Extract original filename from MinIO object name
-     * Format is: username/uuid-filename
-     */
-    private String extractFilenameFromObjectName(String objectName) {
-        // Get everything after the last slash
-        String nameWithUuid = objectName.substring(objectName.lastIndexOf('/') + 1);
-        // Remove the UUID prefix (everything before the first dash after the UUID)
-        int dashIndex = nameWithUuid.indexOf('-', 36); // UUID is 36 chars
-        if (dashIndex >= 0 && dashIndex < nameWithUuid.length() - 1) {
-            return nameWithUuid.substring(dashIndex + 1);
-        }
-        return nameWithUuid; // Fallback if format is unexpected
-    }
-
-    private String generateObjectName(String filename, String username) {
-        // Create a structure like: username/uuid-filename
-        String uuid = UUID.randomUUID().toString();
-        return username + "/" + uuid + "-" + filename;
     }
 
 }

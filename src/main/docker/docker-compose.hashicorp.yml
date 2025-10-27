@@ -1,0 +1,23 @@
+services:
+  vault:
+    image: hashicorp/vault:latest
+    container_name: vault-new
+    environment:
+      VAULT_ADDR: https://localhost:8200
+      VAULT_API_ADDR: https://localhost:8200
+      VAULT_ADDRESS: https://localhost:8200
+      # VAULT_UI: true
+      # VAULT_TOKEN:
+    ports:
+      - "8200:8200"
+      - "8201:8201"
+    restart: always
+    volumes:
+      - ./vault/logs:/vault/logs/:rw
+      - ./vault/data:/vault/data/:rw
+      - ./vault/config:/vault/config/:rw
+      - ./vault/certs:/certs/:rw
+      - ./vault/file:/vault/file/:rw
+    cap_add:
+      - IPC_LOCK
+    entrypoint: vault server -config /vault/config/config.hcl

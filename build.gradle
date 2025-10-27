@@ -5,25 +5,30 @@ plugins {
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
+    // Quarkus BOM for dependency management
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+
+    // Core Quarkus dependencies
     implementation 'io.quarkus:quarkus-grpc'
     implementation 'io.quarkus:quarkus-rest'
+    implementation 'io.quarkus:quarkus-rest-jackson'
     implementation 'io.quarkus:quarkus-smallrye-openapi'
     implementation 'io.quarkus:quarkus-hibernate-validator'
-    implementation 'org.projectlombok:lombok:1.18.38'
     implementation 'io.quarkus:quarkus-reactive-pg-client'
     implementation 'io.quarkus:quarkus-hibernate-reactive-panache'
-    implementation 'io.quarkus:quarkus-rest-jackson'
 
-    // MinIO S3 client dependencies
+    // Utility dependencies
+    implementation 'org.projectlombok:lombok:1.18.38'
     implementation 'io.minio:minio:8.5.9'
-    implementation 'io.quarkus:quarkus-vertx'
 
+    // Test dependencies
     testImplementation 'io.quarkus:quarkus-junit5'
+
+    // Annotation processors
+    annotationProcessor 'org.projectlombok:lombok:1.18.38'
 }
 
 group 'com.drive.backend'

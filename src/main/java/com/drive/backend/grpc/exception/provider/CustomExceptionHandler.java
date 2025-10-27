@@ -1,7 +1,7 @@
 package com.drive.backend.grpc.exception.provider;
 
 import com.drive.backend.grpc.exception.CustomRunTimeException;
-import com.drive.backend.grpc.exception.dto.ErrorMessage;
+import com.drive.backend.grpc.exception.data.EntityMessage;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
@@ -16,6 +16,6 @@ public class CustomExceptionHandler implements ExceptionMapper<CustomRunTimeExce
     @Override
     public Response toResponse(CustomRunTimeException e) {
         // Custom logic to handle the exception
-        return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(e.getMessage(), false)).build();
+        return Response.status(Response.Status.BAD_REQUEST).entity(new EntityMessage(e.getMessage(), false)).build();
     }
 }
