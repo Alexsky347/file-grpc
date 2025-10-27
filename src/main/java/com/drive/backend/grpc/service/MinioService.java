@@ -69,9 +69,7 @@ public class MinioService {
         // Get everything after the last slash
         String nameWithUuid = objectName.substring(objectName.lastIndexOf('/') + 1);
         // Extract the UUID (first 36 characters before the dash)
-        if (nameWithUuid.length() > 36 && nameWithUuid.charAt(36) == '-') {
-            return nameWithUuid.substring(0, 36);
-        }
+        if (nameWithUuid.length() > 36 && nameWithUuid.charAt(36) == '-') return nameWithUuid.substring(0, 36);
         return null; // Fallback if format is unexpected
     }
 
@@ -177,7 +175,31 @@ public class MinioService {
         });
     }
 
-    public Uni<Boolean> deleteFile(String objectName) {
+    Uni<String> uploadFile(byte[] content, String filename, String username) {
+        return Uni.createFrom().emitter(emitter -> {
+            vertx.executeBlocking(() -> {
+                        try {
+                            // Generate a unique object name
+                            String objectName = generateObjectName(filename, username);
+
+                            // Upload to MinIO
+                            minioClient.putObject(PutObjectArgs.builder()
+                                    .bucket(bucket)
+                                    .object(objectName)
+                                    .stream(new ByteArrayInputStream(content), content.length, -1)
+                                    .build());
+
+                            return objectName;
+                        } catch (Exception e) {
+                            Log.error("Error uploading file", e);
+                            throw new CustomRunTimeException("File upload failed", e);
+                        }
+                    })
+                    .subscribe().with(emitter::complete, emitter::fail);
+        });
+    }
+
+    Uni<Boolean> deleteFile(String objectName) {
         return Uni.createFrom().emitter(emitter -> {
             vertx.executeBlocking(() -> {
                         try {
@@ -212,7 +234,7 @@ public class MinioService {
         });
     }
 
-    public Uni<Boolean> renameFile(String oldObjectName, String newFilename, String username) {
+    Uni<Boolean> renameFile(String oldObjectName, String newFilename, String username) {
         String newObjectName = generateObjectName(newFilename, username);
 
         return Uni.createFrom().emitter(emitter -> {
@@ -278,7 +300,7 @@ public class MinioService {
                                     String encodedObjectName = URLEncoder.encode(objectName, StandardCharsets.UTF_8)
                                             .replace("+", "%20"); // Replace + with %20 for spaces
 
-                                    files.add(new FileInfoDto(
+                                    if (uuid != null) files.add(new FileInfoDto(
                                             objectName,
                                             filename,
                                             item.size(),

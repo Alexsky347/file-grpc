@@ -26,13 +26,15 @@ public class FileInfoService implements FileService {
     @RunOnVirtualThread
     @Override
     public io.smallrye.mutiny.Uni<io.quarkus.example.FileUploadResponse> uploadFile(io.quarkus.example.FileUploadRequest request) {
-        // Implement the file upload logic here
-        // For now, just return a dummy response
-        io.quarkus.example.FileUploadResponse response = io.quarkus.example.FileUploadResponse.newBuilder()
-                .setSuccess(true)
-                .setMessage("File uploaded successfully")
-                .build();
-        return io.smallrye.mutiny.Uni.createFrom().item(response);
+        return minioService.uploadFile(request.getContent().toByteArray(), request.getFilename(), request.getUser())
+                .onItem().transform(objectName -> io.quarkus.example.FileUploadResponse.newBuilder()
+                        .setSuccess(true)
+                        .setMessage("File uploaded successfully")
+                        .build())
+                .onFailure().recoverWithItem(th -> io.quarkus.example.FileUploadResponse.newBuilder()
+                        .setSuccess(false)
+                        .setMessage("Upload failed: " + th.getMessage())
+                        .build());
     }
 
     /**
@@ -41,13 +43,32 @@ public class FileInfoService implements FileService {
     @RunOnVirtualThread
     @Override
     public io.smallrye.mutiny.Uni<io.quarkus.example.FileOperationResponse> deleteFile(io.quarkus.example.FileDeleteRequest request) {
-        // Implement the file deletion logic here
-        // For now, just return a dummy response
-        io.quarkus.example.FileOperationResponse response = io.quarkus.example.FileOperationResponse.newBuilder()
-                .setSuccess(true)
-                .setMessage("File deleted successfully: " + request.getUuid())
-                .build();
-        return io.smallrye.mutiny.Uni.createFrom().item(response);
+        String uuid = request.getUuid();
+        String user = request.getUser();
+
+        return minioService.listUserFiles(user)
+                .onItem().transformToUni(files -> {
+                    String objectName = null;
+                    for (FileInfoDto file : files)
+                        if (uuid.equals(file.uuid())) {
+                            objectName = file.objectName();
+                            break;
+                        }
+                    if (objectName == null)
+                        return Uni.createFrom().item(io.quarkus.example.FileOperationResponse.newBuilder()
+                                .setSuccess(false)
+                                .setMessage("File not found with uuid: " + uuid)
+                                .build());
+                    return minioService.deleteFile(objectName)
+                            .onItem().transform(success -> io.quarkus.example.FileOperationResponse.newBuilder()
+                                    .setSuccess(success)
+                                    .setMessage(success ? "File deleted successfully" : "Failed to delete file")
+                                    .build());
+                })
+                .onFailure().recoverWithItem(th -> io.quarkus.example.FileOperationResponse.newBuilder()
+                        .setSuccess(false)
+                        .setMessage("Delete failed: " + th.getMessage())
+                        .build());
     }
 
     /**
@@ -56,13 +77,33 @@ public class FileInfoService implements FileService {
     @RunOnVirtualThread
     @Override
     public io.smallrye.mutiny.Uni<io.quarkus.example.FileOperationResponse> renameFile(io.quarkus.example.FileRenameRequest request) {
-        // Implement the file renaming logic here
-        // For now, just return a dummy response
-        io.quarkus.example.FileOperationResponse response = io.quarkus.example.FileOperationResponse.newBuilder()
-                .setSuccess(true)
-                .setMessage("File renamed successfully from: " + request.getUuid() + " to: " + request.getNewFilename())
-                .build();
-        return io.smallrye.mutiny.Uni.createFrom().item(response);
+        String uuid = request.getUuid();
+        String newFilename = request.getNewFilename();
+        String user = request.getUser();
+
+        return minioService.listUserFiles(user)
+                .onItem().transformToUni(files -> {
+                    String oldObjectName = null;
+                    for (FileInfoDto file : files)
+                        if (uuid.equals(file.uuid())) {
+                            oldObjectName = file.objectName();
+                            break;
+                        }
+                    if (oldObjectName == null)
+                        return Uni.createFrom().item(io.quarkus.example.FileOperationResponse.newBuilder()
+                                .setSuccess(false)
+                                .setMessage("File not found with uuid: " + uuid)
+                                .build());
+                    return minioService.renameFile(oldObjectName, newFilename, user)
+                            .onItem().transform(success -> io.quarkus.example.FileOperationResponse.newBuilder()
+                                    .setSuccess(success)
+                                    .setMessage(success ? "File renamed successfully" : "Failed to rename file")
+                                    .build());
+                })
+                .onFailure().recoverWithItem(th -> io.quarkus.example.FileOperationResponse.newBuilder()
+                        .setSuccess(false)
+                        .setMessage("Rename failed: " + th.getMessage())
+                        .build());
     }
 
     /**
