@@ -59,6 +59,14 @@ compileTestJava {
 
 spotless {
     java {
+        // Only format main and test source sets
+        target 'src/main/java/**/*.java', 'src/test/java/**/*.java'
+        // Exclude generated code (Quarkus, Lombok, etc.)
+        targetExclude '**/generated/**', '**/build/**', 'src/main/resources/**'
+
         googleJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
     }
 }

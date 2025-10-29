@@ -10,6 +10,6 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 @Getter
 @Setter
 public class FileUploadDto extends FileBaseDto {
-    @RestForm("file")
-    private FileUpload file;
+  @RestForm("file")
+  private FileUpload file;
 }

@@ -7,5 +7,4 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 @Blocking
-public class UserRepository implements PanacheRepository<UserEntity> {
-}
+public class UserRepository implements PanacheRepository<UserEntity> {}
