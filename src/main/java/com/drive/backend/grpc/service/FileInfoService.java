@@ -35,7 +35,7 @@ public class FileInfoService implements FileService {
     /**
      * Helper method to safely extract username from SecurityIdentity
      */
-    private String getUsername() {
+    String getUsername() {
         if (identity == null || identity.isAnonymous()) {
             log.warn("SecurityIdentity is null or anonymous");
             throw new SecurityException("User not authenticated");

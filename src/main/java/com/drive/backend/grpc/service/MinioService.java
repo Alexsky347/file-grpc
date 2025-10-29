@@ -51,7 +51,7 @@ public class MinioService {
      * Extract original filename from MinIO object name
      * Format is: username/uuid-filename
      */
-    private static String extractFilenameFromObjectName(String objectName) {
+    static String extractFilenameFromObjectName(String objectName) {
         // Get everything after the last slash
         String nameWithUuid = objectName.substring(objectName.lastIndexOf('/') + 1);
         // Remove the UUID prefix (everything before the first dash after the UUID)
@@ -64,7 +64,7 @@ public class MinioService {
      * Extract UUID from MinIO object name
      * Format is: username/uuid-filename
      */
-    private static String extractUuidFromObjectName(String objectName) {
+    static String extractUuidFromObjectName(String objectName) {
         // Get everything after the last slash
         String nameWithUuid = objectName.substring(objectName.lastIndexOf('/') + 1);
         // Extract the UUID (first 36 characters before the dash)
