@@ -44,7 +44,6 @@ java {
 
 test {
     systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
-    reports.junitXml.enabled = true
 }
 compileJava {
     options.encoding = 'UTF-8'
