@@ -5,7 +5,6 @@ import com.drive.backend.grpc.dto.FileInfoDto;
 import com.drive.backend.grpc.exception.CustomRunTimeException;
 import io.minio.*;
 import io.minio.messages.Item;
-import io.quarkus.logging.Log;
 import io.quarkus.runtime.StartupEvent;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.Vertx;
@@ -13,19 +12,19 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import lombok.Getter;
-import org.jboss.resteasy.reactive.multipart.FileUpload;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
+@Slf4j
 public class MinioService {
 
     // Explicit getter methods for minioUrl and bucket
@@ -76,11 +75,12 @@ public class MinioService {
     private static String generateObjectName(String filename, String username) {
         // Create a structure like: username/uuid-filename
         String uuid = UUID.randomUUID().toString();
-        return username + "/" + uuid + "-" + filename;
+
+        return username + "/" + uuid + "-" + (StringUtils.isBlank(filename) ? "random" : filename);
     }
 
     void onStart(@Observes StartupEvent ev) {
-        Log.info("Initializing MinIO client");
+        log.info("Initializing MinIO client");
         initMinioClient();
         createBucketIfNotExists();
     }
@@ -96,18 +96,18 @@ public class MinioService {
         try {
             boolean bucketExists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
             if (!bucketExists) {
-                Log.info("Creating bucket: " + bucket);
+                log.info("Creating bucket: " + bucket);
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
 
                 // Set the bucket policy to public read
                 setBucketPolicy();
             } else {
-                Log.info("Bucket already exists: " + bucket);
+                log.info("Bucket already exists: " + bucket);
                 // Make sure the policy is set even if the bucket exists
                 setBucketPolicy();
             }
         } catch (Exception e) {
-            Log.error("Error checking/creating bucket", e);
+            log.error("Error checking/creating bucket", e);
             throw new CustomRunTimeException("Failed to create or access bucket: " + bucket, e);
         }
     }
@@ -140,39 +140,11 @@ public class MinioService {
                     .config(policy)
                     .build());
 
-            Log.info("Bucket policy set to public read for bucket: " + bucket);
+            log.info("Bucket policy set to public read for bucket: " + bucket);
         } catch (Exception e) {
-            Log.error("Error setting bucket policy", e);
+            log.error("Error setting bucket policy", e);
             throw new CustomRunTimeException("Failed to set bucket policy", e);
         }
-    }
-
-    public Uni<String> uploadFile(FileUpload fileUpload, String username) {
-        return Uni.createFrom().emitter(emitter -> {
-            vertx.executeBlocking(() -> {
-                        try {
-                            // Generate a unique object name
-                            String objectName = generateObjectName(fileUpload.fileName(), username);
-
-                            // Read file content
-                            byte[] fileContent = Files.readAllBytes(fileUpload.uploadedFile());
-
-                            // Upload to MinIO
-                            minioClient.putObject(PutObjectArgs.builder()
-                                    .bucket(bucket)
-                                    .object(objectName)
-                                    .contentType(fileUpload.contentType())
-                                    .stream(new ByteArrayInputStream(fileContent), fileContent.length, -1)
-                                    .build());
-
-                            return objectName;
-                        } catch (CustomRunTimeException e) {
-                            Log.error("Error uploading file", e);
-                            throw new CustomRunTimeException("File upload failed", e);
-                        }
-                    })
-                    .subscribe().with(emitter::complete, emitter::fail);
-        });
     }
 
     Uni<String> uploadFile(byte[] content, String filename, String username) {
@@ -188,10 +160,9 @@ public class MinioService {
                                     .object(objectName)
                                     .stream(new ByteArrayInputStream(content), content.length, -1)
                                     .build());
-
                             return objectName;
                         } catch (Exception e) {
-                            Log.error("Error uploading file", e);
+                            log.error("Error uploading file", e);
                             throw new CustomRunTimeException("File upload failed", e);
                         }
                     })
@@ -209,25 +180,8 @@ public class MinioService {
                                     .build());
                             return true;
                         } catch (CustomRunTimeException e) {
-                            Log.error("Error deleting file", e);
+                            log.error("Error deleting file", e);
                             return false;
-                        }
-                    })
-                    .subscribe().with(emitter::complete, emitter::fail);
-        });
-    }
-
-    public Uni<InputStream> downloadFile(String objectName) {
-        return Uni.createFrom().emitter(emitter -> {
-            vertx.executeBlocking(() -> {
-                        try {
-                            return minioClient.getObject(GetObjectArgs.builder()
-                                    .bucket(bucket)
-                                    .object(objectName)
-                                    .build());
-                        } catch (CustomRunTimeException e) {
-                            Log.error("Error downloading file", e);
-                            throw new CustomRunTimeException("File download failed", e);
                         }
                     })
                     .subscribe().with(emitter::complete, emitter::fail);
@@ -258,7 +212,7 @@ public class MinioService {
 
                             return Boolean.TRUE;
                         } catch (CustomRunTimeException e) {
-                            Log.error("Error renaming file", e);
+                            log.error("Error renaming file", e);
                             throw new CustomRunTimeException("File rename failed", e);
                         }
                     })
@@ -313,7 +267,7 @@ public class MinioService {
 
                             return files;
                         } catch (Exception e) {
-                            Log.error("Error listing files for user: " + username, e);
+                            log.error("Error listing files for user: " + username, e);
                             throw new CustomRunTimeException("Failed to list user files", e);
                         }
                     })
