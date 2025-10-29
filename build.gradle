@@ -1,6 +1,8 @@
 plugins {
     id 'java'
     id 'io.quarkus'
+    id 'com.diffplug.spotless' version '6.25.0'
+    id 'org.owasp.dependencycheck' version '9.0.9'
 }
 
 repositories {
@@ -42,6 +44,7 @@ java {
 
 test {
     systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+    reports.junitXml.enabled = true
 }
 compileJava {
     options.encoding = 'UTF-8'
@@ -50,4 +53,10 @@ compileJava {
 
 compileTestJava {
     options.encoding = 'UTF-8'
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
 }
