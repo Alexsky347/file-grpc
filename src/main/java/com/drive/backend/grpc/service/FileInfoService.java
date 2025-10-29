@@ -5,18 +5,48 @@ import io.quarkus.example.FileService;
 import io.quarkus.example.ListUserFilesRequest;
 import io.quarkus.example.ListUserFilesResponse;
 import io.quarkus.grpc.GrpcService;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.common.annotation.RunOnVirtualThread;
 import io.smallrye.mutiny.Uni;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import org.jboss.logging.Logger;
+
+import java.security.Principal;
+
+import static com.drive.backend.grpc.security.Role.ADMIN;
+import static com.drive.backend.grpc.security.Role.USER;
 
 @GrpcService
 public class FileInfoService implements FileService {
 
+    private static final Logger LOG = Logger.getLogger(FileInfoService.class);
+
     private final MinioService minioService;
+    private final SecurityIdentity identity;
 
     @Inject
-    public FileInfoService(MinioService minioService) {
+    public FileInfoService(MinioService minioService, SecurityIdentity identity) {
         this.minioService = minioService;
+        this.identity = identity;
+    }
+
+    /**
+     * Helper method to safely extract username from SecurityIdentity
+     */
+    private String getUsername() {
+        if (identity == null || identity.isAnonymous()) {
+            LOG.warn("SecurityIdentity is null or anonymous");
+            throw new SecurityException("User not authenticated");
+        }
+
+        Principal principal = identity.getPrincipal();
+        if (principal == null || principal.getName() == null) {
+            LOG.warn("Principal or principal name is null");
+            throw new SecurityException("User principal not available");
+        }
+
+        return principal.getName();
     }
 
     /**
@@ -24,86 +54,105 @@ public class FileInfoService implements FileService {
      * It provides an implementation for the uploadFile method.
      */
     @RunOnVirtualThread
+    @RolesAllowed({USER, ADMIN})
     @Override
-    public io.smallrye.mutiny.Uni<io.quarkus.example.FileUploadResponse> uploadFile(io.quarkus.example.FileUploadRequest request) {
-        return minioService.uploadFile(request.getContent().toByteArray(), request.getFilename(), request.getUser())
-                .onItem().transform(objectName -> io.quarkus.example.FileUploadResponse.newBuilder()
-                        .setSuccess(true)
-                        .setMessage("File uploaded successfully")
-                        .build())
-                .onFailure().recoverWithItem(th -> io.quarkus.example.FileUploadResponse.newBuilder()
-                        .setSuccess(false)
-                        .setMessage("Upload failed: " + th.getMessage())
-                        .build());
+    public Uni<io.quarkus.example.FileUploadResponse> uploadFile(io.quarkus.example.FileUploadRequest request) {
+        return Uni.createFrom().item(this::getUsername)
+                .onItem().transformToUni(user ->
+                        minioService.uploadFile(request.getContent().toByteArray(), request.getFilename(), user)
+                                .onItem().transform(objectName -> io.quarkus.example.FileUploadResponse.newBuilder()
+                                        .setSuccess(true)
+                                        .setMessage("File uploaded successfully")
+                                        .build())
+                )
+                .onFailure().recoverWithItem(th -> {
+                    LOG.error("Upload failed", th);
+                    return io.quarkus.example.FileUploadResponse.newBuilder()
+                            .setSuccess(false)
+                            .setMessage("Upload failed: " + th.getMessage())
+                            .build();
+                });
     }
 
     /**
      * Implementation of the deleteFile method from the FileService interface.
      */
     @RunOnVirtualThread
+    @RolesAllowed({USER, ADMIN})
     @Override
-    public io.smallrye.mutiny.Uni<io.quarkus.example.FileOperationResponse> deleteFile(io.quarkus.example.FileDeleteRequest request) {
+    public Uni<io.quarkus.example.FileOperationResponse> deleteFile(io.quarkus.example.FileDeleteRequest request) {
         String uuid = request.getUuid();
-        String user = request.getUser();
 
-        return minioService.listUserFiles(user)
-                .onItem().transformToUni(files -> {
-                    String objectName = null;
-                    for (FileInfoDto file : files)
-                        if (uuid.equals(file.uuid())) {
-                            objectName = file.objectName();
-                            break;
-                        }
-                    if (objectName == null)
-                        return Uni.createFrom().item(io.quarkus.example.FileOperationResponse.newBuilder()
-                                .setSuccess(false)
-                                .setMessage("File not found with uuid: " + uuid)
-                                .build());
-                    return minioService.deleteFile(objectName)
-                            .onItem().transform(success -> io.quarkus.example.FileOperationResponse.newBuilder()
-                                    .setSuccess(success)
-                                    .setMessage(success ? "File deleted successfully" : "Failed to delete file")
-                                    .build());
-                })
-                .onFailure().recoverWithItem(th -> io.quarkus.example.FileOperationResponse.newBuilder()
-                        .setSuccess(false)
-                        .setMessage("Delete failed: " + th.getMessage())
-                        .build());
+        return Uni.createFrom().item(this::getUsername)
+                .onItem().transformToUni(user ->
+                        minioService.listUserFiles(user)
+                                .onItem().transformToUni(files -> {
+                                    String objectName = null;
+                                    for (FileInfoDto file : files)
+                                        if (uuid.equals(file.uuid())) {
+                                            objectName = file.objectName();
+                                            break;
+                                        }
+                                    if (objectName == null)
+                                        return Uni.createFrom().item(io.quarkus.example.FileOperationResponse.newBuilder()
+                                                .setSuccess(false)
+                                                .setMessage("File not found with uuid: " + uuid)
+                                                .build());
+                                    return minioService.deleteFile(objectName)
+                                            .onItem().transform(success -> io.quarkus.example.FileOperationResponse.newBuilder()
+                                                    .setSuccess(success)
+                                                    .setMessage(success ? "File deleted successfully" : "Failed to delete file")
+                                                    .build());
+                                })
+                )
+                .onFailure().recoverWithItem(th -> {
+                    LOG.error("Delete failed", th);
+                    return io.quarkus.example.FileOperationResponse.newBuilder()
+                            .setSuccess(false)
+                            .setMessage("Delete failed: " + th.getMessage())
+                            .build();
+                });
     }
 
     /**
      * Implementation of the renameFile method from the FileService interface.
      */
     @RunOnVirtualThread
+    @RolesAllowed({USER, ADMIN})
     @Override
-    public io.smallrye.mutiny.Uni<io.quarkus.example.FileOperationResponse> renameFile(io.quarkus.example.FileRenameRequest request) {
+    public Uni<io.quarkus.example.FileOperationResponse> renameFile(io.quarkus.example.FileRenameRequest request) {
         String uuid = request.getUuid();
         String newFilename = request.getNewFilename();
-        String user = request.getUser();
 
-        return minioService.listUserFiles(user)
-                .onItem().transformToUni(files -> {
-                    String oldObjectName = null;
-                    for (FileInfoDto file : files)
-                        if (uuid.equals(file.uuid())) {
-                            oldObjectName = file.objectName();
-                            break;
-                        }
-                    if (oldObjectName == null)
-                        return Uni.createFrom().item(io.quarkus.example.FileOperationResponse.newBuilder()
-                                .setSuccess(false)
-                                .setMessage("File not found with uuid: " + uuid)
-                                .build());
-                    return minioService.renameFile(oldObjectName, newFilename, user)
-                            .onItem().transform(success -> io.quarkus.example.FileOperationResponse.newBuilder()
-                                    .setSuccess(success)
-                                    .setMessage(success ? "File renamed successfully" : "Failed to rename file")
-                                    .build());
-                })
-                .onFailure().recoverWithItem(th -> io.quarkus.example.FileOperationResponse.newBuilder()
-                        .setSuccess(false)
-                        .setMessage("Rename failed: " + th.getMessage())
-                        .build());
+        return Uni.createFrom().item(this::getUsername)
+                .onItem().transformToUni(user ->
+                        minioService.listUserFiles(user)
+                                .onItem().transformToUni(files -> {
+                                    String oldObjectName = null;
+                                    for (FileInfoDto file : files)
+                                        if (uuid.equals(file.uuid())) {
+                                            oldObjectName = file.objectName();
+                                            break;
+                                        }
+                                    if (oldObjectName == null)
+                                        return Uni.createFrom().item(io.quarkus.example.FileOperationResponse.newBuilder()
+                                                .setSuccess(false)
+                                                .setMessage("File not found with uuid: " + uuid)
+                                                .build());
+                                    return minioService.renameFile(oldObjectName, newFilename, user)
+                                            .onItem().transform(success -> io.quarkus.example.FileOperationResponse.newBuilder()
+                                                    .setSuccess(success)
+                                                    .setMessage(success ? "File renamed successfully" : "Failed to rename file")
+                                                    .build());
+                                })
+                )
+                .onFailure().recoverWithItem(th -> {
+                    LOG.error("Rename failed", th);
+                    return io.quarkus.example.FileOperationResponse.newBuilder()
+                            .setSuccess(false)
+                            .setMessage("Rename failed: " + th.getMessage())
+                            .build();
+                });
     }
 
     /**
@@ -111,35 +160,40 @@ public class FileInfoService implements FileService {
      * Lists all files for a specific user from MinIO storage.
      */
     @RunOnVirtualThread
+    @RolesAllowed({USER, ADMIN})
     @Override
     public Uni<ListUserFilesResponse> listUserFiles(ListUserFilesRequest request) {
-        String username = request.getUsername();
+        return Uni.createFrom().item(this::getUsername)
+                .onItem().transformToUni(username ->
+                        minioService.listUserFiles(username)
+                                .onItem().transform(files -> {
+                                    ListUserFilesResponse.Builder responseBuilder = ListUserFilesResponse.newBuilder()
+                                            .setSuccess(true)
+                                            .setMessage("Files retrieved successfully for user: " + username);
 
-        return minioService.listUserFiles(username)
-                .onItem().transform(files -> {
-                    ListUserFilesResponse.Builder responseBuilder = ListUserFilesResponse.newBuilder()
-                            .setSuccess(true)
-                            .setMessage("Files retrieved successfully for user: " + username);
+                                    // Convert from DTO FileInfo to gRPC FileInfo
+                                    for (FileInfoDto file : files) {
+                                        io.quarkus.example.FileInfo fileInfo = io.quarkus.example.FileInfo.newBuilder()
+                                                .setObjectName(file.objectName())
+                                                .setFilename(file.filename())
+                                                .setSize(file.size())
+                                                .setLastModified(file.lastModified().getTime())
+                                                .setFileUrl(file.fileUrl())
+                                                .setUuid(file.uuid())
+                                                .build();
 
-                    // Convert from DTO FileInfo to gRPC FileInfo
-                    for (FileInfoDto file : files) {
-                        io.quarkus.example.FileInfo fileInfo = io.quarkus.example.FileInfo.newBuilder()
-                                .setObjectName(file.objectName())
-                                .setFilename(file.filename())
-                                .setSize(file.size())
-                                .setLastModified(file.lastModified().getTime())
-                                .setFileUrl(file.fileUrl())
-                                .setUuid(file.uuid())
-                                .build();
+                                        responseBuilder.addFiles(fileInfo);
+                                    }
 
-                        responseBuilder.addFiles(fileInfo);
-                    }
-
-                    return responseBuilder.build();
-                })
-                .onFailure().recoverWithItem(() -> ListUserFilesResponse.newBuilder()
-                        .setSuccess(false)
-                        .setMessage("Failed to retrieve files for user: " + username)
-                        .build());
+                                    return responseBuilder.build();
+                                })
+                )
+                .onFailure().recoverWithItem(th -> {
+                    LOG.error("List files failed", th);
+                    return ListUserFilesResponse.newBuilder()
+                            .setSuccess(false)
+                            .setMessage("Failed to retrieve files: " + th.getMessage())
+                            .build();
+                });
     }
 }

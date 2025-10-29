@@ -13,13 +13,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import lombok.Getter;
-import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -145,34 +143,6 @@ public class MinioService {
             Log.error("Error setting bucket policy", e);
             throw new CustomRunTimeException("Failed to set bucket policy", e);
         }
-    }
-
-    public Uni<String> uploadFile(FileUpload fileUpload, String username) {
-        return Uni.createFrom().emitter(emitter -> {
-            vertx.executeBlocking(() -> {
-                        try {
-                            // Generate a unique object name
-                            String objectName = generateObjectName(fileUpload.fileName(), username);
-
-                            // Read file content
-                            byte[] fileContent = Files.readAllBytes(fileUpload.uploadedFile());
-
-                            // Upload to MinIO
-                            minioClient.putObject(PutObjectArgs.builder()
-                                    .bucket(bucket)
-                                    .object(objectName)
-                                    .contentType(fileUpload.contentType())
-                                    .stream(new ByteArrayInputStream(fileContent), fileContent.length, -1)
-                                    .build());
-
-                            return objectName;
-                        } catch (CustomRunTimeException e) {
-                            Log.error("Error uploading file", e);
-                            throw new CustomRunTimeException("File upload failed", e);
-                        }
-                    })
-                    .subscribe().with(emitter::complete, emitter::fail);
-        });
     }
 
     Uni<String> uploadFile(byte[] content, String filename, String username) {
