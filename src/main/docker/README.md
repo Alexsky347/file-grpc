@@ -384,3 +384,19 @@ http://{KEYCLOAK_HOST}:{PORT}/realms/{REALM_NAME}/protocol/openid-connect/token
 ```
 authorization: Bearer {ACCESS_TOKEN}
 ```
+
+# hashicorp
+
+## Generate keys
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.crt -subj "/CN=localhost"
+
+docker-compose up -d
+
+## Exec into the vault container
+
+docker exec -it vault-new /bin/sh
+
+## Once logged into the vault container
+
+vault operator init
