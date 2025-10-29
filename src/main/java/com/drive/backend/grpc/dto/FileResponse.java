@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FileResponse {
-    private boolean success;
-    private String message;
-    private String fileUrl;
+  private boolean success;
+  private String message;
+  private String fileUrl;
 }

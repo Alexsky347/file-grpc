@@ -8,5 +8,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FileRenameDto extends FileBaseDto {
-    private String newFilename;
+  private String newFilename;
 }

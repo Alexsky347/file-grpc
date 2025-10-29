@@ -7,5 +7,4 @@ import lombok.Setter;
 @RegisterForReflection
 @Getter
 @Setter
-public class FileDeleteDto extends FileBaseDto {
-}
+public class FileDeleteDto extends FileBaseDto {}

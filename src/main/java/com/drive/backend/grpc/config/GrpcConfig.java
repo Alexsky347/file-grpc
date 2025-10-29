@@ -6,20 +6,20 @@ import jakarta.validation.constraints.NotBlank;
 
 @ConfigMapping(prefix = "grpc-file")
 public interface GrpcConfig {
-    @Valid
-    Minio minio();
+  @Valid
+  Minio minio();
 
-    interface Minio {
-        @NotBlank
-        String url();
+  interface Minio {
+    @NotBlank
+    String url();
 
-        @NotBlank
-        String accessKey();
+    @NotBlank
+    String accessKey();
 
-        @NotBlank
-        String secretKey();
+    @NotBlank
+    String secretKey();
 
-        @NotBlank
-        String bucket();
-    }
+    @NotBlank
+    String bucket();
+  }
 }
