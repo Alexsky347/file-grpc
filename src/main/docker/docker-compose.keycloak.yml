@@ -32,6 +32,19 @@ services:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: password
+        
+  app_db:
+    image: postgres:latest
+    container_name: app_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: drive-clone
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - app_postgres_data:/var/lib/postgresql/data
 
 volumes:
   postgres_data:
+  app_postgres_data:
