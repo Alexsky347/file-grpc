@@ -15,6 +15,6 @@ jobs:
       - name: Enable Testcontainers Reuse
         run: echo "testcontainers.reuse.enable=true" > ~/.testcontainers.properties
       - name: Start Docker Compose
-        run: docker-compose -f src/main/docker/docker-compose.keycloak.yml up -d
+        run: docker compose -f src/main/docker/docker-compose.keycloak.yml up -d
       - name: Build with Gradle
         run: ./gradlew build
