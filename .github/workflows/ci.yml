@@ -1,0 +1,20 @@
+name: CI
+
+on: [ push, pull_request ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Enable Testcontainers Reuse
+        run: echo "testcontainers.reuse.enable=true" > ~/.testcontainers.properties
+      - name: Start Docker Compose
+        run: docker-compose -f src/main/docker/docker-compose.keycloak.yml up -d
+      - name: Build with Gradle
+        run: ./gradlew build
