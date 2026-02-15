@@ -73,7 +73,7 @@ public class FileInfoService implements FileService {
                             .build());
                     return minioService.uploadFile(Base64.getDecoder().decode(request.getContent()), request.getFilename(), user)
                             .onItem().transform(objectName -> {
-                                        log.info("File uploaded successfully: " + objectName);
+                                log.info("File uploaded successfully: {}", objectName);
                                         return io.quarkus.example.FileUploadResponse.newBuilder()
                                                 .setSuccess(true)
                                                 .setMessage("File uploaded successfully")
