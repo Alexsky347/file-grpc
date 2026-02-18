@@ -42,7 +42,13 @@ jobs:
           docker compose -f src/main/docker/docker-compose.minio.yml up -d
 
       - name: Wait for services
-        run: sleep 30
+        run: |
+          echo "Waiting for Keycloak..."
+          for i in {1..30}; do
+            curl -sf http://localhost:8090/realms/doc-manager > /dev/null && echo "Keycloak ready" && break
+            echo "Attempt $i/30..."
+            sleep 10
+          done
 
       - name: Build + checks
         run: ./gradlew build dependencyCheckAnalyze
