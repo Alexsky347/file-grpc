@@ -1,6 +1,7 @@
 package com.drive.backend.grpc.service;
 
 import com.drive.backend.grpc.dto.FileInfoDto;
+import io.quarkus.example.FileInfo;
 import io.quarkus.example.FileService;
 import io.quarkus.example.ListUserFilesRequest;
 import io.quarkus.example.ListUserFilesResponse;
@@ -27,7 +28,7 @@ public class FileInfoService implements FileService {
     private final SecurityIdentity identity;
 
     @Inject
-    public FileInfoService(MinioService minioService, SecurityIdentity identity) {
+    public FileInfoService(final MinioService minioService, final SecurityIdentity identity) {
         this.minioService = minioService;
         this.identity = identity;
     }
@@ -36,12 +37,12 @@ public class FileInfoService implements FileService {
      * Helper method to safely extract username from SecurityIdentity
      */
     private String getUsername() {
-        if (identity == null || identity.isAnonymous()) {
+        if (this.identity == null || this.identity.isAnonymous()) {
             log.warn("SecurityIdentity is null or anonymous");
             throw new SecurityException("User not authenticated");
         }
 
-        Principal principal = identity.getPrincipal();
+        final Principal principal = this.identity.getPrincipal();
         if (principal == null || principal.getName() == null) {
             log.warn("Principal or principal name is null");
             throw new SecurityException("User principal not available");
@@ -57,21 +58,23 @@ public class FileInfoService implements FileService {
     @RolesAllowed({USER, ADMIN})
     @Override
     @RunOnVirtualThread
-    public Uni<io.quarkus.example.FileUploadResponse> uploadFile(io.quarkus.example.FileUploadRequest request) {
+    public Uni<io.quarkus.example.FileUploadResponse> uploadFile(final io.quarkus.example.FileUploadRequest request) {
         return Uni.createFrom().item(() -> {
                     try {
-                        return getUsername();
-                    } catch (Exception e) {
+                        return this.getUsername();
+                    } catch (final Exception e) {
                         log.warn("Authentication failed", e);
                         return null;
                     }
                 })
                 .onItem().transformToUni(user -> {
-                    if (user == null) return Uni.createFrom().item(io.quarkus.example.FileUploadResponse.newBuilder()
-                            .setSuccess(false)
-                            .setMessage("User not authenticated")
-                            .build());
-                    return minioService.uploadFile(Base64.getDecoder().decode(request.getContent()), request.getFilename(), user)
+                    if (user == null) {
+                        return Uni.createFrom().item(io.quarkus.example.FileUploadResponse.newBuilder()
+                                .setSuccess(false)
+                                .setMessage("User not authenticated")
+                                .build());
+                    }
+                    return this.minioService.uploadFile(Base64.getDecoder().decode(request.getContent()), request.getFilename(), user)
                             .onItem().transform(objectName -> {
                                 log.info("File uploaded successfully: {}", objectName);
                                         return io.quarkus.example.FileUploadResponse.newBuilder()
@@ -96,25 +99,27 @@ public class FileInfoService implements FileService {
     @RolesAllowed({USER, ADMIN})
     @RunOnVirtualThread
     @Override
-    public Uni<io.quarkus.example.FileOperationResponse> deleteFile(io.quarkus.example.FileDeleteRequest request) {
-        String uuid = request.getUuid();
+    public Uni<io.quarkus.example.FileOperationResponse> deleteFile(final io.quarkus.example.FileDeleteRequest request) {
+        final String uuid = request.getUuid();
 
         return Uni.createFrom().item(this::getUsername)
                 .onItem().transformToUni(user ->
-                        minioService.listUserFiles(user)
-                                .onItem().transformToUni(files -> {
+                        this.minioService.listUserFiles(user, null, null, null, 1000) // Get all files to find the one with matching UUID
+                                .onItem().transformToUni(result -> {
                                     String objectName = null;
-                                    for (FileInfoDto file : files)
+                                    for (final FileInfoDto file : result.files()) {
                                         if (uuid.equals(file.uuid())) {
                                             objectName = file.objectName();
                                             break;
                                         }
-                                    if (objectName == null)
+                                    }
+                                    if (objectName == null) {
                                         return Uni.createFrom().item(io.quarkus.example.FileOperationResponse.newBuilder()
                                                 .setSuccess(false)
                                                 .setMessage("File not found with uuid: " + uuid)
                                                 .build());
-                                    return minioService.deleteFile(objectName)
+                                    }
+                                    return this.minioService.deleteFile(objectName)
                                             .onItem().transform(success -> io.quarkus.example.FileOperationResponse.newBuilder()
                                                     .setSuccess(success)
                                                     .setMessage(success ? "File deleted successfully" : "Failed to delete file")
@@ -136,26 +141,28 @@ public class FileInfoService implements FileService {
     @RunOnVirtualThread
     @RolesAllowed({USER, ADMIN})
     @Override
-    public Uni<io.quarkus.example.FileOperationResponse> renameFile(io.quarkus.example.FileRenameRequest request) {
-        String uuid = request.getUuid();
-        String newFilename = request.getNewFilename();
+    public Uni<io.quarkus.example.FileOperationResponse> renameFile(final io.quarkus.example.FileRenameRequest request) {
+        final String uuid = request.getUuid();
+        final String newFilename = request.getNewFilename();
 
         return Uni.createFrom().item(this::getUsername)
                 .onItem().transformToUni(user ->
-                        minioService.listUserFiles(user)
-                                .onItem().transformToUni(files -> {
+                        this.minioService.listUserFiles(user, null, null, null, 1000) // Get all files to find the one with matching UUID
+                                .onItem().transformToUni(result -> {
                                     String oldObjectName = null;
-                                    for (FileInfoDto file : files)
+                                    for (final FileInfoDto file : result.files()) {
                                         if (uuid.equals(file.uuid())) {
                                             oldObjectName = file.objectName();
                                             break;
                                         }
-                                    if (oldObjectName == null)
+                                    }
+                                    if (oldObjectName == null) {
                                         return Uni.createFrom().item(io.quarkus.example.FileOperationResponse.newBuilder()
                                                 .setSuccess(false)
                                                 .setMessage("File not found with uuid: " + uuid)
                                                 .build());
-                                    return minioService.renameFile(oldObjectName, newFilename, user)
+                                    }
+                                    return this.minioService.renameFile(oldObjectName, newFilename, user)
                                             .onItem().transform(success -> io.quarkus.example.FileOperationResponse.newBuilder()
                                                     .setSuccess(success)
                                                     .setMessage(success ? "File renamed successfully" : "Failed to rename file")
@@ -173,42 +180,85 @@ public class FileInfoService implements FileService {
 
     /**
      * Implementation of the listUserFiles method from the FileService interface.
-     * Lists all files for a specific user from MinIO storage.
+     * Lists all files for a specific user from MinIO storage with support for:
+     * - Search filtering by filename
+     * - File type filtering (all, images, documents)
+     * - Cursor-based pagination using UUID
+     * - Configurable page limit
      */
     @RunOnVirtualThread
     @RolesAllowed({USER, ADMIN})
     @Override
-    public Uni<ListUserFilesResponse> listUserFiles(ListUserFilesRequest request) {
+    public Uni<ListUserFilesResponse> listUserFiles(final ListUserFilesRequest request) {
         return Uni.createFrom().item(this::getUsername)
-                .onItem().transformToUni(username ->
-                        minioService.listUserFiles(username)
-                                .onItem().transform(files -> {
-                                    ListUserFilesResponse.Builder responseBuilder = ListUserFilesResponse.newBuilder()
-                                            .setSuccess(true)
-                                            .setMessage("Files retrieved successfully for user: " + username);
+                .onItem().transformToUni(username -> {
+                    // Extract request parameters
+                    final String search = request.getSearch();
+                    final String filter = request.getFilter();
+                    final String lastUuid = request.getLastUuid();
+                    final int limit = request.getLimit() > 0 ? request.getLimit() : 20; // Default to 20
 
-                                    // Convert from DTO FileInfo to gRPC FileInfo
-                                    for (FileInfoDto file : files) {
-                                        io.quarkus.example.FileInfo fileInfo = io.quarkus.example.FileInfo.newBuilder()
-                                                .setObjectName(file.objectName())
-                                                .setFilename(file.filename())
-                                                .setSize(file.size())
-                                                .setLastModified(file.lastModified().getTime())
-                                                .setFileUrl(file.fileUrl())
-                                                .setUuid(file.uuid())
-                                                .build();
+                    return this.minioService.listUserFiles(username, lastUuid, search, filter, limit)
+                            .onItem().transform(result -> {
+                                final ListUserFilesResponse.Builder responseBuilder = ListUserFilesResponse.newBuilder()
+                                        .setSuccess(true)
+                                        .setMessage("Files retrieved successfully for user: " + username)
+                                        .setHasMore(result.hasMore()); // Set the has_more flag
 
-                                        responseBuilder.addFiles(fileInfo);
-                                    }
+                                // Convert from DTO FileInfo to gRPC FileInfo
+                                responseBuilder.addAllFiles(result.files().stream().map(file -> FileInfo.newBuilder()
+                                        .setObjectName(file.objectName())
+                                        .setFilename(file.filename())
+                                        .setSize(file.size())
+                                        .setLastModified(file.lastModified().getTime())
+                                        .setFileUrl(file.fileUrl())
+                                        .setUuid(file.uuid())
+                                        .build()).toList());
 
-                                    return responseBuilder.build();
-                                })
-                )
+                                return responseBuilder.build();
+                            });
+                })
                 .onFailure().recoverWithItem(th -> {
                     log.error("List files failed", th);
                     return ListUserFilesResponse.newBuilder()
                             .setSuccess(false)
                             .setMessage("Failed to retrieve files: " + th.getMessage())
+                            .setHasMore(false)
+                            .build();
+                });
+    }
+
+    /**
+     * Implementation of the getFileCounts method from the FileService interface.
+     * Returns statistics about user's files including:
+     * - Total number of files
+     * - Count of images
+     * - Count of documents
+     * Supports optional search filtering by filename.
+     */
+    @RunOnVirtualThread
+    @RolesAllowed({USER, ADMIN})
+    @Override
+    public Uni<io.quarkus.example.GetFileCountsResponse> getFileCounts(final io.quarkus.example.GetFileCountsRequest request) {
+        return Uni.createFrom().item(this::getUsername)
+                .onItem().transformToUni(username -> {
+                    final String search = request.getSearch();
+
+                    return this.minioService.getFileCounts(username, search)
+                            .onItem().transform(result ->
+                                    io.quarkus.example.GetFileCountsResponse.newBuilder()
+                                            .setTotal(result.total())
+                                            .setImages(result.images())
+                                            .setDocuments(result.documents())
+                                            .build()
+                            );
+                })
+                .onFailure().recoverWithItem(th -> {
+                    log.error("Get file counts failed", th);
+                    return io.quarkus.example.GetFileCountsResponse.newBuilder()
+                            .setTotal(0)
+                            .setImages(0)
+                            .setDocuments(0)
                             .build();
                 });
     }
