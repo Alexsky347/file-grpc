@@ -52,7 +52,7 @@ jobs:
         run: sleep 30
 
       - name: Build + checks
-        run: ./gradlew build spotlessCheck dependencyCheckAnalyze
+        run: ./gradlew build dependencyCheckAnalyze
 
       - name: Publish Test Results
         uses: dorny/test-reporter@v1

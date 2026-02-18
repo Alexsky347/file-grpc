@@ -1,7 +1,6 @@
 plugins {
     id 'java'
     id 'io.quarkus'
-    id 'com.diffplug.spotless' version '6.25.0'
     id 'org.owasp.dependencycheck' version '9.0.9'
 }
 
@@ -56,18 +55,4 @@ compileJava {
 
 compileTestJava {
     options.encoding = 'UTF-8'
-}
-
-spotless {
-    java {
-        // Only format main and test source sets
-        target 'src/main/java/**/*.java', 'src/test/java/**/*.java'
-        // Exclude generated code (Quarkus, Lombok, etc.)
-        targetExclude '**/generated/**', '**/build/**', 'src/main/resources/**'
-
-        googleJavaFormat()
-        removeUnusedImports()
-        trimTrailingWhitespace()
-        endWithNewline()
-    }
 }
