@@ -60,7 +60,7 @@ jobs:
         run: |
           echo "Waiting for Keycloak realm doc-manager..."
           for i in {1..30}; do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8090/realms/doc-manager)
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8090/realms/doc-manager 2>/dev/null || echo "000")
             echo "Attempt $i/30 - HTTP $STATUS"
             if [ "$STATUS" = "200" ]; then
               echo "Keycloak ready!"
