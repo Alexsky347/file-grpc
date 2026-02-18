@@ -41,6 +41,18 @@ jobs:
           docker compose -f src/main/docker/docker-compose.keycloak.yml up -d
           docker compose -f src/main/docker/docker-compose.minio.yml up -d
 
+#      For debugging purposes
+      - name: Debug Keycloak startup
+        run: |
+          echo "=== Docker containers ==="
+          docker ps -a
+          echo "=== Keycloak logs ==="
+          docker logs keycloak_web
+          echo "=== Testing Keycloak root ==="
+          curl -v http://localhost:8090/
+          echo "=== Testing realms endpoint ==="
+          curl -v http://localhost:8090/realms/master
+
       - name: Wait for services
         run: |
           echo "Waiting for Keycloak..."
