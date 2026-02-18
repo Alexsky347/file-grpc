@@ -50,6 +50,10 @@ Use [grpcurl](https://github.com/fullstorydev/grpcurl) or your frontend:
 ```sh
 grpcurl -plaintext -d '{"filename":"test.txt","content":"...base64..."}' localhost:9000 com.drive.backend.grpc.file_info.FileService/UploadFile
 ```
+#### Generate base64 from file with Linux
+```sh
+base64 -w 0 toTest.png > encoded.txt
+```
 
 ## gRPC API Overview
 
@@ -91,12 +95,5 @@ message GetFileCountsRequest {
   ```
 - Docker scripts: `src/main/docker/scripts/`
 
-## Useful Tips
-
-### Generate base64 from file with Linux
-```sh
-base64 -w 0 toTest.png > encoded.txt
-```
-
 ## License
-MIT or your preferred license.
+MIT
