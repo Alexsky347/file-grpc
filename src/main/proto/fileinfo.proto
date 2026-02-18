@@ -10,6 +10,7 @@ service FileService {
   rpc DeleteFile (FileDeleteRequest) returns (FileOperationResponse);
   rpc RenameFile (FileRenameRequest) returns (FileOperationResponse);
   rpc ListUserFiles (ListUserFilesRequest) returns (ListUserFilesResponse);
+  rpc GetFileCounts (GetFileCountsRequest) returns (GetFileCountsResponse);
 }
 
 message FileUploadRequest {
@@ -38,6 +39,10 @@ message FileOperationResponse {
 
 message ListUserFilesRequest {
   string username = 1;
+  string search = 2;
+  string filter = 3; // "all", "images", "documents"
+  string last_uuid = 4; // Cursor for pagination - last UUID from previous page
+  int32 limit = 5; // Number of items per page (default: 20)
 }
 
 message FileInfo {
@@ -53,4 +58,15 @@ message ListUserFilesResponse {
   bool success = 1;
   string message = 2;
   repeated FileInfo files = 3;
+  bool has_more = 4; // Indicates if there are more files to load
+}
+
+message GetFileCountsRequest {
+  string search = 1; // Optional search filter
+}
+
+message GetFileCountsResponse {
+  int32 total = 1;
+  int32 images = 2;
+  int32 documents = 3;
 }

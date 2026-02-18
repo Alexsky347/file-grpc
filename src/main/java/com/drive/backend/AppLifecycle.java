@@ -1,8 +1,9 @@
 package com.drive.backend;
 
-import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ApplicationScoped
 public class AppLifecycle {
     // This class can be used to manage application lifecycle events
@@ -12,23 +13,4 @@ public class AppLifecycle {
     // - onStart()
     // - onStop()
     // - onRestart()
-
-    // For now, it serves as a placeholder for future lifecycle management logic.
-    public void onStart() {
-        // Logic to execute when the application starts
-        Log.info("Application Started");
-    }
-    public void onStop() {
-        // Logic to execute when the application stops
-    }
-    public void onRestart() {
-        // Logic to execute when the application restarts
-    }
-    public void onInit() {
-        // Logic to execute during initialization
-    }
-    public void onDestroy() {
-        // Logic to execute during application destruction
-        Log.info("Application has been destroyed");
-    }
 }
