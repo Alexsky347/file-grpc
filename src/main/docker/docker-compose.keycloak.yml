@@ -18,7 +18,7 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
     command: start-dev --import-realm
     volumes:
-      - ./keycloak/document-manager-backend-service.json:/opt/keycloak/data/import/document-manager-backend-service.json
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
     depends_on:
       - keycloak_db
     ports:
