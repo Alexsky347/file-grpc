@@ -47,17 +47,28 @@ jobs:
           echo "=== Docker containers ==="
           docker ps -a
           echo "=== Keycloak logs ==="
-          docker logs keycloak_web
-          echo "=== Testing Keycloak root ==="
-          curl -v http://localhost:8090/
-          echo "=== Testing realms endpoint ==="
-          curl -v http://localhost:8090/realms/master
+          docker logs keycloak_web || true
+          echo "=== app_db logs ==="
+          docker logs app_db || true
+        continue-on-error: true
+
+      - name: Check app_db logs
+        run: docker logs app_db || true
+        continue-on-error: true
 
       - name: Wait for services
         run: |
+          echo "Waiting for app_db..."
+          for i in {1..20}; do
+            docker ps | grep app_db | grep "Up" && break
+            echo "app_db not up yet... attempt $i"
+            docker logs app_db || true
+            sleep 5
+          done
+          
           echo "Waiting for Keycloak..."
           for i in {1..30}; do
-            curl -sf http://localhost:8090/realms/doc-manager > /dev/null && echo "Keycloak ready" && break
+            curl -sf http://localhost:8090/realms/doc-manager > /dev/null 2>&1 && echo "Keycloak ready" && break
             echo "Attempt $i/30..."
             sleep 10
           done
