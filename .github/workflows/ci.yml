@@ -56,22 +56,21 @@ jobs:
         run: docker logs app_db || true
         continue-on-error: true
 
-      - name: Wait for services
+      - name: Wait for Keycloak
         run: |
-          echo "Waiting for app_db..."
-          for i in {1..20}; do
-            docker ps | grep app_db | grep "Up" && break
-            echo "app_db not up yet... attempt $i"
-            docker logs app_db || true
-            sleep 5
-          done
-          
-          echo "Waiting for Keycloak..."
+          echo "Waiting for Keycloak realm doc-manager..."
           for i in {1..30}; do
-            curl -sf http://localhost:8090/realms/doc-manager > /dev/null 2>&1 && echo "Keycloak ready" && break
-            echo "Attempt $i/30..."
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8090/realms/doc-manager)
+            echo "Attempt $i/30 - HTTP $STATUS"
+            if [ "$STATUS" = "200" ]; then
+              echo "Keycloak ready!"
+              exit 0
+            fi
             sleep 10
           done
+          echo "=== Keycloak never became ready, dumping logs ==="
+          docker logs keycloak_web
+          exit 1
 
       - name: Build + checks
         run: ./gradlew build dependencyCheckAnalyze
