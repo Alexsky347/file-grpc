@@ -42,7 +42,7 @@ docker-compose -f docker-compose.minio.yml up -d
 ```sh
 ./gradlew quarkusDev
 # or
-java -jar build/drive-backend-dev.jar
+java -jar build/document-manager-backend-dev.jar
 ```
 
 ### 5. Test the API

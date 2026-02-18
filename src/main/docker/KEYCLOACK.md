@@ -10,7 +10,7 @@
 
 1. Go to **Clients** → **Create Client**
 2. Configure the client:
-    - **Client ID**: `drive-backend-service` (or your preferred name)
+    - **Client ID**: `document-manager-backend-service` (or your preferred name)
     - **Client Type**: `OpenID Connect`
     - **Client authentication**: `ON` (this is important for backend services)
 
@@ -76,7 +76,7 @@
 ```properties
 # Keycloak OIDC Configuration
 quarkus.oidc.auth-server-url=http://localhost:8090/realms/drive
-quarkus.oidc.client-id=drive-backend-service
+quarkus.oidc.client-id=document-manager-backend-service
 quarkus.oidc.credentials.secret=YOUR_CLIENT_SECRET_FROM_STEP_3
 # Token verification
 quarkus.oidc.token.issuer=http://localhost:8090/realms/drive
@@ -100,7 +100,7 @@ CLIENT_SECRET="3xK9ilcgXgl7Vt8RNJSxhRpA9RqJOYOE"
 curl -X POST "http://localhost:8090/realms/drive/protocol/openid-connect/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=password" \
-  -d "client_id=drive-backend-service" \
+  -d "client_id=document-manager-backend-service" \
   -d "client_secret=$CLIENT_SECRET" \
   -d "username=testUser" \
   -d "password=$PWD"
@@ -135,18 +135,18 @@ FileServiceGrpc.FileServiceBlockingStub stub = FileServiceGrpc.newBlockingStub(c
 **Root Causes & Solutions:**
 
 1. **Client Authentication is OFF**
-   - Go to: Clients → `drive-backend-service` → Settings
+   - Go to: Clients → `document-manager-backend-service` → Settings
    - Find "Client authentication" and set it to **ON**
    - Click **Save**
    - Go to Credentials tab and get the NEW client secret
 
 2. **Direct Access Grants is DISABLED**
-   - Go to: Clients → `drive-backend-service` → Settings (or Advanced tab)
+   - Go to: Clients → `document-manager-backend-service` → Settings (or Advanced tab)
    - Find "Direct access grants" and **ENABLE** it
    - Click **Save**
 
 3. **Wrong Client Secret**
-   - Go to: Clients → `drive-backend-service` → Credentials tab
+   - Go to: Clients → `document-manager-backend-service` → Credentials tab
    - Copy the EXACT client secret (it's case-sensitive!)
    - Don't use the secret from another client
 
@@ -156,7 +156,7 @@ FileServiceGrpc.FileServiceBlockingStub stub = FileServiceGrpc.newBlockingStub(c
 
 5. **Client ID is wrong**
    - The client ID must match EXACTLY (case-sensitive)
-   - Default from this guide: `drive-backend-service`
+   - Default from this guide: `document-manager-backend-service`
 
 **Quick Test Scrip:**
 ```bash
@@ -239,7 +239,7 @@ Add this header:
 | Key             | Value                                |
 |-----------------|--------------------------------------|
 | `grant_type`    | `password`                           |
-| `client_id`     | `drive-backend-service`              |
+| `client_id`     | `document-manager-backend-service`              |
 | `client_secret` | `YOUR_CLIENT_SECRET` (from Keycloak) |
 | `username`      | `testuser`                           |
 | `password`      | `testpassword`                       |
@@ -291,7 +291,7 @@ Fill in these details:
 | **Token Name**            | `Keycloak Token`                                                         |
 | **Grant Type**            | `Password Credentials`                                                   |
 | **Access Token URL**      | `http://localhost:8180/realms/drive-realm/protocol/openid-connect/token` |
-| **Client ID**             | `drive-backend-service`                                                  |
+| **Client ID**             | `document-manager-backend-service`                                                  |
 | **Client Secret**         | `YOUR_CLIENT_SECRET`                                                     |
 | **Username**              | `testuser`                                                               |
 | **Password**              | `testpassword`                                                           |
@@ -359,7 +359,7 @@ if (!tokenExpiry || currentTime >= tokenExpiry) {
             mode: 'urlencoded',
             urlencoded: [
                 {key: 'grant_type', value: 'password'},
-                {key: 'client_id', value: 'drive-backend-service'},
+                {key: 'client_id', value: 'document-manager-backend-service'},
                 {key: 'client_secret', value: 'YOUR_CLIENT_SECRET'},
                 {key: 'username', value: 'testuser'},
                 {key: 'password', value: 'testpassword'}
