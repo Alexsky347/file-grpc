@@ -1,9 +1,11 @@
 package com.document.manager.backend.grpc.service;
 
+import com.document.manager.backend.grpc.NoDbProfile;
 import io.quarkus.grpc.GrpcService;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
+@TestProfile(NoDbProfile.class)
 class FileInfoServiceTest {
 
     @Inject
