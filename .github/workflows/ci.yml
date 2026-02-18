@@ -56,6 +56,12 @@ jobs:
         run: docker logs app_db || true
         continue-on-error: true
 
+      - name: Debug Keycloak import
+        run: |
+          docker exec keycloak_web ls /opt/keycloak/data/import/ || echo "import dir empty or missing"
+          docker logs keycloak_web 2>&1 | grep -i import || echo "no import log lines"
+        continue-on-error: true
+
       - name: Wait for Keycloak
         run: |
           echo "Waiting for Keycloak realm doc-manager..."
