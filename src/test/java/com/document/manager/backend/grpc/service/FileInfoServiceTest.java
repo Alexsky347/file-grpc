@@ -22,7 +22,6 @@ import static org.mockito.Mockito.when;
 class FileInfoServiceTest {
 
     @Inject
-    @GrpcService
     FileInfoService fileInfoService;
 
     @InjectMock
@@ -72,6 +71,14 @@ class FileInfoServiceTest {
     private String invokeGetUsername() throws Exception {
         final var method = FileInfoService.class.getDeclaredMethod("getUsername");
         method.setAccessible(true);
-        return (String) method.invoke(this.fileInfoService);
+        try {
+            return (String) method.invoke(this.fileInfoService);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            if (e.getCause() instanceof SecurityException se) {
+                throw se;
+            }
+            throw e;
+        }
     }
+
 }
