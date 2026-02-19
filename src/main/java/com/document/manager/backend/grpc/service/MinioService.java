@@ -128,13 +128,13 @@ public class MinioService {
         try {
             final boolean bucketExists = this.minioClient.bucketExists(BucketExistsArgs.builder().bucket(this.bucket).build());
             if (!bucketExists) {
-                log.info("Creating bucket: " + this.bucket);
+                log.info("Creating bucket: {}", this.bucket);
                 this.minioClient.makeBucket(MakeBucketArgs.builder().bucket(this.bucket).build());
 
                 // Set the bucket policy to public read
                 this.setBucketPolicy();
             } else {
-                log.info("Bucket already exists: " + this.bucket);
+                log.info("Bucket already exists: {}", this.bucket);
                 // Make sure the policy is set even if the bucket exists
                 this.setBucketPolicy();
             }
@@ -172,7 +172,7 @@ public class MinioService {
                     .config(policy)
                     .build());
 
-            log.info("Bucket policy set to public read for bucket: " + this.bucket);
+            log.info("Bucket policy set to public read for bucket: {}", this.bucket);
         } catch (final Exception e) {
             log.error("Error setting bucket policy", e);
             throw new CustomRunTimeException("Failed to set bucket policy", e);
