@@ -1,0 +1,141 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+  checks: write
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: doc-manager-backend
+    permissions:
+      contents: read
+      checks: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
+
+      - name: Configure Testcontainers
+        run: |
+          echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
+          echo "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock" >> $GITHUB_ENV
+          mkdir -p ~/.testcontainers
+          echo "docker.client.strategy=org.testcontainers.dockerclient.UnixSocketClientProviderStrategy" >> ~/.testcontainers.properties
+          echo "testcontainers.reuse.enable=false" >> ~/.testcontainers.properties
+
+      - name: Start Docker Compose
+        run: |
+          docker compose -f src/main/docker/docker-compose.keycloak.yml up -d
+          docker compose -f src/main/docker/docker-compose.minio.yml up -d
+
+#      For debugging purposes
+      - name: Debug Keycloak startup
+        run: |
+          echo "=== Docker containers ==="
+          docker ps -a
+          echo "=== Keycloak logs ==="
+          docker logs keycloak_web || true
+          echo "=== app_db logs ==="
+          docker logs app_db || true
+        continue-on-error: true
+
+      - name: Check app_db logs
+        run: docker logs app_db || true
+        continue-on-error: true
+
+      - name: Wait for Keycloak
+        run: |
+          echo "Waiting for Keycloak realm doc-manager..."
+          for i in {1..30}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8090/realms/doc-manager 2>/dev/null || echo "000")
+            echo "Attempt $i/30 - HTTP $STATUS"
+            if [ "$STATUS" = "200" ]; then
+              echo "Keycloak ready!"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "=== Keycloak never became ready, dumping logs ==="
+          docker logs keycloak_web
+          exit 1
+
+      - name: Check NVD key is set
+        run: |
+          if [ -z "$NVD_API_KEY" ]; then
+            echo "NVD_API_KEY is EMPTY"
+          else
+            echo "NVD_API_KEY is set (length: ${#NVD_API_KEY})"
+          fi
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+
+      - name: Build
+        run: ./gradlew build
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+
+      - name: Checks
+        run: ./gradlew dependencyCheckAnalyze
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+
+      - name: Publish Test Results
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: JUnit Tests
+          path: 'build/test-results/test/*.xml'
+          reporter: java-junit
+        
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set lowercase repo name
+        run: echo "REPO_LC=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: src/main/docker/Dockerfile.jvm
+          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: |
+            ghcr.io/${{ env.REPO_LC }}/document-manager-backend:latest
+            ghcr.io/${{ env.REPO_LC }}/document-manager-backend:${{ github.sha }}
+
+  dependency-submission:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582

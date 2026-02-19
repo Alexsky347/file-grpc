@@ -8,4 +8,4 @@ pluginManagement {
         id "${quarkusPluginId}" version "${quarkusPluginVersion}"
     }
 }
-rootProject.name = 'drive-backend'
+rootProject.name = 'document-manager-backend'

@@ -13,7 +13,7 @@ A Java/Quarkus backend for secure file management using gRPC and MinIO. Supports
 - Error handling and security roles
 
 ## Prerequisites
-- Java 17+
+- Java 21+
 - Docker & Docker Compose
 - [Quarkus CLI](https://quarkus.io/guides/cli-tooling) (optional, for dev)
 - [grpcurl](https://github.com/fullstorydev/grpcurl) or compatible gRPC client for testing
@@ -42,7 +42,7 @@ docker-compose -f docker-compose.minio.yml up -d
 ```sh
 ./gradlew quarkusDev
 # or
-java -jar build/drive-backend-dev.jar
+java -jar build/document-manager-backend-dev.jar
 ```
 
 ### 5. Test the API
