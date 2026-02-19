@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: doc-manager-backend
     permissions:
       contents: read
       checks: write
