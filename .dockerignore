@@ -1,4 +1,13 @@
+.git
+.idea
+build/tmp
+build/reports
+build/resources/test
+**/test
+**/docs
+**/logs
 src
+src/main/resources/application-dev.properties
 !build/*-runner
 !build/*-runner.jar
 !build/lib/*
