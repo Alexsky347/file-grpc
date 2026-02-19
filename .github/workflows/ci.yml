@@ -113,6 +113,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set lowercase repo name
+        run: echo "REPO_LC=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -120,8 +123,8 @@ jobs:
           file: src/main/docker/Dockerfile.jvm
           push: ${{ github.ref == 'refs/heads/main' }}
           tags: |
-            ghcr.io/${{ github.repository }}/document-manager-backend:latest
-            ghcr.io/${{ github.repository }}/document-manager-backend:${{ github.sha }}
+            ghcr.io/${{ env.REPO_LC }}/document-manager-backend:latest
+            ghcr.io/${{ env.REPO_LC }}/document-manager-backend:${{ github.sha }}
 
   dependency-submission:
     runs-on: ubuntu-latest
