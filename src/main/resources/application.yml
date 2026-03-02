@@ -59,11 +59,12 @@ quarkus:
     logging:
       scope: request-response
 
-# MinIO configuration
+# RustFS configuration (S3-compatible object storage)
 grpc-file:
-  minio:
-    url: ${MINIO_URL:http://localhost:9010}
-    access-key: ${MINIO_ACCESS_KEY:minioadmin}
-    secret-key: ${MINIO_SECRET_KEY:minioadmin}
-    bucket: ${MINIO_BUCKET:file-uploads}
+  rustfs:
+    url: ${RUSTFS_URL:http://localhost:9010}
+    access-key: ${RUSTFS_ACCESS_KEY:rustfsadmin}
+    secret-key: ${RUSTFS_SECRET_KEY:rustfsadmin}
+    bucket: ${RUSTFS_BUCKET:file-uploads}
+    presigned-url-expiry: ${RUSTFS_PRESIGNED_EXPIRY:3600}  # 1 hour in seconds
 

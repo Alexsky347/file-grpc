@@ -14,7 +14,7 @@ chmod -R 755 "$VAULT_DIR"
 echo "Starting Docker services..."
 docker compose -p doc-manager-vault    -f docker-compose.hashicorp.yml up -d --remove-orphans
 docker compose -p doc-manager-keycloak -f docker-compose.keycloak.yml  up -d --remove-orphans
-docker compose -p doc-manager-minio    -f docker-compose.minio.yml     up -d --remove-orphans
+docker compose -p doc-manager-rustfs   -f docker-compose.rustfs.yml    up -d --remove-orphans
 
 echo "Development environment started!"
 
@@ -40,11 +40,11 @@ else
     echo "✗ PostgreSQL container failed to start"
 fi
 
-# Check MinIO
-if [ "$(docker compose -p doc-manager-minio -f docker-compose.minio.yml ps -q minio)" ]; then
-    echo "✓ MinIO container is running"
+# Check RustFS
+if [ "$(docker compose -p doc-manager-rustfs -f docker-compose.rustfs.yml ps -q rustfs)" ]; then
+    echo "✓ RustFS container is running"
 else
-    echo "✗ MinIO container failed to start"
+    echo "✗ RustFS container failed to start"
 fi
 
 # Check Vault

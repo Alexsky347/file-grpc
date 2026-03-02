@@ -24,12 +24,12 @@ import static com.document.manager.backend.grpc.security.Role.USER;
 public class FileInfoService implements FileService {
 
 
-    private final MinioService minioService;
+    private final RustfsService rustfsService;
     private final SecurityIdentity identity;
 
     @Inject
-    public FileInfoService(final MinioService minioService, final SecurityIdentity identity) {
-        this.minioService = minioService;
+    public FileInfoService(final RustfsService rustfsService, final SecurityIdentity identity) {
+        this.rustfsService = rustfsService;
         this.identity = identity;
     }
 
@@ -74,7 +74,7 @@ public class FileInfoService implements FileService {
                                 .setMessage("User not authenticated")
                                 .build());
                     }
-                    return this.minioService.uploadFile(Base64.getDecoder().decode(request.getContent()), request.getFilename(), user)
+                    return this.rustfsService.uploadFile(Base64.getDecoder().decode(request.getContent()), request.getFilename(), user)
                             .onItem().transform(objectName -> {
                                 log.info("File uploaded successfully: {}", objectName);
                                         return io.quarkus.example.FileUploadResponse.newBuilder()
@@ -104,7 +104,7 @@ public class FileInfoService implements FileService {
 
         return Uni.createFrom().item(this::getUsername)
                 .onItem().transformToUni(user ->
-                        this.minioService.listUserFiles(user, null, null, null, 1000) // Get all files to find the one with matching UUID
+                        this.rustfsService.listUserFiles(user, null, null, null, 1000) // Get all files to find the one with matching UUID
                                 .onItem().transformToUni(result -> {
                                     String objectName = null;
                                     for (final FileInfoDto file : result.files()) {
@@ -119,7 +119,7 @@ public class FileInfoService implements FileService {
                                                 .setMessage("File not found with uuid: " + uuid)
                                                 .build());
                                     }
-                                    return this.minioService.deleteFile(objectName)
+                                    return this.rustfsService.deleteFile(objectName)
                                             .onItem().transform(success -> io.quarkus.example.FileOperationResponse.newBuilder()
                                                     .setSuccess(success)
                                                     .setMessage(success ? "File deleted successfully" : "Failed to delete file")
@@ -147,7 +147,7 @@ public class FileInfoService implements FileService {
 
         return Uni.createFrom().item(this::getUsername)
                 .onItem().transformToUni(user ->
-                        this.minioService.listUserFiles(user, null, null, null, 1000) // Get all files to find the one with matching UUID
+                        this.rustfsService.listUserFiles(user, null, null, null, 1000) // Get all files to find the one with matching UUID
                                 .onItem().transformToUni(result -> {
                                     String oldObjectName = null;
                                     for (final FileInfoDto file : result.files()) {
@@ -162,7 +162,7 @@ public class FileInfoService implements FileService {
                                                 .setMessage("File not found with uuid: " + uuid)
                                                 .build());
                                     }
-                                    return this.minioService.renameFile(oldObjectName, newFilename, user)
+                                    return this.rustfsService.renameFile(oldObjectName, newFilename, user)
                                             .onItem().transform(success -> io.quarkus.example.FileOperationResponse.newBuilder()
                                                     .setSuccess(success)
                                                     .setMessage(success ? "File renamed successfully" : "Failed to rename file")
@@ -180,7 +180,7 @@ public class FileInfoService implements FileService {
 
     /**
      * Implementation of the listUserFiles method from the FileService interface.
-     * Lists all files for a specific user from MinIO storage with support for:
+     * Lists all files for a specific user from RustFS storage with support for:
      * - Search filtering by filename
      * - File type filtering (all, images, documents)
      * - Cursor-based pagination using UUID
@@ -198,7 +198,7 @@ public class FileInfoService implements FileService {
                     final String lastUuid = request.getLastUuid();
                     final int limit = request.getLimit() > 0 ? request.getLimit() : 20; // Default to 20
 
-                    return this.minioService.listUserFiles(username, lastUuid, search, filter, limit)
+                    return this.rustfsService.listUserFiles(username, lastUuid, search, filter, limit)
                             .onItem().transform(result -> {
                                 final ListUserFilesResponse.Builder responseBuilder = ListUserFilesResponse.newBuilder()
                                         .setSuccess(true)
@@ -244,7 +244,7 @@ public class FileInfoService implements FileService {
                 .onItem().transformToUni(username -> {
                     final String search = request.getSearch();
 
-                    return this.minioService.getFileCounts(username, search)
+                    return this.rustfsService.getFileCounts(username, search)
                             .onItem().transform(result ->
                                     io.quarkus.example.GetFileCountsResponse.newBuilder()
                                             .setTotal(result.total())

@@ -27,6 +27,7 @@ dependencies {
 
     // Utility dependencies
     implementation 'org.projectlombok:lombok:1.18.42'
+    // MinIO SDK used as a generic S3 client — compatible with RustFS (S3-compatible storage)
     implementation 'io.minio:minio:8.6.0'
 
     // Test dependencies
