@@ -1,0 +1,69 @@
+quarkus:
+  application:
+    name: drive-clone
+
+  # File service gRPC client configuration
+  grpc:
+    clients:
+      fileService:
+        host: ${GRPC_HOST:localhost}
+        port: ${GRPC_PORT:9100}
+    server:
+      use-separate-server: false
+      enable-reflection-service: true
+
+  # HTTP server configuration
+  http:
+    port: ${APP_PORT:8080}
+    root-path: /api
+    host: 0.0.0.0
+    cors:
+      enabled: true
+      origins: "*"
+      methods: GET,POST,PUT,DELETE,OPTIONS
+      headers: Authorization,Content-Type
+      access-control-allow-credentials: true
+    body:
+      handle-file-uploads: true
+    limits:
+      max-body-size: 10M
+    auth:
+      permission:
+        permit-all:
+          paths: /internal/*
+          policy: permit
+
+  # OpenAPI configuration
+  smallrye-openapi:
+    enabled: true
+
+  # Logging configuration
+  log:
+    file:
+      enabled: false
+    console:
+      level: DEBUG
+
+  # OIDC configuration for Keycloak
+  oidc:
+    auth-server-url: ${OIDC_AUTH_SERVER_URL:http://localhost:8090/realms/doc-manager}
+    client-id: ${OIDC_CLIENT_ID:document-manager-backend-service}
+    credentials:
+      secret: ${OIDC_CLIENT_SECRET:pjMPrWLlLEqRCU142laXhqFzsyBWS2da}
+    application-type: service
+    token:
+      issuer: ${OIDC_TOKEN_ISSUER:http://localhost:8090/realms/doc-manager}
+
+  # Rest client logging configuration -> to change in production
+  rest-client:
+    logging:
+      scope: request-response
+
+# MinIO configuration
+grpc-file:
+  minio:
+    url: ${MINIO_URL:http://localhost:9010}
+    access-key: ${MINIO_ACCESS_KEY:minioadmin}
+    secret-key: ${MINIO_SECRET_KEY:minioadmin}
+    bucket: ${MINIO_BUCKET:file-uploads}
+
