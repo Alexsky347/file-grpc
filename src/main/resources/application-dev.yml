@@ -1,0 +1,15 @@
+quarkus:
+  datasource:
+    db-kind: postgresql
+    username: admin
+    password: admin
+    reactive:
+      url: vertx-reactive:postgresql://localhost:5432/drive-clone
+
+  # Hibernate ORM configuration
+  hibernate-orm:
+    schema-management:
+      strategy: drop-and-create
+    log:
+      sql: true
+
