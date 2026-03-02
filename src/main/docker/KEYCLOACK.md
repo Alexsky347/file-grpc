@@ -3,14 +3,14 @@
 ## Step 1: Create or Select a Realm
 
 1. Log into Keycloak Admin Console
-2. Create a new realm or select an existing one (e.g., "drive-realm")
+2. Create a new realm or select an existing one (e.g., "doc-manager-realme")
 3. Note the realm name for your configuration
 
 ## Step 2: Create a Client for Your Backend Service
 
 1. Go to **Clients** → **Create Client**
 2. Configure the client:
-    - **Client ID**: `document-manager-backend-service` (or your preferred name)
+   - **Client ID**: `doc-manager-service` (or your preferred name)
     - **Client Type**: `OpenID Connect`
     - **Client authentication**: `ON` (this is important for backend services)
 

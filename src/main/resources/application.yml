@@ -46,13 +46,13 @@ quarkus:
 
   # OIDC configuration for Keycloak
   oidc:
-    auth-server-url: ${OIDC_AUTH_SERVER_URL:http://localhost:8090/realms/doc-manager}
-    client-id: ${OIDC_CLIENT_ID:document-manager-backend-service}
+    auth-server-url: ${OIDC_AUTH_SERVER_URL:http://localhost:8090/realms/doc-manager-realme}
+    client-id: ${OIDC_CLIENT_ID:doc-manager-service}
     credentials:
-      secret: ${OIDC_CLIENT_SECRET:pjMPrWLlLEqRCU142laXhqFzsyBWS2da}
+      secret: ${OIDC_CLIENT_SECRET:VnKTomnge8m27xjsFkyB8rr9l4zgh9v5}
     application-type: service
     token:
-      issuer: ${OIDC_TOKEN_ISSUER:http://localhost:8090/realms/doc-manager}
+      issuer: ${OIDC_TOKEN_ISSUER:http://localhost:8090/realms/doc-manager-realme}
 
   # Rest client logging configuration -> to change in production
   rest-client:

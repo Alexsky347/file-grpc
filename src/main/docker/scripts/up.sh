@@ -1,23 +1,20 @@
 #!/usr/bin/env bash
 
-# Ensure vault data directory exists with correct permissions
-VAULT_DATA_DIR="../vault/data"
-
-if [ ! -d "$VAULT_DATA_DIR" ]; then
-    echo "Creating Vault data directory..."
-    mkdir -p "$VAULT_DATA_DIR"
-fi
+# Ensure vault directories exist with correct permissions
+VAULT_DIR="../vault"
+for dir in data logs file certs config; do
+    mkdir -p "$VAULT_DIR/$dir"
+done
 
 echo "Setting Vault directory permissions..."
-# Use current user ownership instead of 777
-sudo chown -R $(id -u):$(id -g) "$VAULT_DATA_DIR"
-chmod -R 755 "$VAULT_DATA_DIR"
+sudo chown -R $(id -u):$(id -g) "$VAULT_DIR"
+chmod -R 755 "$VAULT_DIR"
 
 # Start services
 echo "Starting Docker services..."
-docker compose -f docker-compose.hashicorp.yml up -d --remove-orphans
-docker compose -f docker-compose.keycloak.yml up -d --remove-orphans
-docker compose -f docker-compose.minio.yml up -d --remove-orphans
+docker compose -p doc-manager-vault    -f docker-compose.hashicorp.yml up -d --remove-orphans
+docker compose -p doc-manager-keycloak -f docker-compose.keycloak.yml  up -d --remove-orphans
+docker compose -p doc-manager-minio    -f docker-compose.minio.yml     up -d --remove-orphans
 
 echo "Development environment started!"
 
@@ -31,27 +28,27 @@ echo "📊 Checking container status..."
 echo ""
 
 # Check Keycloak services (use service names from compose files)
-if [ "$(docker compose -f docker-compose.keycloak.yml ps -q keycloak_web)" ]; then
+if [ "$(docker compose -p doc-manager-keycloak -f docker-compose.keycloak.yml ps -q keycloak_web)" ]; then
     echo "✓ Keycloak container is running"
 else
     echo "✗ Keycloak container failed to start"
 fi
 
-if [ "$(docker compose -f docker-compose.keycloak.yml ps -q keycloak_db)" ]; then
+if [ "$(docker compose -p doc-manager-keycloak -f docker-compose.keycloak.yml ps -q keycloak_db)" ]; then
     echo "✓ PostgreSQL container is running"
 else
     echo "✗ PostgreSQL container failed to start"
 fi
 
 # Check MinIO
-if [ "$(docker compose -f docker-compose.minio.yml ps -q minio)" ]; then
+if [ "$(docker compose -p doc-manager-minio -f docker-compose.minio.yml ps -q minio)" ]; then
     echo "✓ MinIO container is running"
 else
     echo "✗ MinIO container failed to start"
 fi
 
 # Check Vault
-if [ "$(docker compose -f docker-compose.hashicorp.yml ps -q vault)" ]; then
+if [ "$(docker compose -p doc-manager-vault -f docker-compose.hashicorp.yml ps -q vault)" ]; then
     echo "✓ Vault container is running"
 else
     echo "✗ Vault container failed to start"
