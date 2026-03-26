@@ -27,7 +27,7 @@ dependencies {
 
     // Utility dependencies
     implementation 'org.projectlombok:lombok:1.18.42'
-    implementation 'io.minio:minio:8.6.0'
+    implementation 'io.minio:minio:9.0.0'
 
     // Test dependencies
     testImplementation 'io.quarkus:quarkus-junit5'
